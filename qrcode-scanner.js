@@ -50,12 +50,32 @@ window.onload = () =>{
 		});
 	});
 }
-function loadWebAssembly(fileName) {
-	let i = {};
-	i.env = {};
-	i.global = {};
-	return fetch(fileName)
-	  .then(response => response.arrayBuffer())
-	  .then(bits => WebAssembly.compile(bits))
-	  .then(module => { return new WebAssembly.Instance(module, i) });
-  };
+function loadWebAssembly(filename, imports) {
+	return fetch(filename)
+		.then(response => response.arrayBuffer())
+		.then(buffer => WebAssembly.compile(buffer))
+		.then(module => {
+			imports = imports || {};
+			imports.env = imports.env || {};
+			if (!imports.env.memory) {
+				// Setup our Memory import, initializing it
+				// to use 256 pages of memory.
+				imports.env.memory = new WebAssembly.Memory({ initial: 256 });
+			}
+			if (!imports.env.__indirect_function_table) {
+				// Setup our Table with an inital size of 0,
+				// 'anyfunc' is currently the option here
+				imports.env.__indirect_function_table = new WebAssembly.Table({ initial: 0, element: 'anyfunc' });
+			}
+
+
+			imports.env.out = function consoleLogString(offset, length) {
+
+				let a = new Float32Array(imports.env.memory.buffer, offset, length);
+				console.log(a, offset, length);
+			}
+			// Create a WebAssembly instance with our compiled
+			// module and pass in our import object
+			return new WebAssembly.Instance(module, imports);
+		});
+}
