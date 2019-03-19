@@ -7,6 +7,7 @@ i32 length;
 i32 width;
 i32 height;
 
+
 export u8 *decode(i32 w, i32 h)
 {
 	length = w * h;
@@ -17,6 +18,7 @@ export u8 *decode(i32 w, i32 h)
 
 	return imageData;
 }
+
 export u8 *setImageData(i32 l)
 {
 	_free(imageData);
@@ -79,6 +81,7 @@ u8 **getMiddleBrightnessPerArea()
 		}
 	}
 	u8 **middle = (u8 **)_malloc(numSqrtArea * sizeof(u8 *));
+
 	for (i32 i3 = 0; i3 < numSqrtArea; i3++)
 	{
 		middle[i3] = (u8 *)_malloc(numSqrtArea * sizeof(u8 *));

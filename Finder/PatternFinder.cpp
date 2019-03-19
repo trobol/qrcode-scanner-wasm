@@ -1,9 +1,12 @@
 #include "wasm.h"
-#include "FinderPatternFinder.h"
+#include "PatternFinder.h"
 const i32 MAX_MODULES = 57,
 		  MIN_SKIP = 3;
-
-int FinderPatternFinder::findFinderPattern(u8 *imageData)
+PatternFinder::PatternFinder(i32 w, i32 h) {
+	width = w;
+	height = h;
+};
+int PatternFinder::findFinderPattern(u8 *imageData)
 {
 	bool tryHarder = false;
 
@@ -118,13 +121,13 @@ int FinderPatternFinder::findFinderPattern(u8 *imageData)
 				}
 			}
 		}
-		if (this.foundPatternCross(stateCount))
+		if (foundPatternCross(stateCount))
 		{
-			var confirmed = this.handlePossibleCenter(stateCount, i, maxJ);
+			var confirmed = handlePossibleCenter(stateCount, i, maxJ);
 			if (confirmed)
 			{
 				iSkip = stateCount[0];
-				if (this.hasSkipped)
+				if (hasSkipped)
 				{
 					// Found a third one
 					done = haveMultiplyConfirmedCenters();
@@ -133,8 +136,8 @@ int FinderPatternFinder::findFinderPattern(u8 *imageData)
 		}
 	}
 
-	var patternInfo = this.selectBestPatterns();
-	qrcode.orderBestPatterns(patternInfo);
+	var patternInfo = selectBestPatterns();
+	orderBestPatterns(patternInfo);
 
 	return new FinderPatternInfo(patternInfo);
 }

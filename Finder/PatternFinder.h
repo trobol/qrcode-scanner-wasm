@@ -1,14 +1,15 @@
 #include "wasm.h"
-class FinderPatternFinder
+class PatternFinder
 {
   public:
 	int crossCheckStateCount[5];
 	bool hasSkipped = false;
-	int width, height;
+	i32 width, height;
+	PatternFinder(i32, i32);
 
   private:
 	int *getCrossCheckStateCount();
-	void foundPatternCross();
+	bool foundPatternCross(i32 *);
 	void centerFromEnd();
 	void crossCheckVertical();
 	void crossCheckHorizontal();
