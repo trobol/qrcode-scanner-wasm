@@ -23,7 +23,7 @@ const mimeType = {
 	'.wasm': 'application/wasm'
 };
 let wasmFiles = {
-	"qrcode-scanner.wasm": "qrcode-scanner.cpp"
+	"qrcode.wasm": "qrcode.cpp"
 };
 
 http.createServer(function (req, res) {
@@ -59,6 +59,7 @@ http.createServer(function (req, res) {
 			ext = p.ext;
 		if (ext == ".wasm" && wasmFiles[p.base]) {
 			let sourceFile = wasmFiles[p.base];
+			console.log(sourceFile + "->" + p.name);
 			exec("wsl /mnt/c/wasmception/dist/bin/clang++ " +
 				"--sysroot=/mnt/c/wasmception/sysroot/ " +
 				` cpp/${sourceFile} -o build/${p.name}.wasm ` +

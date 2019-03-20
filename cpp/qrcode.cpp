@@ -1,43 +1,45 @@
-#include "wasm.h"
 #include "qrcode.h"
 
-u8 *imageData;
-i32 length, width, height;
-i32 qrCodeSymbol;
-bool debug = false;
-const i32 maxImageSize = 1024 * 1024;
-const u8 sizeOfDataLengthInfo[3][4] = {{10, 9, 8, 8}, {12, 11, 16, 10}, {14, 13, 16, 12}};
+QRCode qrcode;
 
-export u8 *decode(i32 w, i32 h)
+export u8 *decode()
 {
-	length = w * h;
-	width = w;
-	height = h;
-	grayscale();
-	grayScaleToBitmap();
 
-	return imageData;
+	qrcode.grayscale();
+	qrcode.grayScaleToBitmap();
+
+	Detector detector;
+
+	var result = detector.detect();
+
+	return qrcode.imageData;
 }
 
-export u8 *setImageData(i32 l)
+export u8 *setImageData(i32 w, i32 h)
 {
-	_free(imageData);
-	imageData = (u8 *)_malloc(l * sizeof(u8));
-	return imageData;
+	_free(qrcode.imageData);
+
+	qrcode.width = w;
+	qrcode.height = h;
+	qrcode.length = w * h;
+
+	qrcode.imageData = (u8 *)_malloc(qrcode.length * sizeof(u8));
+
+	return qrcode.imageData;
 }
 export u8 *getImageData()
 {
-	return imageData;
+	return qrcode.imageData;
 }
 
-u8 getPixel(i32 x, i32 y)
+u8 QRCode::getPixel(i32 x, i32 y)
 {
 	i32 point = (x * 4) + (y * width * 4);
 	u8 p = (imageData[point] * 33 + imageData[point + 1] * 34 + imageData[point + 2] * 33) / 100;
 	return p;
 }
 
-void grayscale()
+void QRCode::grayscale()
 {
 	u8 *rect = (u8 *)_malloc(sizeof(u8[width * height]));
 
@@ -53,7 +55,7 @@ void grayscale()
 	imageData = rect;
 }
 
-u8 **getMiddleBrightnessPerArea()
+u8 **QRCode::getMiddleBrightnessPerArea()
 {
 	u8 numSqrtArea = 4;
 	//obtain middle brightness((min + max) / 2) per area
@@ -97,7 +99,7 @@ u8 **getMiddleBrightnessPerArea()
 	return middle;
 }
 
-void grayScaleToBitmap()
+void QRCode::grayScaleToBitmap()
 {
 	u8 **middle = getMiddleBrightnessPerArea();
 	i32 sqrtNumArea = 4;
@@ -117,4 +119,62 @@ void grayScaleToBitmap()
 			}
 		}
 	}
+}
+f32 distance(FinderPattern pattern1, FinderPattern pattern2)
+{
+	i32 xDiff = pattern1.x - pattern2.x;
+	i32 yDiff = pattern1.y - pattern2.y;
+	return Math.sqrt((xDiff * xDiff + yDiff * yDiff));
+}
+/// <summary> Returns the z component of the cross product between vectors BC and BA.</summary>
+f32 crossProductZ(FinderPattern pointA, FinderPattern pointB, FinderPattern pointC)
+{
+	i32 bX = pointB.x;
+	i32 bY = pointB.y;
+	return ((pointC.x - bX) * (pointA.y - bY)) - ((pointC.y - bY) * (pointA.x - bX));
+}
+
+void QRCode::orderBestPatterns(FinderPattern *patterns)
+{
+
+	// Find distances between pattern centers
+	f32 zeroOneDistance = distance(patterns[0], patterns[1]);
+	f32 oneTwoDistance = distance(patterns[1], patterns[2]);
+	f32 zeroTwoDistance = distance(patterns[0], patterns[2]);
+
+	FinderPattern pointA, pointB, pointC;
+	// Assume one closest to other two is B; A and C will just be guesses at first
+	if (oneTwoDistance >= zeroOneDistance && oneTwoDistance >= zeroTwoDistance)
+	{
+		pointB = patterns[0];
+		pointA = patterns[1];
+		pointC = patterns[2];
+	}
+	else if (zeroTwoDistance >= oneTwoDistance && zeroTwoDistance >= zeroOneDistance)
+	{
+		pointB = patterns[1];
+		pointA = patterns[0];
+		pointC = patterns[2];
+	}
+	else
+	{
+		pointB = patterns[2];
+		pointA = patterns[0];
+		pointC = patterns[1];
+	}
+
+	// Use cross product to figure out whether A and C are correct or flipped.
+	// This asks whether BC x BA has a positive z component, which is the arrangement
+	// we want for A, B, C. If it's negative, then we've got it flipped around and
+	// should swap A and C.
+	if (crossProductZ(pointA, pointB, pointC) < 0.0)
+	{
+		FinderPattern temp = pointA;
+		pointA = pointC;
+		pointC = temp;
+	}
+
+	patterns[0] = pointA;
+	patterns[1] = pointB;
+	patterns[2] = pointC;
 }

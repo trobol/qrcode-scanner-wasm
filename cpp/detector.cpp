@@ -21,64 +21,66 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+#include "detector.h"
 
-function PerspectiveTransform(a11, a21, a31, a12, a22, a32, a13, a23, a33)
+PerspectiveTransform::PerspectiveTransform(i32 a11, i32 a21, i32 a31, i32 a12, i32 a22, i32 a32, i32 a13, i32 a23, i32 a33)
 {
-	this.a11 = a11;
-	this.a12 = a12;
-	this.a13 = a13;
-	this.a21 = a21;
-	this.a22 = a22;
-	this.a23 = a23;
-	this.a31 = a31;
-	this.a32 = a32;
-	this.a33 = a33;
-	this.transformPoints1 = function(points)
+	a[1][1] = a11;
+	a[1][2] = a12;
+	a[1][3] = a13;
+	a[2][1] = a21;
+	a[2][2] = a22;
+	a[2][3] = a23;
+	a[3][1] = a31;
+	a[3][2] = a32;
+	a[3][3] = a33;
+}
+void PerspectiveTransform::transformPoints1(var points)
+{
+	var max = points.length;
+	var a11 = this.a11;
+	var a12 = this.a12;
+	var a13 = this.a13;
+	var a21 = this.a21;
+	var a22 = this.a22;
+	var a23 = this.a23;
+	var a31 = this.a31;
+	var a32 = this.a32;
+	var a33 = this.a33;
+	for (var i = 0; i < max; i += 2)
 	{
-		var max = points.length;
-		var a11 = this.a11;
-		var a12 = this.a12;
-		var a13 = this.a13;
-		var a21 = this.a21;
-		var a22 = this.a22;
-		var a23 = this.a23;
-		var a31 = this.a31;
-		var a32 = this.a32;
-		var a33 = this.a33;
-		for (var i = 0; i < max; i += 2)
-		{
-			var x = points[i];
-			var y = points[i + 1];
-			var denominator = a13 * x + a23 * y + a33;
-			points[i] = (a11 * x + a21 * y + a31) / denominator;
-			points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
-		}
+		var x = points[i];
+		var y = points[i + 1];
+		var denominator = a13 * x + a23 * y + a33;
+		points[i] = (a11 * x + a21 * y + a31) / denominator;
+		points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
 	}
-	this.transformPoints2 = function(xValues, yValues)
-	{
-		var n = xValues.length;
-		for (var i = 0; i < n; i++)
-		{
-			var x = xValues[i];
-			var y = yValues[i];
-			var denominator = this.a13 * x + this.a23 * y + this.a33;
-			xValues[i] = (this.a11 * x + this.a21 * y + this.a31) / denominator;
-			yValues[i] = (this.a12 * x + this.a22 * y + this.a32) / denominator;
-		}
-	}
+}
+void PerspectiveTransform::transformPoints2(var xValues, var yValues)
+{
 
-	this.buildAdjoint = function()
+	var n = xValues.length;
+	for (var i = 0; i < n; i++)
 	{
-		// Adjoint is the transpose of the cofactor matrix:
-		return new PerspectiveTransform(this.a22 * this.a33 - this.a23 * this.a32, this.a23 * this.a31 - this.a21 * this.a33, this.a21 * this.a32 - this.a22 * this.a31, this.a13 * this.a32 - this.a12 * this.a33, this.a11 * this.a33 - this.a13 * this.a31, this.a12 * this.a31 - this.a11 * this.a32, this.a12 * this.a23 - this.a13 * this.a22, this.a13 * this.a21 - this.a11 * this.a23, this.a11 * this.a22 - this.a12 * this.a21);
-	}
-	this.times = function(other)
-	{
-		return new PerspectiveTransform(this.a11 * other.a11 + this.a21 * other.a12 + this.a31 * other.a13, this.a11 * other.a21 + this.a21 * other.a22 + this.a31 * other.a23, this.a11 * other.a31 + this.a21 * other.a32 + this.a31 * other.a33, this.a12 * other.a11 + this.a22 * other.a12 + this.a32 * other.a13, this.a12 * other.a21 + this.a22 * other.a22 + this.a32 * other.a23, this.a12 * other.a31 + this.a22 * other.a32 + this.a32 * other.a33, this.a13 * other.a11 + this.a23 * other.a12 + this.a33 * other.a13, this.a13 * other.a21 + this.a23 * other.a22 + this.a33 * other.a23, this.a13 * other.a31 + this.a23 * other.a32 + this.a33 * other.a33);
+		var x = xValues[i];
+		var y = yValues[i];
+		var denominator = this.a13 * x + this.a23 * y + this.a33;
+		xValues[i] = (this.a11 * x + this.a21 * y + this.a31) / denominator;
+		yValues[i] = (this.a12 * x + this.a22 * y + this.a32) / denominator;
 	}
 }
 
-PerspectiveTransform.quadrilateralToQuadrilateral = function(x0, y0, x1, y1, x2, y2, x3, y3, x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p)
+PerspectiveTransform PerspectiveTransform::buildAdjoint()
+{
+	// Adjoint is the transpose of the cofactor matrix:
+	return PerspectiveTransform(a[2][2] * a[3][3] - a[2][3] * a[3][2], a[2][3] * a[3][1] - a[2][1] * a[3][3], a[2][1] * this.a32 - this.a22 * this.a31, this.a13 * this.a32 - this.a12 * this.a33, this.a11 * this.a33 - this.a13 * this.a31, this.a12 * this.a31 - this.a11 * this.a32, this.a12 * this.a23 - this.a13 * this.a22, this.a13 * this.a21 - this.a11 * this.a23, this.a11 * this.a22 - this.a12 * this.a21);
+}
+PerspectiveTransform PerspectiveTransform::times(other)
+{
+	return PerspectiveTransform(this.a11 * other.a11 + this.a21 * other.a12 + this.a31 * other.a13, this.a11 * other.a21 + this.a21 * other.a22 + this.a31 * other.a23, this.a11 * other.a31 + this.a21 * other.a32 + this.a31 * other.a33, this.a12 * other.a11 + this.a22 * other.a12 + this.a32 * other.a13, this.a12 * other.a21 + this.a22 * other.a22 + this.a32 * other.a23, this.a12 * other.a31 + this.a22 * other.a32 + this.a32 * other.a33, this.a13 * other.a11 + this.a23 * other.a12 + this.a33 * other.a13, this.a13 * other.a21 + this.a23 * other.a22 + this.a33 * other.a23, this.a13 * other.a31 + this.a23 * other.a32 + this.a33 * other.a33);
+}
+
+PerspectiveTransform PerspectiveTransform::quadrilateralToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3, x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p)
 {
 
 	var qToS = this.quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
@@ -86,7 +88,7 @@ PerspectiveTransform.quadrilateralToQuadrilateral = function(x0, y0, x1, y1, x2,
 	return sToQ.times(qToS);
 }
 
-PerspectiveTransform.squareToQuadrilateral = function(x0, y0, x1, y1, x2, y2, x3, y3)
+PerspectiveTransform PerspectiveTransform::squareToQuadrilateral = function(x0, y0, x1, y1, x2, y2, x3, y3)
 {
 	var dy2 = y3 - y2;
 	var dy3 = y0 - y1 + y2 - y3;
@@ -107,7 +109,7 @@ PerspectiveTransform.squareToQuadrilateral = function(x0, y0, x1, y1, x2, y2, x3
 	}
 }
 
-PerspectiveTransform.quadrilateralToSquare = function(x0, y0, x1, y1, x2, y2, x3, y3)
+PerspectiveTransform PerspectiveTransform::quadrilateralToSquare = function(x0, y0, x1, y1, x2, y2, x3, y3)
 {
 	// Here, the adjoint serves as the inverse:
 	return this.squareToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3).buildAdjoint();
@@ -238,19 +240,19 @@ i32 Dectector::calculateModuleSizeOneWay = function(pattern, otherPattern)
 	return (moduleSizeEst1 + moduleSizeEst2) / 14.0;
 }
 
-i32 Dectector::calculateModuleSize = function(topLeft, topRight, bottomLeft)
+i32 Detector::calculateModuleSize = function(topLeft, topRight, bottomLeft)
 {
 	// Take the average
 	return (this.calculateModuleSizeOneWay(topLeft, topRight) + this.calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0;
 }
 
-f32 Dectector::distance = function(pattern1, pattern2)
+f32 Detector::distance = function(pattern1, pattern2)
 {
 	var xDiff = pattern1.X - pattern2.X;
 	var yDiff = pattern1.Y - pattern2.Y;
 	return Math.sqrt((xDiff * xDiff + yDiff * yDiff));
 }
-i32 Dectector::computeDimension = function(topLeft, topRight, bottomLeft, moduleSize)
+i32 Detector::computeDimension = function(topLeft, topRight, bottomLeft, moduleSize)
 {
 
 	var tltrCentersDimension = Math.round(this.distance(topLeft, topRight) / moduleSize);
@@ -327,7 +329,7 @@ this.sampleGrid = function(image, transform, dimension)
 	return sampler.sampleGrid3(image, dimension, transform);
 }
 
-this.processFinderPatternInfo = function(info)
+DetectorResults Detector::processFinderPatternInfo(info)
 {
 
 	var topLeft = info.TopLeft;
@@ -387,12 +389,13 @@ this.processFinderPatternInfo = function(info)
 	{
 		points = new Array(bottomLeft, topLeft, topRight, alignmentPattern);
 	}
-	return new DetectorResult(bits, points);
+	return DetectorResult(bits, points);
 }
 
-void Dectector::detect()
+void Detector::detect()
 {
-	var info = new FinderPatternFinder().findFinderPattern();
 
-	return this.processFinderPatternInfo(info);
+	var info = FinderPatternFinder().findFinderPattern();
+
+	return processFinderPatternInfo(info);
 }
