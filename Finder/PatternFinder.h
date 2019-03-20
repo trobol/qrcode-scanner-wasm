@@ -13,9 +13,10 @@ class PatternFinder
 	void centerFromEnd();
 	void crossCheckVertical();
 	void crossCheckHorizontal();
-	void handlePossibleCenter();
+	bool handlePossibleCenter(i32[], i32, i32);
 	void selectBestPatterns();
 	void findRowSkip();
 	void haveMultiplyConfirmedCenters();
 	int findFinderPattern(u8 *);
+	void orderBestPatterns();
 };

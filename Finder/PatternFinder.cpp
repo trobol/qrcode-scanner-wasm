@@ -53,7 +53,7 @@ int PatternFinder::findFinderPattern(u8 *imageData)
 						if (foundPatternCross(stateCount))
 						{
 							// Yes
-							var confirmed = handlePossibleCenter(stateCount, i, j);
+							bool confirmed = handlePossibleCenter(stateCount, i, j);
 							if (confirmed)
 							{
 								// Start examining every other line. Checking each line turned out to be too

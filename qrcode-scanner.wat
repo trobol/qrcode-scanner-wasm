@@ -1,14 +1,13 @@
 (module
   (type (;0;) (func (param i32) (result i32)))
-  (type (;1;) (func (param i32)))
-  (type (;2;) (func))
-  (type (;3;) (func (param i32 i32) (result i32)))
-  (type (;4;) (func (result i32)))
+  (type (;1;) (func))
+  (type (;2;) (func (param i32 i32) (result i32)))
+  (type (;3;) (func (result i32)))
   (import "env" "memory" (memory (;0;) 2))
   (import "env" "_malloc" (func $_malloc (type 0)))
-  (import "env" "_free" (func $_free (type 1)))
-  (func $__wasm_call_ctors (type 2))
-  (func $decode (type 3) (param i32 i32) (result i32)
+  (import "env" "_free" (func $_free (type 0)))
+  (func $__wasm_call_ctors (type 1))
+  (func $decode (type 2) (param i32 i32) (result i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     local.set 2
@@ -74,7 +73,7 @@
     global.set 0
     local.get 14
     return)
-  (func $grayscale__ (type 2)
+  (func $grayscale__ (type 1)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     local.set 0
@@ -262,7 +261,7 @@
     local.get 48
     global.set 0
     return)
-  (func $grayScaleToBitmap__ (type 2)
+  (func $grayScaleToBitmap__ (type 1)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     local.set 0
@@ -685,7 +684,7 @@
     local.get 114
     global.set 0
     return)
-  (func $getPixel_int__int_ (type 3) (param i32 i32) (result i32)
+  (func $getPixel_int__int_ (type 2) (param i32 i32) (result i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     local.set 2
@@ -856,7 +855,7 @@
     local.set 52
     local.get 52
     return)
-  (func $getMiddleBrightnessPerArea__ (type 4) (result i32)
+  (func $getMiddleBrightnessPerArea__ (type 3) (result i32)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
     global.get 0
     local.set 0
@@ -1827,6 +1826,7 @@
     local.set 5
     local.get 5
     call $_free
+    drop
     local.get 3
     i32.load offset=12
     local.set 6
@@ -1859,7 +1859,7 @@
     global.set 0
     local.get 12
     return)
-  (func $getImageData (type 4) (result i32)
+  (func $getImageData (type 3) (result i32)
     (local i32 i32)
     i32.const 0
     local.set 0
