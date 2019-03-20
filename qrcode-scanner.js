@@ -16,7 +16,7 @@ window.onload = () => {
 	compileMemory(m).then(() => {
 		i.env._free = _free;
 		i.env._malloc = _malloc;
-		loadWebAssembly('/qrcode-scanner.wasm', i).then(({ instance }) => {
+		loadWebAssembly('/build/qrcode.wasm', i).then(({ instance }) => {
 			console.log(instance);
 
 			var string = "hi";

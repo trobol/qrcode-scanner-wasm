@@ -61,7 +61,7 @@ http.createServer(function (req, res) {
 			let sourceFile = wasmFiles[p.base];
 			exec("wsl /mnt/c/wasmception/dist/bin/clang++ " +
 				"--sysroot=/mnt/c/wasmception/sysroot/ " +
-				` ${sourceFile} -o ${p.name}.wasm ` +
+				` cpp/${sourceFile} -o build/${p.name}.wasm ` +
 				"-nostartfiles -Wl,--no-entry,--export-dynamic " +
 				"-Wl,--allow-undefined-file=main.syms,--import-memory " +
 				"-Wl,--demangle,--no-entry,--no-threads -fno-exceptions", (err, stdout, stderr) => {
