@@ -23,7 +23,8 @@ const mimeType = {
 	'.wasm': 'application/wasm'
 };
 let wasmFiles = {
-	"qrcode.wasm": "qrcode.cpp"
+	"qrcode.wasm": "cpp/qrcode.cpp",
+	"qrcode-reader.wasm": "mine/cpp/qrcode.cpp"
 };
 
 http.createServer(function (req, res) {
@@ -62,10 +63,10 @@ http.createServer(function (req, res) {
 			console.log(sourceFile + "->" + p.name);
 			exec("wsl /mnt/c/wasmception/dist/bin/clang++ " +
 				"--sysroot=/mnt/c/wasmception/sysroot/ " +
-				` cpp/${sourceFile} -o build/${p.name}.wasm ` +
+				` ${sourceFile} -o build/${p.name}.wasm ` +
 				"-nostartfiles -Wl,--no-entry,--export-dynamic " +
 				"-Wl,--allow-undefined-file=main.syms,--import-memory " +
-				"-Wl,--demangle,--no-entry,--no-threads -fno-exceptions", (err, stdout, stderr) => {
+				"-Wl,--no-entry,--no-threads -fno-exceptions", (err, stdout, stderr) => {
 					if (err) {
 						console.error(`Compilation Error`);
 						res.statusCode = 500;
