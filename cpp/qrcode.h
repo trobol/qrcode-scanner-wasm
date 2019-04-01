@@ -1,6 +1,7 @@
 #include "wasm.h"
 #include "detector.h"
 #include "findpat.h"
+#include "decoder.h"
 
 class QRCode
 {

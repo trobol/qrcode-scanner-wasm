@@ -21,9 +21,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+#include "gf256.h"
 
-
-function GF256( primitive)
+GF256::GF256(u16 primitive)
 {
 	this.expTable = new Array(256);
 	this.logTable = new Array(256);
@@ -107,11 +107,10 @@ function GF256( primitive)
 			return this.expTable[(this.logTable[a] + this.logTable[b]) % 255];
 		}		
 }
+GF256 GF256::QR_CODE_FIELD = GF256(0x011D);
+GF256 GF256::DATA_MATRIX_FIELD = GF256(0x012D);
 
-GF256.QR_CODE_FIELD = new GF256(0x011D);
-GF256.DATA_MATRIX_FIELD = new GF256(0x012D);
-
-GF256.addOrSubtract=function( a,  b)
+var GF256::addOrSubtract(var a, var b)
 {
 	return a ^ b;
 }

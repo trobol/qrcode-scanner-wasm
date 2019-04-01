@@ -3,13 +3,15 @@
 class DetectorResults
 {
   public:
-	DetectorResults(var bits, var points);
+	var bits;
+	var points;
+	DetectorResults(var b, var p);
 };
 
 class Detector
 {
   public:
-	void detect();
+	DetectorResults detect();
 
   private:
 	i32 sizeOfBlackWhiteBlackRun(i32 fromX, i32 fromY, i32 toX, i32 toY);

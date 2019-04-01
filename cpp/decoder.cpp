@@ -22,8 +22,6 @@
 * limitations under the License.
 */
 
-
-var Decoder={};
 Decoder.rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
 
 Decoder.correctErrors=function( codewordBytes,  numDataCodewords)
@@ -54,7 +52,7 @@ Decoder.correctErrors=function( codewordBytes,  numDataCodewords)
 	}
 }
 
-Decoder.decode=function(bits)
+QRCodeDataBlockReader Decoder::decode(var bits)
 {
 	var parser = new BitMatrixParser(bits);
 	var version = parser.readVersion();

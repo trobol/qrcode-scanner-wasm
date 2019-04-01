@@ -9,8 +9,10 @@ export u8 *decode()
 	qrcode.grayScaleToBitmap();
 
 	Detector detector;
+	Decoder decoder;
 
-	var result = detector.detect();
+	DetectorResults qrCodeMatrix = detector.detect();
+	var result = decoder.decode(qrCodeMatrix.bits);
 
 	return qrcode.imageData;
 }

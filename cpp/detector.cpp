@@ -115,10 +115,10 @@ PerspectiveTransform PerspectiveTransform::quadrilateralToSquare = function(x0, 
 	return this.squareToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3).buildAdjoint();
 }
 
-function DetectorResult(bits, points)
+DetectorResult::DetectorResult(var bits, var points)
 {
-	this.bits = bits;
-	this.points = points;
+	bits = b;
+	points = p;
 }
 
 i32 Dectector::sizeOfBlackWhiteBlackRun = function(fromX, fromY, toX, toY)

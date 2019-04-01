@@ -22,94 +22,96 @@
 * limitations under the License.
 */
 
+#include "databr.h"
 
-function QRCodeDataBlockReader(blocks,  version,  numErrorCorrectionCode)
+QRCodeDataBlockReader::QRCodeDataBlockReader(i8 *blocks, u8 version, u8 numErrorCorrectionCode)
 {
-	this.blockPointer = 0;
-	this.bitPointer = 7;
-	this.dataLength = 0;
-	this.blocks = blocks;
-	this.numErrorCorrectionCode = numErrorCorrectionCode;
+	blockPointer = 0;
+	bitPointer = 7;
+	dataLength = 0;
+	blocks = blocks;
+	numErrorCorrectionCode = numErrorCorrectionCode;
+
 	if (version <= 9)
-		this.dataLengthMode = 0;
+		dataLengthMode = 0;
 	else if (version >= 10 && version <= 26)
-		this.dataLengthMode = 1;
+		dataLengthMode = 1;
 	else if (version >= 27 && version <= 40)
-		this.dataLengthMode = 2;
-		
-	this.getNextBits = function( numBits)
-		{			
-			var bits = 0;
-			if (numBits < this.bitPointer + 1)
-			{
-				// next word fits into current data block
-				var mask = 0;
-				for (var i = 0; i < numBits; i++)
-				{
-					mask += (1 << i);
-				}
-				mask <<= (this.bitPointer - numBits + 1);
-				
-				bits = (this.blocks[this.blockPointer] & mask) >> (this.bitPointer - numBits + 1);
-				this.bitPointer -= numBits;
-				return bits;
-			}
-			else if (numBits < this.bitPointer + 1 + 8)
-			{
-				// next word crosses 2 data blocks
-				var mask1 = 0;
-				for (var i = 0; i < this.bitPointer + 1; i++)
-				{
-					mask1 += (1 << i);
-				}
-				bits = (this.blocks[this.blockPointer] & mask1) << (numBits - (this.bitPointer + 1));
-                this.blockPointer++;
-				bits += ((this.blocks[this.blockPointer]) >> (8 - (numBits - (this.bitPointer + 1))));
-				
-				this.bitPointer = this.bitPointer - numBits % 8;
-				if (this.bitPointer < 0)
-				{
-					this.bitPointer = 8 + this.bitPointer;
-				}
-				return bits;
-			}
-			else if (numBits < this.bitPointer + 1 + 16)
-			{
-				// next word crosses 3 data blocks
-				var mask1 = 0; // mask of first block
-				var mask3 = 0; // mask of 3rd block
-				//bitPointer + 1 : number of bits of the 1st block
-				//8 : number of the 2nd block (note that use already 8bits because next word uses 3 data blocks)
-				//numBits - (bitPointer + 1 + 8) : number of bits of the 3rd block 
-				for (var i = 0; i < this.bitPointer + 1; i++)
-				{
-					mask1 += (1 << i);
-				}
-				var bitsFirstBlock = (this.blocks[this.blockPointer] & mask1) << (numBits - (this.bitPointer + 1));
-				this.blockPointer++;
-				
-				var bitsSecondBlock = this.blocks[this.blockPointer] << (numBits - (this.bitPointer + 1 + 8));
-				this.blockPointer++;
-				
-				for (var i = 0; i < numBits - (this.bitPointer + 1 + 8); i++)
-				{
-					mask3 += (1 << i);
-				}
-				mask3 <<= 8 - (numBits - (this.bitPointer + 1 + 8));
-				var bitsThirdBlock = (this.blocks[this.blockPointer] & mask3) >> (8 - (numBits - (this.bitPointer + 1 + 8)));
-				
-				bits = bitsFirstBlock + bitsSecondBlock + bitsThirdBlock;
-				this.bitPointer = this.bitPointer - (numBits - 8) % 8;
-				if (this.bitPointer < 0)
-				{
-					this.bitPointer = 8 + this.bitPointer;
-				}
-				return bits;
-			}
-			else
-			{
-				return 0;
-			}
+		dataLengthMode = 2;
+}
+QRCodeDataBlockReader::getNextBits = function(numBits)
+{
+	var bits = 0;
+	if (numBits < this.bitPointer + 1)
+	{
+		// next word fits into current data block
+		var mask = 0;
+		for (var i = 0; i < numBits; i++)
+		{
+			mask += (1 << i);
+		}
+		mask <<= (this.bitPointer - numBits + 1);
+
+		bits = (this.blocks[this.blockPointer] & mask) >> (this.bitPointer - numBits + 1);
+		this.bitPointer -= numBits;
+		return bits;
+	}
+	else if (numBits < this.bitPointer + 1 + 8)
+	{
+		// next word crosses 2 data blocks
+		var mask1 = 0;
+		for (var i = 0; i < this.bitPointer + 1; i++)
+		{
+			mask1 += (1 << i);
+		}
+		bits = (this.blocks[this.blockPointer] & mask1) << (numBits - (this.bitPointer + 1));
+		this.blockPointer++;
+		bits += ((this.blocks[this.blockPointer]) >> (8 - (numBits - (this.bitPointer + 1))));
+
+		this.bitPointer = this.bitPointer - numBits % 8;
+		if (this.bitPointer < 0)
+		{
+			this.bitPointer = 8 + this.bitPointer;
+		}
+		return bits;
+	}
+	else if (numBits < this.bitPointer + 1 + 16)
+	{
+		// next word crosses 3 data blocks
+		var mask1 = 0; // mask of first block
+		var mask3 = 0; // mask of 3rd block
+		//bitPointer + 1 : number of bits of the 1st block
+		//8 : number of the 2nd block (note that use already 8bits because next word uses 3 data blocks)
+		//numBits - (bitPointer + 1 + 8) : number of bits of the 3rd block
+		for (var i = 0; i < this.bitPointer + 1; i++)
+		{
+			mask1 += (1 << i);
+		}
+		var bitsFirstBlock = (this.blocks[this.blockPointer] & mask1) << (numBits - (this.bitPointer + 1));
+		this.blockPointer++;
+
+		var bitsSecondBlock = this.blocks[this.blockPointer] << (numBits - (this.bitPointer + 1 + 8));
+		this.blockPointer++;
+
+		for (var i = 0; i < numBits - (this.bitPointer + 1 + 8); i++)
+		{
+			mask3 += (1 << i);
+		}
+		mask3 <<= 8 - (numBits - (this.bitPointer + 1 + 8));
+		var bitsThirdBlock = (this.blocks[this.blockPointer] & mask3) >> (8 - (numBits - (this.bitPointer + 1 + 8)));
+
+		bits = bitsFirstBlock + bitsSecondBlock + bitsThirdBlock;
+		this.bitPointer = this.bitPointer - (numBits - 8) % 8;
+		if (this.bitPointer < 0)
+		{
+			this.bitPointer = 8 + this.bitPointer;
+		}
+		return bits;
+	}
+	else
+	{
+		return 0;
+	}
 		}
 	this.NextMode=function()
 	{
@@ -158,7 +160,8 @@ function QRCodeDataBlockReader(blocks,  version,  numErrorCorrectionCode)
 			
 			return strData;
 		}
-	this.getFigureString=function( dataLength)
+
+		QRCodeDataBlockReader::getFigureString = function(dataLength)
 		{
 			var length = dataLength;
 			var intData = 0;
