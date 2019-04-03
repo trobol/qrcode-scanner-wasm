@@ -2,15 +2,13 @@
 
 QRCode qrcode;
 
-
 export u8 *decode()
 {
 
 	qrcode.grayscale();
-	draw(false);
+	draw();
 	qrcode.grayScaleToBitmap();
-	draw(true);
-
+	draw();
 
 	return qrcode.imageData;
 }
@@ -32,4 +30,4 @@ export u8 *getImageData()
 	return qrcode.imageData;
 }
 
-import void draw(bool grayscale);
+import void draw();
