@@ -16,7 +16,15 @@ export u8 *decode()
 
 	return qrcode.imageData;
 }
-
+export void getPos()
+{
+}
+export u32 getQRX()
+{
+}
+export u32 getQRY()
+{
+}
 export u8 *setImageData(i32 w, i32 h)
 {
 	_free(qrcode.imageData);

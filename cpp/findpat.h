@@ -1,11 +1,19 @@
 #include "wasm.h"
 
+/*
+
+*/
 class FinderPattern
 {
   public:
 	i32 x, y;
 };
 
+/*
+	Finds the finder pattern
+	findFinderPattern ->
+		
+*/
 class FinderPatternFinder
 {
   public:

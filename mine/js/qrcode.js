@@ -76,7 +76,6 @@ let QRCode = (function () {
 		p: loadWebAssembly('/build/qrcode-reader.wasm').then(({ instance }) => {
 			exports = instance.exports;
 		}),
-
 	}
 
 })();

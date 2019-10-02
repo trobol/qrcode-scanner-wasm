@@ -12,6 +12,8 @@ class QRCode
 	bool debug = false;
 	const i32 maxImageSize = 1024 * 1024;
 	const u8 sizeOfDataLengthInfo[3][4] = {{10, 9, 8, 8}, {12, 11, 16, 10}, {14, 13, 16, 12}};
+	Detector detector();
+	Decoder decorder();
 
 	u8 getPixel(i32 x, i32 y);
 	void grayScaleToBitmap();

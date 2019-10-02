@@ -24,8 +24,6 @@ window.onload = () => {
 			var exports = instance.exports;
 			p.then(() => {
 
-
-
 				var image = new Image();
 				image.onload = function () {
 					var canvas_qr = document.createElement('canvas');

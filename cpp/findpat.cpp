@@ -147,7 +147,7 @@ i32 *FinderPatternFinder::getCrosCheckStateCount()
 	crossCheckStateCount[4] = 0;
 	return getCrosCheckStateCount;
 }
-FinderPatternInfo FinderPatternFinder::findFinderPattern = function(image)
+FinderPatternInfo FinderPatternFinder::findFinderPattern(u8 *imgData)
 {
 	bool tryHarder = false;
 	i32 maxI = height;
