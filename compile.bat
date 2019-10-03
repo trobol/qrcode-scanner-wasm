@@ -1,5 +1,6 @@
 @echo off
+bash -c "clang --include-directory include --target=wasm32 -O3 -flto -nostdlib -Wl,--no-gc-sections -Wl,--no-entry -Wl,--export-all -Wl,--lto-O3 -Wl,-z,stack-size=$[8 * 1024 * 1024] -o %~n1.wasm %1 "
+::uncomment to export readable wast
+ ::wasm2wat "%~n1.wasm" -o "%~n1.wast"
 
-wsl /mnt/c/wasmception/dist/bin/clang++ --sysroot=/mnt/c/wasmception/sysroot/ "%1" -o "build/%~n1.wasm" -nostartfiles -Wl,--no-entry,--export-dynamic -Wl,--allow-undefined-file=main.syms,--import-memory,--demangle,--no-entry,--no-threads -fno-exceptions
-
-wasm2wat "build/%~n1.wasm" -o "build/%~n1.wat"
+echo Compiled %1 to %~n1.wasm
