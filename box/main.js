@@ -52,7 +52,7 @@ window.onload = function () {
 
 		readCanvas();
 		if (info) {
-
+			console.log(info);
 			var a1 = info.TopRight.X - info.TopLeft.X
 			b1 = info.TopRight.Y - info.TopLeft.Y,
 				width = Math.sqrt(a1 * a1 + b1 * b1),
@@ -75,6 +75,8 @@ window.onload = function () {
 				x2 = info.BottomLeft.X - canvas.width / 2,
 				y1 = info.TopRight.Y - canvas.height / 2,
 				y2 = info.BottomLeft.Y - canvas.height / 2;
+
+
 			let a = x1 - x2,
 				b = y1 - y2;
 
@@ -84,7 +86,7 @@ window.onload = function () {
 			var pY = Math.sqrt(b * b);
 
 
-			var angleInRadians = Math.atan2(b, a) + Math.PI / 4.5;
+			var angleInRadians = Math.atan2(b, a);
 
 			let sin = Math.sin(angleInRadians),
 				cos = Math.cos(angleInRadians);
@@ -102,22 +104,27 @@ window.onload = function () {
 			ctx.fillRect(x1 + canvas.width / 2, y1 + canvas.height / 2, 10, 10);
 			ctx.fillStyle = "green";
 			ctx.fillRect(x2 + canvas.width / 2, y2 + canvas.height / 2, 10, 10);
-			//ctx.fillStyle = "blue";
-			//ctx.fillRect(x3, y3, 10, 10);
+
+			let centerX = info.TopLeft.X + (info.TopRight.X - info.TopLeft.X) / 2;
 
 			ctx.beginPath();
 			ctx.moveTo(info.BottomLeft.X, info.BottomLeft.Y);
 			ctx.lineTo(info.BottomLeft.X, info.TopRight.Y);
 			ctx.lineTo(info.TopRight.X, info.TopRight.Y);
+			ctx.lineTo(info.BottomLeft.X, info.BottomLeft.Y);
 			ctx.strokeStyle = "red";
 			ctx.stroke();
+
 			//var angleInRadians = Math.atan((info.TopRight.Y - info.TopLeft.Y) / width);
 			console.log(angleInRadians);
-			ctx.translate(canvas.width / 2, canvas.height / 2);
+			ctx.translate(centerX, canvas.height / 2);
+
 			ctx.rotate(angleInRadians);
-			ctx.translate(-width / 2, -height / 2);
+			ctx.translate(-centerX, -height / 2);
+
 			ctx.drawImage(image, 0, 0, width, height);
 			ctx.translate(width / 2, height / 2);
+
 			ctx.rotate(-angleInRadians);
 			ctx.translate(-canvas.width / 2, -canvas.height / 2);
 
