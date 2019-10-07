@@ -1,13 +1,5 @@
 #include "../c/wasm.h"
 
-/*
-
-MEMORY LAYOUT
-
-imageData  outputString  bitmap
-
-*/
-
 unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
 
@@ -30,37 +22,24 @@ export void *setImageSize(unsigned int x, unsigned int y)
 	return (void *)imageIndex;
 }
 
-export void *getImageIndex()
-{
-	return (void *)(imageIndex);
-}
-
 export unsigned int getImageSize()
 {
 	return imageSize;
 }
-
-unsigned int pixelIndex(unsigned int x, unsigned int y)
-{
-	return x * 4 + (imageWidth * y) * 4;
-}
-export void imageToGreyscale()
+export void imageToBitmap()
 {
 	unsigned int pixel;
 	for (unsigned int y = 0; y < imageHeight; ++y)
 	{
 		for (unsigned int x = 0; x < imageWidth; ++x)
 		{
-			pixel = pixelIndex(x, y);
+			pixel = x * 4 + (imageWidth * y) * 4;
 			imageIndex[pixel] = (imageIndex[pixel] * 33 + imageIndex[pixel + 1] * 34 + imageIndex[pixel + 2] * 33) / 100;
 			imageIndex[pixel + 1] = imageIndex[pixel];
 			imageIndex[pixel + 2] = imageIndex[pixel];
 		}
 	}
-}
 
-export void greyscaleToBitmap()
-{
 	unsigned int numSqrtArea = 4;
 	//obtain middle brightness((min + max) / 2) per area
 	unsigned int areaWidth = imageWidth / numSqrtArea;
@@ -94,7 +73,7 @@ export void greyscaleToBitmap()
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
-					target = pixelIndex(areaWidth * areaX + imageX, areaHeight * areaY + imageY);
+					target = (areaWidth * areaX + imageX) * 4 + (imageWidth * (areaHeight * areaY + imageY)) * 4;
 					if (imageIndex[target] > middle)
 					{
 						imageIndex[target] = 255;
@@ -107,8 +86,6 @@ export void greyscaleToBitmap()
 						imageIndex[target + 1] = 0;
 						imageIndex[target + 2] = 0;
 					}
-
-					//bitmapIndex[areaWidth * areaX + imageX + (areaHeight * areaY + imageY) * imageWidth]
 				}
 			}
 		}
