@@ -43,41 +43,23 @@ http.createServer(function (req, res) {
 	fs.exists(pathname, function (exist) {
 
 
+		if (!exist) {
+			// if the file is not found, return 404
+			res.statusCode = 404;
+			res.end(`File ${pathname} not found!`);
+			return;
+		}
+		// if is a directory, then look for index.html
+		if (fs.statSync(pathname).isDirectory()) {
+			pathname += '/index.html';
+		}
+
 
 		let p = path.parse(pathname),
 			ext = p.ext;
-		console.log(p.base);
-		if (ext == ".wasm" && wasmFiles[p.base]) {
-			let sourceFile = wasmFiles[p.base];
-			console.log(sourceFile + "->" + p.name);
-			exec(`compile.bat ${sourceFile}`, (err, stdout, stderr) => {
-				if (err) {
-					console.error(`Compilation Error`);
-					res.statusCode = 500;
-					res.end(`Compilation Error: ${err.message.slice(err.message.indexOf("\n"))}`);
-					return;
-				}
-				console.log(stdout);
-				console.log("recompiled");
-				readFile();
-			});
 
-		} else {
+		readFile();
 
-			if (!exist) {
-				// if the file is not found, return 404
-				res.statusCode = 404;
-				res.end(`File ${pathname} not found!`);
-				return;
-			}
-
-
-			// if is a directory, then look for index.html
-			if (fs.statSync(pathname).isDirectory()) {
-				pathname += '/index.html';
-			}
-			readFile();
-		}
 
 		function readFile() {
 
