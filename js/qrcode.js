@@ -748,7 +748,7 @@ function Detector(image) {
 
 	this.detect = function () {
 		var info = new FinderPatternFinder().findFinderPattern(this.image);
-
+		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}
 }
@@ -2596,7 +2596,7 @@ function FinderPatternFinder() {
 
 		var startSize = this.possibleCenters.length;
 		if (startSize < 3) {
-			throw "Couldn't find enough finder patterns";
+			return null;
 		}
 
 		// Filter outlier possibilities whose module size is too different
