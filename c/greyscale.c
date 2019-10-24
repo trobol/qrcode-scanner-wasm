@@ -8,10 +8,10 @@ export void *setImageSize(unsigned int x, unsigned int y)
 
 	imageSize = x * y * 4;
 
-	bitmapIndex = imageIndex + imageSize;
+	bitmapIndex = image + imageSize;
 	bitmapSize = x * y;
 
-	return (void *)imageIndex;
+	return (void *)image;
 }
 
 export unsigned int getImageSize()
@@ -26,9 +26,9 @@ export void imageToBitmap()
 		for (unsigned int x = 0; x < imageWidth; ++x)
 		{
 			pixel = x * 4 + (imageWidth * y) * 4;
-			imageIndex[pixel] = (imageIndex[pixel] * 33 + imageIndex[pixel + 1] * 34 + imageIndex[pixel + 2] * 33) / 100;
-			imageIndex[pixel + 1] = imageIndex[pixel];
-			imageIndex[pixel + 2] = imageIndex[pixel];
+			image[pixel] = (image[pixel] * 33 + image[pixel + 1] * 34 + image[pixel + 2] * 33) / 100;
+			image[pixel + 1] = image[pixel];
+			image[pixel + 2] = image[pixel];
 		}
 	}
 
@@ -53,7 +53,7 @@ export void imageToBitmap()
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
-					target = imageIndex[areaWidth * areaX + imageX + (areaHeight * areaY + imageY) * imageWidth];
+					target = image[areaWidth * areaX + imageX + (areaHeight * areaY + imageY) * imageWidth];
 					if (target < min)
 						min = target;
 					if (target > max)
@@ -66,17 +66,17 @@ export void imageToBitmap()
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
 					target = (areaWidth * areaX + imageX) * 4 + (imageWidth * (areaHeight * areaY + imageY)) * 4;
-					if (imageIndex[target] > middle)
+					if (image[target] > middle)
 					{
-						imageIndex[target] = 255;
-						imageIndex[target + 1] = 255;
-						imageIndex[target + 2] = 255;
+						image[target] = 255;
+						image[target + 1] = 255;
+						image[target + 2] = 255;
 					}
 					else
 					{
-						imageIndex[target] = 0;
-						imageIndex[target + 1] = 0;
-						imageIndex[target + 2] = 0;
+						image[target] = 0;
+						image[target + 1] = 0;
+						image[target + 2] = 0;
 					}
 				}
 			}

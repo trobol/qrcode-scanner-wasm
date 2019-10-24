@@ -12,8 +12,17 @@
 typedef int i32;
 typedef long long int i64;
 
+typedef unsigned int ui32;
+typedef unsigned long long int ui64;
+
 typedef float f32;
 typedef double f64;
+
+
+typedef int bool;
+#define true 1
+#define false 0
+
 
 import unsigned char __data_end;
 import unsigned char __heap_base;
