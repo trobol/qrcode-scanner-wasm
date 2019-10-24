@@ -1,13 +1,5 @@
+#include "../c/qrcode.h"
 #include "../c/wasm.h"
-
-unsigned int imageWidth = 0;
-unsigned int imageHeight = 0;
-
-unsigned int imageSize = 0;
-unsigned char *imageIndex = &__heap_base;
-
-unsigned int bitmapSize = 0;
-unsigned char *bitmapIndex;
 
 export void *setImageSize(unsigned int x, unsigned int y)
 {
@@ -91,45 +83,3 @@ export void imageToBitmap()
 		}
 	}
 }
-/*
-
-
-void grayScaleToBitmap(grayScale)
-{
-
-	var middle = getMiddleBrightnessPerArea(grayScale);
-	var sqrtNumArea = middle.length;
-	var areaWidth = Math.floor(canvas.width / sqrtNumArea);
-	var areaHeight = Math.floor(canvas.height / sqrtNumArea);
-	var bitmap = new Array(canvas.height * canvas.width);
-
-	for (unsigned int ay = 0; ay < sqrtNumArea; ay++)
-	{
-		for (unsigned int ax = 0; ax < sqrtNumArea; ax++)
-		{
-			for (unsigned int dy = 0; dy < areaHeight; dy++)
-			{
-				for (unsigned int dx = 0; dx < areaWidth; dx++)
-				{
-					bitmap[areaWidth * ax + dx + (areaHeight * ay + dy) * canvas.width] = (grayScale[areaWidth * ax + dx + (areaHeight * ay + dy) * canvas.width] < middle[ax][ay]);
-				}
-			}
-		}
-	}
-
-	for (let y = 0; y < canvas.height; y++)
-	{
-		for (let x = 0; x < canvas.width; x++)
-		{
-			let v = bitmap[x + y * canvas.width] ? 0 : 255;
-
-			var point = (x * 4) + (y * canvas.width * 4);
-			imagedata.data[point] = v;
-			imagedata.data[point + 1] = v;
-			imagedata.data[point + 2] = v;
-		}
-	}
-	return bitmap;
-}
-
-*/
