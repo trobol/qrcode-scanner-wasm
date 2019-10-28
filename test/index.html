@@ -17,10 +17,11 @@
 	<h1>Scanner Canvas</h1>
 	<canvas></canvas>
 	<img src="/img/qrcode.png">
+
 	<script>
 		const video = document.querySelector('video');
 		const canvas = document.querySelector('canvas');
-
+		const img = document.querySelector('img');
 
 		let imageData;
 		const scanner = new QRCodeScanner(canvas);
@@ -30,10 +31,10 @@
 		scanner.onRead = onRead;
 		scanner.onError = onError;
 
-		scanner.start();
+		scanner.start(false);
 
 		function onStart() {
-
+			setTimeout(update, 500);
 		}
 
 		function onRead(data) {
@@ -42,8 +43,36 @@
 		function onError(e) {
 			console.error(e);
 		}
+		var i = 0;
+		function update() {
+			scanner.context.clearRect(0, 0, canvas.width,
+				canvas.height);
+			scanner.context.drawImage(scanner.videoElem, 0, 0,
+				scanner.videoElem.videoWidth,
+				scanner.videoElem.videoHeight);
+			scanner.context.translate(canvas.width/2, canvas.height/2);
+			scanner.context.rotate(i);
+			
+			scanner.context.drawImage(img, -img.width/2, -img.height/2,
+				img.width,
+				img.height);
+			scanner.context.rotate(-i);
+			scanner.context.translate(-canvas.width/2, -canvas.height/2);
+			i+=0.1;
+			try {
+				var decoded = qrcode.decode();
 
-		
+			} catch (e) {
+				console.error(e);
+			}
+
+			if (decoded) {
+				this.onRead(decoded);
+			}
+
+			setTimeout(update, 500);
+		}
+
 	</script>
 </body>
 

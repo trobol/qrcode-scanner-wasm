@@ -1,3 +1,6 @@
+#ifndef WASM_H
+#define WASM_H
+
 #ifndef __GNUC__
 #define __attribute__(x)
 #endif
@@ -26,3 +29,5 @@ typedef int bool;
 
 import unsigned char __data_end;
 import unsigned char __heap_base;
+
+#endif

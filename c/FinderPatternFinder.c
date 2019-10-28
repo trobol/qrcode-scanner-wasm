@@ -143,28 +143,25 @@ bool handlePossibleCenter(i32* stateCount, ui32 i, ui32 j) {
 	i32 stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
   	f32 centerJ = centerFromEnd(stateCount, j);
   	f32 centerI = crossCheckVertical(i, (ui32)centerJ, stateCount[2], stateCountTotal);
+
   	if (!isnan(centerI)) {
 		// Re-cross check
 		centerJ = crossCheckHorizontal((ui32)centerJ, (ui32)centerI, stateCount[2], stateCountTotal);
 		if (!isnan(centerJ)) {
 		ui32 estimatedModuleSize = (float)stateCountTotal / 7.0f;
 		bool found = false;
-		ui32 max = possibleCenters_.size();
+		ui32 max = possibleCentersIndex+1;
 		for (ui32 index = 0; index < max; index++) {
-			Ref<FinderPattern> center = possibleCenters_[index];
+			struct FinderPattern center = possibleCenters[index];
 			// Look for about the same center and module size:
-			if (center->aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-			possibleCenters_[index] = center->combineEstimate(centerI, centerJ, estimatedModuleSize);
-			found = true;
-			break;
+			if (aboutEquals(&center, estimatedModuleSize, centerI, centerJ)) {
+				combineEstimate(&center, &possibleCenters[index++] , centerI, centerJ, estimatedModuleSize);
+				found = true;
+				break;
 			}
 		}
 		if (!found) {
-			Ref<FinderPattern> newPattern(new FinderPattern(centerJ, centerI, estimatedModuleSize));
-			possibleCenters_.push_back(newPattern);
-			if (callback_ != 0) {
-			callback_->foundPossibleResultPoint(*newPattern);
-			}
+			createFinderPattern(&possibleCenters[possibleCentersIndex], centerJ, centerI, estimatedModuleSize, 0);		
 		}
 		return true;
 		}

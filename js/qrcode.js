@@ -747,7 +747,10 @@ function Detector(image) {
 
 
 	this.detect = function () {
-		var info = new FinderPatternFinder().findFinderPattern(this.image);
+		var patternFinder = new FinderPatternFinder();
+		
+		var info = patternFinder.findFinderPattern(this.image);
+		console.log(patternFinder.possibleCenters.length);
 		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}
@@ -2184,7 +2187,7 @@ qrcode.load = (() => {
 
 
 	WebAssembly.instantiateStreaming(
-		fetch("/greyscale.wasm"), imports
+		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
 
 		qrcode.setPixelData = function () {

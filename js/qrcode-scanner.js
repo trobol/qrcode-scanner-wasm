@@ -24,7 +24,7 @@ function QRCodeScanner(canvas) {
 }
 
 
-QRCodeScanner.prototype.start = function () {
+QRCodeScanner.prototype.start = function (startUpdate = true) {
 
 	let self = this;
 	navigator.mediaDevices.getUserMedia({
@@ -46,7 +46,7 @@ QRCodeScanner.prototype.start = function () {
 			console.log(self.videoElem.videoWidth);
 
 
-			self._captureToCanvas();
+			if(startUpdate) self.update();
 			//self.videoElem.play();
 			self.onStart();
 
@@ -132,11 +132,13 @@ QRCodeScanner.prototype._captureToCanvas = function () {
 
 		}
 	}
-	this.timerCapture = setTimeout(() => {
-		this._captureToCanvas();
-	}, 500);
 };
-
+QRCodeScanner.prototype.update = function() {
+	this._captureToCanvas();
+	this.timerCapture = setTimeout(() => {
+		this.update();
+	}, 500);
+}
 
 /**
  * Releases a video stream that was being

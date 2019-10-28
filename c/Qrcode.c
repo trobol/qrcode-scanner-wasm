@@ -1,4 +1,4 @@
-#include "../c/qrcode.h"
+#include "../c/Qrcode.h"
 #include "../c/wasm.h"
 
 export void *setImageSize(unsigned int x, unsigned int y)
@@ -18,6 +18,16 @@ export unsigned int getImageSize()
 {
 	return imageSize;
 }
+
+export void decode() {
+
+//create detector
+//detect
+//decode
+
+}
+
+
 export void imageToBitmap()
 {
 	unsigned int pixel;
@@ -85,6 +95,6 @@ export void imageToBitmap()
 }
 
 
-inline bool getBitmap(ui32 x, ui32 y) {
+inline bool getBitmapPixel(ui32 x, ui32 y) {
 	return image[x * 4 + (imageWidth * y) * 4];
 }
