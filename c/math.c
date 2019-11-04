@@ -48,3 +48,8 @@ float fsqrt(float num)
 			   guess * guess <= num + e));
 	return guess;
 }
+
+inline int round(float d)
+{
+	return (int)(d + 0.5f);
+}

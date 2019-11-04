@@ -20,4 +20,8 @@ struct Version
 	struct ECBlocks ecBlocks[4];
 };
 
-void new_Version(int vNum, int *alignmentPatternCenters, int ecbCount0, int ecbCodewords0, int ecbCount1, int ecbCodewords1, int ecbCount2, int ecbCodewords2, int ecbCount3, int ecbCodewords3);
+#define N_VERSIONS 40;
+struct Version VERSIONS[40];
+
+struct Version *getProvisionalVersionForDimension(int dimension);
+int getDimensionForVersion(struct Version *version);

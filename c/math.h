@@ -10,4 +10,5 @@ float fmax(float i, float j);
 int sqrt(int num);
 float fsqrt(float num);
 
+inline int round(float d);
 #endif

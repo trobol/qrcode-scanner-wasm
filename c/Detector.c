@@ -1,4 +1,8 @@
 #include "FinderPatternFinder.h"
+#include "Detector.h"
+#include "Version.h"
+#include "math.h"
+#include "AlignmentPattern.h"
 
 void processFinderPatternInfo()
 {
@@ -12,24 +16,24 @@ void processFinderPatternInfo()
 		//TODO EXIT
 		//throw zxing::ReaderException("bad module size");
 	}
-	int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
-	Version *provisionalVersion = Version::getProvisionalVersionForDimension(dimension);
-	int modulesBetweenFPCenters = provisionalVersion->getDimensionForVersion() - 7;
+	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
+	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
+	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
 
-	Ref<AlignmentPattern> alignmentPattern;
+	struct AlignmentPattern alignmentPattern;
 	// Anything above version 1 has an alignment pattern
-	if (provisionalVersion->getAlignmentPatternCenters().size() > 0)
+	if (provisionalVersion->alignmentPatternCount > 0)
 	{
 
 		// Guess where a "bottom right" finder pattern would have been
-		float bottomRightX = topRight->getX() - topLeft->getX() + bottomLeft->getX();
-		float bottomRightY = topRight->getY() - topLeft->getY() + bottomLeft->getY();
+		float bottomRightX = topRight.posX - topLeft.posX + bottomLeft.posX;
+		float bottomRightY = topRight.posY - topLeft.posY + bottomLeft.posY;
 
 		// Estimate that alignment pattern is closer by 3 modules
 		// from "bottom right" to known top left location
 		float correctionToTopLeft = 1.0f - 3.0f / (float)modulesBetweenFPCenters;
-		int estAlignmentX = (int)(topLeft->getX() + correctionToTopLeft * (bottomRightX - topLeft->getX()));
-		int estAlignmentY = (int)(topLeft->getY() + correctionToTopLeft * (bottomRightY - topLeft->getY()));
+		int estAlignmentX = (int)(topLeft.posX + correctionToTopLeft * (bottomRightX - topLeft.posX));
+		int estAlignmentY = (int)(topLeft.posX + correctionToTopLeft * (bottomRightY - topLeft.posX));
 
 		// Kind of arbitrary -- expand search radius before giving up
 		for (int i = 4; i <= 16; i <<= 1)
@@ -51,7 +55,7 @@ void processFinderPatternInfo()
 		}
 	}
 
-	Ref<PerspectiveTransform> transform = createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+	PerspectiveTransform transform = createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 	Ref<BitMatrix> bits(sampleGrid(image_, dimension, transform));
 	ArrayRef<Ref<ResultPoint>> points(new Array<Ref<ResultPoint>>(alignmentPattern == 0 ? 3 : 4));
 	points[0].reset(bottomLeft);
@@ -88,4 +92,27 @@ float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPatt
 	// Average them, and divide by 7 since we've counted the width of 3 black modules,
 	// and 1 white and 1 black module on either side. Ergo, divide sum by 14.
 	return (moduleSizeEst1 + moduleSizeEst2) / 14.0f;
+}
+
+int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft,
+					 float moduleSize)
+{
+	int tltrCentersDimension =
+		round(distance(topLeft, topRight) / moduleSize);
+	int tlblCentersDimension =
+		round(distance(topLeft, bottomLeft) / moduleSize);
+	int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
+	switch (dimension & 0x03)
+	{ // mod 4
+	case 0:
+		dimension++;
+		break;
+		// 1? do nothing
+	case 2:
+		dimension--;
+		break;
+	case 3:
+		//error
+	}
+	return dimension;
 }

@@ -2,4 +2,6 @@
 
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft);
 
-float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPattern *otherPattern)
+float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPattern *otherPattern);
+int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft,
+					 float moduleSize);
