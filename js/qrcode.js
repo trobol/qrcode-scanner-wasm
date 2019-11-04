@@ -748,9 +748,8 @@ function Detector(image) {
 
 	this.detect = function () {
 		var patternFinder = new FinderPatternFinder();
-		
+
 		var info = patternFinder.findFinderPattern(this.image);
-		console.log(patternFinder.possibleCenters.length);
 		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}

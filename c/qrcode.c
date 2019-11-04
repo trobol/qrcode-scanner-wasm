@@ -1,6 +1,15 @@
 #include "../c/qrcode.h"
 #include "../c/wasm.h"
 
+unsigned int imageWidth = 0;
+unsigned int imageHeight = 0;
+
+unsigned int imageSize = 0;
+unsigned char *image = &__heap_base;
+
+unsigned int bitmapSize = 0;
+unsigned char *bitmapIndex;
+
 export void *setImageSize(unsigned int x, unsigned int y)
 {
 	imageWidth = x;
@@ -17,14 +26,6 @@ export void *setImageSize(unsigned int x, unsigned int y)
 export unsigned int getImageSize()
 {
 	return imageSize;
-}
-
-export void decode()
-{
-
-	//create detector
-	//detect
-	//decode
 }
 
 export void imageToBitmap()
@@ -91,6 +92,18 @@ export void imageToBitmap()
 			}
 		}
 	}
+}
+
+export void decode()
+{
+	//process data
+	imageToBitmap();
+	//detect findpatterns
+	findFinderPattern();
+
+	//create detector
+	//detect
+	//decode
 }
 
 inline bool getBitmapPixel(ui32 x, ui32 y)

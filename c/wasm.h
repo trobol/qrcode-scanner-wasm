@@ -21,11 +21,11 @@ typedef unsigned long long int ui64;
 typedef float f32;
 typedef double f64;
 
-
 typedef int bool;
 #define true 1
 #define false 0
 
+#define NaN 0x400000
 
 import unsigned char __data_end;
 import unsigned char __heap_base;

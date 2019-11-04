@@ -2,15 +2,14 @@
 #define QRCODE_H
 #include "../c/wasm.h"
 
-unsigned int imageWidth = 0;
-unsigned int imageHeight = 0;
+extern unsigned int imageWidth;
+extern unsigned int imageHeight;
 
-unsigned int imageSize = 0;
-unsigned char *image = &__heap_base;
+extern unsigned int imageSize;
+extern unsigned char *image;
 
-unsigned int bitmapSize = 0;
-unsigned char *bitmapIndex;
-
+extern unsigned int bitmapSize;
+extern unsigned char *bitmapIndex;
 
 inline bool getBitmapPixel(ui32 x, ui32 y);
 #endif
