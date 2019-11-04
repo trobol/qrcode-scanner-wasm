@@ -110,8 +110,6 @@ QRCodeScanner.prototype._captureToCanvas = function () {
 		if (this.videoElem.videoWidth && this.videoElem.videoHeight) {
 
 
-
-
 			this.context.clearRect(0, 0, this.videoElem.videoWidth,
 				this.videoElem.videoHeight);
 			this.context.drawImage(this.videoElem, 0, 0,

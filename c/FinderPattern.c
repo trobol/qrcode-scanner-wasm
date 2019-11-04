@@ -1,6 +1,19 @@
 #include "../c/FinderPattern.h"
 #include "./math.h"
 
+float get_posX(struct FinderPattern *pat) {
+    return pat->posX;
+}
+float get_posY(struct FinderPattern *pat) {
+    return pat->posY;
+}
+float get_estimatedModuleSize(struct FinderPattern *pat) {
+    return pat->estimatedModuleSize;
+}
+int get_count(struct FinderPattern *pat) {
+    return pat->count;
+}
+
 void createFinderPattern(struct FinderPattern *pat, f32 posX, f32 posY, float estimatedModuleSize, i32 count)
 {
     pat->posX = posX;

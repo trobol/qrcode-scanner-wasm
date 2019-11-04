@@ -188,7 +188,7 @@ void findFinderPattern()
 			}
 		}
 	}
-	sortBestPatterns();
+	selectBestPatterns();
 	orderBestPatterns();
 }
 
@@ -506,7 +506,9 @@ void sortCenterComparator(float averageModuleSize)
 		}
 }
 
-void sortFurthestFromAveragePatters()
+
+//selectBestPatterns
+void selectBestPatterns()
 {
 	unsigned int startSize = possibleCentersSize;
 
@@ -563,10 +565,4 @@ void sortFurthestFromAveragePatters()
 		sortCenterComparator(average);
 		possibleCentersSize = 3;
 	}
-
-	vector<Ref<FinderPattern>> result(3);
-	result[0] = possibleCenters_[0];
-	result[1] = possibleCenters_[1];
-	result[2] = possibleCenters_[2];
-	return result;
 }

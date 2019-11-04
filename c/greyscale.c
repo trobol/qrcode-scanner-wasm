@@ -1,5 +1,6 @@
 #include "../c/qrcode.h"
 #include "../c/wasm.h"
+#include "FinderPatternFinder.h"
 
 export void *setImageSize(unsigned int x, unsigned int y)
 {
