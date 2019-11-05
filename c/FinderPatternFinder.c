@@ -4,9 +4,19 @@
 #include "./math.h"
 #include "./qrcode.h"
 
-inline bool getBitmapPixel(unsigned int x, unsigned int y)
+void throw() {};
+bool hasSkipped = false;
+struct FinderPattern possibleCenters[4];
+unsigned int possibleCentersSize = 0;
+
+struct FinderPattern *get_pattern(int i)
 {
-	return image[x * 4 + (imageWidth * y) * 4];
+	return &possibleCenters[i];
+}
+
+bool getBitmapPixel(unsigned int x, unsigned int y)
+{
+	return image[x * 4 + (imageWidth * y) * 4] > 0 ? 0 : 1;
 }
 float distance(struct FinderPattern *p1, struct FinderPattern *p2)
 {
@@ -59,7 +69,7 @@ void orderBestPatterns()
 	possibleCenters[1] = topLeft;
 	possibleCenters[2] = topRight;
 }
-void findFinderPattern()
+void findFinderPatterns()
 {
 	bool tryHarder = false;
 	//image
@@ -93,9 +103,9 @@ void findFinderPattern()
 		stateCount[4] = 0;
 		ui32 currentState = 0;
 		for (ui32 j = 0; j < maxJ; ++j)
-		{
+		{	
 
-			if (image[j + i * imageWidth])
+			if (getBitmapPixel(j, i))
 			{
 				// Black pixel
 				if ((currentState & 1) == 1)
@@ -179,6 +189,7 @@ void findFinderPattern()
 				bool confirmed = handlePossibleCenter(stateCount, i, maxJ);
 				if (confirmed)
 				{
+					
 					iSkip = stateCount[0];
 					if (hasSkipped)
 					{
@@ -253,10 +264,10 @@ bool haveMultiplyConfirmedCenters()
 	return totalDeviation <= 0.05f * totalModuleSize;
 }
 
-bool foundPatternCross(i32 *stateCount)
+bool foundPatternCross(int *stateCount)
 {
-	i32 totalModuleSize = 0;
-	for (ui32 i = 0; i < 5; ++i)
+	unsigned int totalModuleSize = 0;
+	for (unsigned int i = 0; i < 5; ++i)
 	{
 		if (stateCount[i] == 0)
 		{
@@ -268,13 +279,13 @@ bool foundPatternCross(i32 *stateCount)
 	{
 		return false;
 	}
-	f32 moduleSize = (f32)totalModuleSize / 7.0f;
-	f32 maxVariance = moduleSize / 2.0f;
+	float moduleSize = (float)totalModuleSize / 7.0f;
+	float maxVariance = moduleSize / 2.0f;
 	// Allow less than 50% variance from 1-1-3-1-1 proportions
-	return fabs(moduleSize - stateCount[0]) < maxVariance && fabs(moduleSize - stateCount[1]) < maxVariance && fabs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && abs(moduleSize - stateCount[3]) < maxVariance && abs(moduleSize - stateCount[4]) < maxVariance;
+	return fabs(moduleSize - stateCount[0]) < maxVariance && fabs(moduleSize - stateCount[1]) < maxVariance && fabs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && abs(moduleSize - stateCount[3]) < maxVariance && fabs(moduleSize - stateCount[4]) < maxVariance;
 }
 
-bool handlePossibleCenter(i32 *stateCount, ui32 i, ui32 j)
+bool handlePossibleCenter(int *stateCount, unsigned int i, unsigned int j)
 {
 	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
 	float centerJ = centerFromEnd(stateCount, j);
@@ -312,10 +323,19 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 						 int originalStateCountTotal)
 {
 	int maxI = imageHeight;
-	int stateCount[3] = {0, 0, 0};
+	int stateCount[5] = {0, 0, 0, 0, 0};
 
 	// Start counting up from center
 	int i = startI;
+	while (i >= 0 && getBitmapPixel(centerJ, i))
+	{
+		stateCount[2]++;
+		i--;
+	}
+	if (i < 0)
+	{
+		return NaN;
+	}
 	while (i >= 0 && getBitmapPixel(centerJ, i) && stateCount[1] <= maxCount)
 	{
 		stateCount[1]++;
@@ -515,7 +535,7 @@ void selectBestPatterns()
 	if (startSize < 3)
 	{
 		// Couldn't find enough finder patterns
-		//throw zxing::ReaderException("Could not find three finder patterns");
+		throw();//zxing::ReaderException("Could not find three finder patterns");
 	}
 
 	// Filter outlier possibilities whose module size is too different

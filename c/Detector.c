@@ -14,7 +14,7 @@ void processFinderPatternInfo()
 	if (moduleSize < 1.0f)
 	{
 		//TODO EXIT
-		//throw zxing::ReaderException("bad module size");
+		throw();// zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
 	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);

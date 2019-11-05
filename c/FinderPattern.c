@@ -14,6 +14,7 @@ int get_count(struct FinderPattern *pat) {
     return pat->count;
 }
 
+
 void createFinderPattern(struct FinderPattern *pat, f32 posX, f32 posY, float estimatedModuleSize, i32 count)
 {
     pat->posX = posX;

@@ -9,21 +9,21 @@
 #define INTEGER_MATH_SHIFT 8
 #define CENTER_QUORUM 2
 
-bool hasSkipped = false;
+extern bool hasSkipped;
 
 struct FinderPattern *addPossibleCenter(float posX, float posY,
 										float estimatedModuleSize,
 										unsigned int count);
-struct FinderPattern possibleCenters[4];
-unsigned int possibleCentersSize = 0;
+extern struct FinderPattern possibleCenters[4];
+extern unsigned int possibleCentersSize;
 
 //returns pattern finder
-void findFinderPattern();
+void findFinderPatterns();
 
 //returns pattern
 void selectBestPatterns();
 
-bool handlePossibleCenter(i32 *stateCount, ui32 i, ui32 j);
+bool handlePossibleCenter(int *stateCount, unsigned int i, unsigned int j);
 
 float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount,
 						 int originalStateCountTotal);
@@ -38,4 +38,8 @@ float centerFromEnd(int *stateCount, int end);
 bool haveMultiplyConfirmedCenters();
 
 int findRowSkip();
+
+struct FinderPattern *get_pattern(int i);
+
+bool getBitmapPixel(unsigned int x, unsigned int y);
 #endif

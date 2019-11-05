@@ -750,6 +750,8 @@ function Detector(image) {
 		var patternFinder = new FinderPatternFinder();
 
 		var info = patternFinder.findFinderPattern(this.image);
+		console.log(info);
+		console.log(qrcode.finderPatterns);
 		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}
@@ -2075,7 +2077,7 @@ qrcode.decode = function () {
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height)
 	qrcode.pixeldata.set(qrcode.imagedata.data);
 	var bitmap = qrcode.imageToBitmap();
-
+	qrcode.decodeWasm();
 	qrcode.result = qrcode.process(bitmap);
 
 
@@ -2183,12 +2185,32 @@ qrcode.load = (() => {
 			memory: new WebAssembly.Memory({ initial: 512 })
 		}
 	}
-
+	
 
 	WebAssembly.instantiateStreaming(
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
-
+		
+		qrcode.get_int = instance.exports.get_int;
+		qrcode.decodeWasm = instance.exports.decode;
+		class FinderPattern {
+			constructor(i) {
+				this.ptr = instance.exports.get_pattern(i);
+			}
+			get posX() {
+				return instance.exports.get_posX(this.ptr);
+			}
+			get posY() {
+				return instance.exports.get_posY(this.ptr);
+			}
+			get estimatedModuleSize() {
+				return instance.exports.get_estimatedModuleSize(this.ptr);
+			}
+			get count() {
+				return instance.exports.get_count(this.ptr);
+			}
+		}
+		qrcode.finderPatterns = [new FinderPattern(0), new FinderPattern(1), new FinderPattern(2)];
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
@@ -2197,7 +2219,7 @@ qrcode.load = (() => {
 		}
 
 		qrcode.imageToBitmap = function () {
-			instance.exports.imageToBitmap();
+			//instance.exports.imageToBitmap();
 			let bitmap = new Array(qrcode.width * qrcode.height);
 			for (let x = 0; x < qrcode.width; x++) {
 				for (let y = 0; y < qrcode.height; y++) {

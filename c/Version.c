@@ -5,7 +5,7 @@ struct Version *getVersionForNumber(int versionNumber)
 	if (versionNumber < 1 || versionNumber > N_VERSIONS)
 	{
 		//ERROR
-		//throw ReaderException("versionNumber must be between 1 and 40");
+		throw();// ReaderException("versionNumber must be between 1 and 40");
 	}
 
 	return &VERSIONS[versionNumber - 1];
@@ -16,7 +16,7 @@ struct Version *getProvisionalVersionForDimension(int dimension)
 	if (dimension % 4 != 1)
 	{
 		//ERROR
-		//throw FormatException();
+		throw();// FormatException();
 	}
 
 	return getVersionForNumber((dimension - 17) >> 2);
