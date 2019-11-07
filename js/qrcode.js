@@ -698,6 +698,7 @@ function Detector(image) {
 			throw 'Error';
 		}
 		var dimension = this.computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+		console.log(dimension);
 		var provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
 		var modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;
 
@@ -743,15 +744,26 @@ function Detector(image) {
 		}
 		return new DetectorResult(bits, points);
 	}
-
+	function drawPoint(x, y) {
+		qrcode.context.fillRect(x - 5, y - 5, 10, 10);
+	}
 
 
 	this.detect = function () {
 		var patternFinder = new FinderPatternFinder();
 
 		var info = patternFinder.findFinderPattern(this.image);
+		qrcode.context.fillStyle = "blue";
 		console.log(info);
+		drawPoint(info.bottomLeft.x, info.bottomLeft.y);
+		drawPoint(info.topRight.x, info.topRight.y);
+		drawPoint(info.topLeft.x, info.topLeft.y);
+
+		qrcode.context.fillStyle = "red";
 		console.log(qrcode.finderPatterns);
+		for(let i = 0; i < 3; i++) {
+			drawPoint(qrcode.finderPatterns[i].posX, qrcode.finderPatterns[i].posY);
+		} 
 		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}
@@ -2187,11 +2199,11 @@ qrcode.load = (() => {
 				console.log("Num", n);
 			},
 			drawPoint(x, y) {
-				console.log("draw", x, y);
-				qrcode.context.fillStyle = "red";
+				
 				qrcode.context.fillRect(x, y, 10, 10); // fill in the pixel at (10,10)
 			},
-			fsqrt: Math.sqrt
+			fsqrt: Math.sqrt,
+			round:Math.round
 		}
 	}
 
@@ -2229,7 +2241,7 @@ qrcode.load = (() => {
 		}
 
 		qrcode.imageToBitmap = function () {
-			//instance.exports.imageToBitmap();
+			instance.exports.imageToBitmap();
 			let bitmap = new Array(qrcode.width * qrcode.height);
 			for (let x = 0; x < qrcode.width; x++) {
 				for (let y = 0; y < qrcode.height; y++) {

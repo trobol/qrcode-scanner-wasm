@@ -13,14 +13,15 @@ void processFinderPatternInfo()
 	float moduleSize = calculateModuleSize(&topLeft, &topRight, &bottomLeft);
 	if (moduleSize < 1.0f)
 	{
-		//TODO EXIT
+		//TODO: EXIT
 		throw();// zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
+	printNum(dimension);
 	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
 	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
 
-	struct AlignmentPattern alignmentPattern;
+	struct AlignmentPattern *alignmentPattern;
 	// Anything above version 1 has an alignment pattern
 	if (provisionalVersion->alignmentPatternCount > 0)
 	{
@@ -38,23 +39,18 @@ void processFinderPatternInfo()
 		// Kind of arbitrary -- expand search radius before giving up
 		for (int i = 4; i <= 16; i <<= 1)
 		{
-			try
-			{
-				alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
+			
+			alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
+			if(alignmentPattern == 0)
 				break;
-			}
-			catch (zxing::ReaderException const &re)
-			{
-				(void)re;
-				// try next round
-			}
+		
 		}
 		if (alignmentPattern == 0)
 		{
 			// Try anyway
 		}
 	}
-
+	/*
 	PerspectiveTransform transform = createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 	Ref<BitMatrix> bits(sampleGrid(image_, dimension, transform));
 	ArrayRef<Ref<ResultPoint>> points(new Array<Ref<ResultPoint>>(alignmentPattern == 0 ? 3 : 4));
@@ -67,7 +63,9 @@ void processFinderPatternInfo()
 	}
 
 	Ref<DetectorResult> result(new DetectorResult(bits, points));
+	
 	return result;
+	*/
 }
 
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft)
@@ -112,7 +110,31 @@ int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRig
 		dimension--;
 		break;
 	case 3:
+		break;
 		//error
 	}
 	return dimension;
+}
+
+struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY,
+													  float allowanceFactor)
+{
+	// Look for an alignment pattern (3 modules in size) around where it
+	// should be
+	int allowance = (int)(allowanceFactor * overallEstModuleSize);
+	int alignmentAreaLeftX = max(0, estAlignmentX - allowance);
+	int alignmentAreaRightX = min((int)(image_->getWidth() - 1), estAlignmentX + allowance);
+	if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
+	{
+		//region too small to hold alignment pattern
+	}
+	int alignmentAreaTopY = max(0, estAlignmentY - allowance);
+	int alignmentAreaBottomY = min((int)(image_->getHeight() - 1), estAlignmentY + allowance);
+	if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3)
+	{
+		//region too small to hold alignment pattern
+	}
+
+	AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
+	return alignmentFinder.find();
 }

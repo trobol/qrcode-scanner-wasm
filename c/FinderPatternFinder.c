@@ -14,10 +14,6 @@ struct FinderPattern *get_pattern(int i)
 	return &possibleCenters[i];
 }
 
-bool getBitmapPixel(unsigned int x, unsigned int y)
-{
-	return image[x * 4 + (imageWidth * y) * 4] != 0 ? 0 : 1;
-}
 float distance(struct FinderPattern *p1, struct FinderPattern *p2)
 {
 	float dx = p1->posX - p2->posX;
@@ -225,8 +221,7 @@ int findRowSkip()
 	int firstConfirmedCenter = 0;
 	for (unsigned int i = 0; i < max; i++)
 	{
-		printNum(possibleCenters[i].count);
-		if (possibleCenters[i].count >= 2)
+		if (possibleCenters[i].count >= CENTER_QUORUM)
 		{
 
 			if (firstConfirmedCenter == 0)
@@ -262,7 +257,6 @@ bool haveMultiplyConfirmedCenters()
 			totalModuleSize += possibleCenters[i].estimatedModuleSize;
 		}
 	}
-	printNum(confirmedCount);
 	if (confirmedCount < 3)
 	{
 		return false;
@@ -506,7 +500,6 @@ struct FinderPattern *addPossibleCenter(float posX, float posY,
 	possibleCenters[possibleCentersSize].posY = posY;
 	possibleCenters[possibleCentersSize].estimatedModuleSize = estimatedModuleSize;
 	possibleCenters[possibleCentersSize].count = count;
-	printNum(possibleCentersSize);
 	if (possibleCentersSize > 10)
 	{
 		return &possibleCenters[possibleCentersSize];

@@ -1,5 +1,4 @@
 #include "Version.h"
-
 struct Version *getVersionForNumber(int versionNumber)
 {
 	if (versionNumber < 1 || versionNumber > N_VERSIONS)
@@ -27,7 +26,7 @@ int getDimensionForVersion(struct Version *version)
 	return 17 + 4 * version->versionNumber;
 }
 
-struct Version VERSIONS[40] = {
+const struct Version VERSIONS[40] = {
 	{
 		1,
 		26,
@@ -478,7 +477,7 @@ struct Version VERSIONS[40] = {
 		38,
 		3362,
 		7,
-		(int[7]){6 32 58 84 110 136 162},
+		(int[7]){6, 32, 58, 84, 110, 136, 162},
 		{
 			{660, {{4, 122}, {18, 123}}}, //38
 			{1260, {{13, 46}, {32, 47}}},

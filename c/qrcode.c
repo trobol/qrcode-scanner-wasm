@@ -1,6 +1,7 @@
 #include "../c/qrcode.h"
 #include "FinderPatternFinder.h"
 #include "../c/wasm.h"
+#include "Detector.h"
 
 unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
@@ -102,17 +103,18 @@ export void imageToBitmap()
 export void decode()
 {
 	//process data
-	imageToBitmap();
+	//imageToBitmap();
 	//detect findpatterns
 	possibleCentersSize = 0;
 	findFinderPatterns();
 
-	for (int i = 0; i < possibleCentersSize; i++)
-	{
-		drawPoint(possibleCenters[i].posX, possibleCenters[i].posY);
-	}
-
+	//processFinderPatternInfo();
 	//create detector
 	//detect
 	//decode
+}
+
+bool getBitmapPixel(unsigned int x, unsigned int y)
+{
+	return image[x * 4 + (imageWidth * y) * 4] != 0 ? 0 : 1;
 }

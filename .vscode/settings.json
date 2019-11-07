@@ -1,5 +1,11 @@
 {
 	"files.associations": {
-		"finderpatternfinder.h": "c"
+		"finderpatternfinder.h": "c",
+		"deque": "c",
+		"string": "c",
+		"vector": "c",
+		"*.tcc": "c",
+		"unordered_map": "c",
+		"string_view": "c"
 	}
 }

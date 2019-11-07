@@ -12,4 +12,6 @@ extern unsigned char *image;
 extern unsigned int bitmapSize;
 extern unsigned char *bitmapIndex;
 
+bool getBitmapPixel(unsigned int x, unsigned int y);
+
 #endif

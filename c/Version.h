@@ -1,3 +1,5 @@
+#ifndef VERSION_H
+#define VERSION_H
 #include "wasm.h"
 struct ECB
 {
@@ -8,7 +10,7 @@ struct ECB
 struct ECBlocks
 {
 	int ecCodewords;
-	ECB ecBlocks[2];
+	struct ECB ecBlocks[2];
 };
 
 struct Version
@@ -20,8 +22,9 @@ struct Version
 	struct ECBlocks ecBlocks[4];
 };
 
-#define N_VERSIONS 40;
-struct Version VERSIONS[40];
+#define N_VERSIONS 40
+extern const struct Version VERSIONS[40];
 
 struct Version *getProvisionalVersionForDimension(int dimension);
 int getDimensionForVersion(struct Version *version);
+#endif
