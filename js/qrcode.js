@@ -761,9 +761,9 @@ function Detector(image) {
 
 		qrcode.context.fillStyle = "red";
 		console.log(qrcode.finderPatterns);
-		for(let i = 0; i < 3; i++) {
+		for (let i = 0; i < 3; i++) {
 			drawPoint(qrcode.finderPatterns[i].posX, qrcode.finderPatterns[i].posY);
-		} 
+		}
 		if (info === null) return null;
 		return this.processFinderPatternInfo(info);
 	}
@@ -2199,11 +2199,11 @@ qrcode.load = (() => {
 				console.log("Num", n);
 			},
 			drawPoint(x, y) {
-				
+
 				qrcode.context.fillRect(x, y, 10, 10); // fill in the pixel at (10,10)
 			},
 			fsqrt: Math.sqrt,
-			round:Math.round
+			round: Math.round
 		}
 	}
 
@@ -2627,7 +2627,6 @@ function FinderPatternFinder() {
 				if (!found) {
 					var point = new FinderPattern(centerJ, centerI, estimatedModuleSize);
 					this.possibleCenters.push(point);
-					console.log(this.possibleCenters.length);
 					if (this.resultPointCallback != null) {
 						this.resultPointCallback.foundPossibleResultPoint(point);
 					}

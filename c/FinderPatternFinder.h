@@ -2,7 +2,7 @@
 #define FINDER_PATTERN_FINDER_H
 #include "../c/wasm.h"
 #include "./math.h"
-#include "../c/FinderPattern.h"
+#include "FinderPattern.h"
 
 #define MIN_SKIP 3
 #define MAX_MODULES 57

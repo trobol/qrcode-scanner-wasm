@@ -14,18 +14,12 @@ struct FinderPattern *get_pattern(int i)
 	return &possibleCenters[i];
 }
 
-float distance(struct FinderPattern *p1, struct FinderPattern *p2)
-{
-	float dx = p1->posX - p2->posX;
-	float dy = p1->posY - p2->posY;
-	return (float)fsqrt(dx * dx + dy * dy);
-}
 void orderBestPatterns()
 {
 	// Find distances between pattern centers
-	float abDistance = distance(&possibleCenters[0], &possibleCenters[1]);
-	float bcDistance = distance(&possibleCenters[1], &possibleCenters[2]);
-	float acDistance = distance(&possibleCenters[0], &possibleCenters[2]);
+	float abDistance = FinderPattern_distance(&possibleCenters[0], &possibleCenters[1]);
+	float bcDistance = FinderPattern_distance(&possibleCenters[1], &possibleCenters[2]);
+	float acDistance = FinderPattern_distance(&possibleCenters[0], &possibleCenters[2]);
 
 	struct FinderPattern topLeft;
 	struct FinderPattern topRight;

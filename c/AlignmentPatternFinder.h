@@ -3,18 +3,16 @@
 #include "wasm.h"
 #include "AlignmentPattern.h"
 
-
-int AlignmentPatternFinder_startX;
-int AlignmentPatternFinder_startY;
-int AlignmentPatternFinder_width;
-int AlignmentPatternFinder_height;
-float AlignmentPatternFinder_moduleSize;
-
+extern int AlignmentPatternFinder_startX;
+extern int AlignmentPatternFinder_startY;
+extern int AlignmentPatternFinder_width;
+extern int AlignmentPatternFinder_height;
+extern float AlignmentPatternFinder_moduleSize;
 
 struct AlignmentPattern *AlignmentPatternFinder_find();
 struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCount[3], int i, int j);
 
-struct AlignmentPattern AlignmentPatternFinder_possibleCenters[4];
-int AlignmentPatternFinder_possibleCentersSize;
+extern struct AlignmentPattern AlignmentPatternFinder_possibleCenters[4];
+extern int AlignmentPatternFinder_possibleCentersSize;
 
 #endif

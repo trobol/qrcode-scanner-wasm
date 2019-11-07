@@ -20,7 +20,22 @@ float fmax(float i, float j)
 	return i > j ? i : j;
 }
 
-inline int round(float d)
+int min(int i, int j)
+{
+	return i < j ? i : j;
+}
+float fmin(float i, float j)
+{
+	return i < j ? i : j;
+}
+
+int round(float d)
 {
 	return (int)(d + 0.5f);
+}
+float distance(float aX, float aY, float bX, float bY)
+{
+	float xDiff = aX - bX;
+	float yDiff = aY - bY;
+	return fsqrt(xDiff * xDiff + yDiff * yDiff);
 }

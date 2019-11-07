@@ -24,4 +24,6 @@ struct FinderPattern combineEstimate(struct FinderPattern *from, f32 i, f32 j, f
 
 bool aboutEquals(struct FinderPattern *pat, f32 moduleSize, f32 i, f32 j);
 
+float FinderPattern_distance(struct FinderPattern *a, struct FinderPattern *b);
+
 #endif

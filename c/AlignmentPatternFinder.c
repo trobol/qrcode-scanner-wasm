@@ -1,6 +1,15 @@
 #include "AlignmentPatternFinder.h"
 #include "qrcode.h"
 
+int AlignmentPatternFinder_startX;
+int AlignmentPatternFinder_startY;
+int AlignmentPatternFinder_width;
+int AlignmentPatternFinder_height;
+float AlignmentPatternFinder_moduleSize;
+
+struct AlignmentPattern AlignmentPatternFinder_possibleCenters[4];
+int AlignmentPatternFinder_possibleCentersSize;
+
 float AlignmentPatternFinder_centerFromEnd(int stateCount[5], int end)
 {
 	return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
@@ -20,7 +29,7 @@ bool AlignmentPatternFinder_foundPatternCross(int stateCount[5])
 }
 
 float AlignmentPatternFinder_crossCheckVertical(int startI, int centerJ, int maxCount,
-												 int originalStateCountTotal)
+												int originalStateCountTotal)
 {
 	int maxI = imageHeight;
 	int stateCount[3] = {0, 0, 0};
@@ -96,7 +105,7 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 				return AlignmentPatternFinder_combineEstimate(center, centerI, centerJ, estimatedModuleSize);
 			}
 		}
-		
+
 		AlignmentPatternFinder_possibleCenters[AlignmentPatternFinder_possibleCentersSize].posX = centerJ;
 		AlignmentPatternFinder_possibleCenters[AlignmentPatternFinder_possibleCentersSize].posY = centerI;
 		AlignmentPatternFinder_possibleCenters[AlignmentPatternFinder_possibleCentersSize].estimatedModuleSize = estimatedModuleSize;
@@ -106,9 +115,9 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 	return 0;
 }
 
-
 struct AlignmentPattern *AlignmentPatternFinder_find()
 {
+	AlignmentPatternFinder_possibleCentersSize = 0;
 	int maxJ = AlignmentPatternFinder_startX + AlignmentPatternFinder_width;
 	int middleI = AlignmentPatternFinder_startY + (AlignmentPatternFinder_height >> 1);
 	//      Ref<BitArray> luminanceRow(new BitArray(width_));

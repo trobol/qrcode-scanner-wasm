@@ -6,4 +6,6 @@ struct AlignmentPattern
 	float estimatedModuleSize;
 };
 
+struct AlignmentPattern *AlignmentPattern_combineEstimate(struct AlignmentPattern *pat, float i, float j,
+														  float newModuleSize);
 #endif

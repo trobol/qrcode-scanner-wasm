@@ -2,10 +2,10 @@
 #include "Detector.h"
 #include "Version.h"
 #include "math.h"
-#include "AlignmentPattern.h"
 #include "AlignmentPatternFinder.h"
+#include "qrcode.h"
 
-void processFinderPatternInfo()
+struct DetectorResult *processFinderPatternInfo()
 {
 	struct FinderPattern bottomLeft = possibleCenters[0];
 	struct FinderPattern topLeft = possibleCenters[1];
@@ -15,7 +15,7 @@ void processFinderPatternInfo()
 	if (moduleSize < 1.0f)
 	{
 		//TODO: EXIT
-		throw();// zxing::ReaderException("bad module size");
+		throw(); // zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
 	printNum(dimension);
@@ -40,11 +40,10 @@ void processFinderPatternInfo()
 		// Kind of arbitrary -- expand search radius before giving up
 		for (int i = 4; i <= 16; i <<= 1)
 		{
-			
+
 			alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
-			if(alignmentPattern == 0)
+			if (alignmentPattern == 0)
 				break;
-		
 		}
 		if (alignmentPattern == 0)
 		{
@@ -97,9 +96,9 @@ int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRig
 					 float moduleSize)
 {
 	int tltrCentersDimension =
-		round(distance(topLeft, topRight) / moduleSize);
+		round(FinderPattern_distance(topLeft, topRight) / moduleSize);
 	int tlblCentersDimension =
-		round(distance(topLeft, bottomLeft) / moduleSize);
+		round(FinderPattern_distance(topLeft, bottomLeft) / moduleSize);
 	int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
 	switch (dimension & 0x03)
 	{ // mod 4
@@ -118,30 +117,129 @@ int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRig
 }
 
 struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY,
-													  float allowanceFactor)
+											   float allowanceFactor)
 {
 	// Look for an alignment pattern (3 modules in size) around where it
 	// should be
 	int allowance = (int)(allowanceFactor * overallEstModuleSize);
 	int alignmentAreaLeftX = max(0, estAlignmentX - allowance);
-	int alignmentAreaRightX = min((int)(image_->getWidth() - 1), estAlignmentX + allowance);
+	int alignmentAreaRightX = min((int)(imageWidth - 1), estAlignmentX + allowance);
 	if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
 	}
 	int alignmentAreaTopY = max(0, estAlignmentY - allowance);
-	int alignmentAreaBottomY = min((int)(image_->getHeight() - 1), estAlignmentY + allowance);
+	int alignmentAreaBottomY = min((int)(imageHeight - 1), estAlignmentY + allowance);
 	if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
 	}
 
 	AlignmentPatternFinder_startX = alignmentAreaLeftX;
-		AlignmentPatternFinder_startY;
-	AlignmentPatternFinder_width;
-	AlignmentPatternFinder_height;
-	AlignmentPatternFinder_moduleSize;
+	AlignmentPatternFinder_startY = alignmentAreaTopY;
+	AlignmentPatternFinder_width = alignmentAreaRightX - alignmentAreaLeftX;
+	AlignmentPatternFinder_height = alignmentAreaBottomY - alignmentAreaTopY;
+	AlignmentPatternFinder_moduleSize = overallEstModuleSize;
+	return AlignmentPatternFinder_find();
+}
 
-	AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
-	return alignmentFinder.find();
+float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY)
+{
+
+	float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
+
+	// Now count other way -- don't run off image though of course
+	float scale = 1.0f;
+	int otherToX = fromX - (toX - fromX);
+	if (otherToX < 0)
+	{
+		scale = (float)fromX / (float)(fromX - otherToX);
+		otherToX = 0;
+	}
+	else if (otherToX >= (int)imageWidth)
+	{
+		scale = (float)(imageWidth - 1 - fromX) / (float)(otherToX - fromX);
+		otherToX = imageWidth - 1;
+	}
+	int otherToY = (int)(fromY - (toY - fromY) * scale);
+
+	scale = 1.0f;
+	if (otherToY < 0)
+	{
+		scale = (float)fromY / (float)(fromY - otherToY);
+		otherToY = 0;
+	}
+	else if (otherToY >= (int)imageHeight)
+	{
+		scale = (float)(imageHeight - 1 - fromY) / (float)(otherToY - fromY);
+		otherToY = imageHeight - 1;
+	}
+	otherToX = (int)(fromX + (otherToX - fromX) * scale);
+
+	result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
+
+	// Middle pixel is double-counted this way; subtract 1
+	return result - 1.0f;
+}
+
+float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
+{
+	// Mild variant of Bresenham's algorithm;
+	// see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
+	bool steep = abs(toY - fromY) > abs(toX - fromX);
+	if (steep)
+	{
+		int temp = fromX;
+		fromX = fromY;
+		fromY = temp;
+		temp = toX;
+		toX = toY;
+		toY = temp;
+	}
+
+	int dx = abs(toX - fromX);
+	int dy = abs(toY - fromY);
+	int error = -dx >> 1;
+	int xstep = fromX < toX ? 1 : -1;
+	int ystep = fromY < toY ? 1 : -1;
+
+	// In black pixels, looking for white, first or second time.
+	int state = 0;
+	// Loop up until x == toX, but not beyond
+	int xLimit = toX + xstep;
+	for (int x = fromX, y = fromY; x != xLimit; x += xstep)
+	{
+		int realX = steep ? y : x;
+		int realY = steep ? x : y;
+
+		// Does current pixel mean we have moved white to black or vice versa?
+		if (!((state == 1) ^ getBitmapPixel(realX, realY)))
+		{
+			if (state == 2)
+			{
+				return distance(x, y, fromX, fromY);
+			}
+			state++;
+		}
+
+		error += dy;
+		if (error > 0)
+		{
+			if (y == toY)
+			{
+				break;
+			}
+			y += ystep;
+			error -= dx;
+		}
+	}
+	// Found black-white-black; give the benefit of the doubt that the next pixel outside the image
+	// is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
+	// small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
+	if (state == 2)
+	{
+		return distance(toX + xstep, toY, fromX, fromY);
+	}
+	// else we didn't find even black-white-black; no estimate is really possible
+	return NaN;
 }

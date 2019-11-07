@@ -1,6 +1,13 @@
 #include "../c/FinderPattern.h"
 #include "./math.h"
 
+float FinderPattern_distance(struct FinderPattern *p1, struct FinderPattern *p2)
+{
+    float dx = p1->posX - p2->posX;
+    float dy = p1->posY - p2->posY;
+    return (float)fsqrt(dx * dx + dy * dy);
+}
+
 float get_posX(struct FinderPattern *pat)
 {
     return pat->posX;
