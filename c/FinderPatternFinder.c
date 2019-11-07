@@ -4,9 +4,9 @@
 #include "./math.h"
 #include "./qrcode.h"
 
-void throw() {};
+void throw(){};
 bool hasSkipped = false;
-struct FinderPattern possibleCenters[4];
+struct FinderPattern possibleCenters[12];
 unsigned int possibleCentersSize = 0;
 
 struct FinderPattern *get_pattern(int i)
@@ -16,13 +16,13 @@ struct FinderPattern *get_pattern(int i)
 
 bool getBitmapPixel(unsigned int x, unsigned int y)
 {
-	return image[x * 4 + (imageWidth * y) * 4] > 0 ? 0 : 1;
+	return image[x * 4 + (imageWidth * y) * 4] != 0 ? 0 : 1;
 }
 float distance(struct FinderPattern *p1, struct FinderPattern *p2)
 {
 	float dx = p1->posX - p2->posX;
 	float dy = p1->posY - p2->posY;
-	return (float)sqrt(dx * dx + dy * dy);
+	return (float)fsqrt(dx * dx + dy * dy);
 }
 void orderBestPatterns()
 {
@@ -71,6 +71,7 @@ void orderBestPatterns()
 }
 void findFinderPatterns()
 {
+	hasSkipped = false;
 	bool tryHarder = false;
 	//image
 
@@ -80,7 +81,7 @@ void findFinderPatterns()
 	// We are looking for black/white/black/white/black modules in
 	// 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
 
-	i32 stateCount[5];
+	int stateCount[5];
 	bool done = false;
 
 	// Let's assume that the maximum version QR Code we support takes up 1/4
@@ -88,31 +89,31 @@ void findFinderPatterns()
 	// modules in size. This gives the smallest number of pixels the center
 	// could be, so skip this often. When trying harder, look for all
 	// QR versions regardless of how dense they are.
-	unsigned int iSkip = (3 * maxI) / (4 * MAX_MODULES);
+	int iSkip = (3 * maxI) / (4 * MAX_MODULES);
 	if (iSkip < MIN_SKIP || tryHarder)
 	{
 		iSkip = MIN_SKIP;
 	}
 
-	for (ui32 i = iSkip - 1; i < maxI && !done; i += iSkip)
+	for (unsigned int i = iSkip - 1; i < maxI && !done; i += iSkip)
 	{
 		stateCount[0] = 0;
 		stateCount[1] = 0;
 		stateCount[2] = 0;
 		stateCount[3] = 0;
 		stateCount[4] = 0;
-		ui32 currentState = 0;
-		for (ui32 j = 0; j < maxJ; ++j)
-		{	
+		int currentState = 0;
+		for (unsigned int j = 0; j < maxJ; ++j)
+		{
 
 			if (getBitmapPixel(j, i))
 			{
 				// Black pixel
 				if ((currentState & 1) == 1)
 				{ // Counting white pixels
-					++currentState;
+					currentState++;
 				}
-				++stateCount[currentState];
+				stateCount[currentState]++;
 			}
 			else
 			{ // White pixel
@@ -129,13 +130,15 @@ void findFinderPatterns()
 								// Start examining every other line. Checking each line turned out to be too
 								// expensive and didn't improve performance.
 								iSkip = 2;
+
 								if (hasSkipped)
 								{
 									done = haveMultiplyConfirmedCenters();
 								}
 								else
 								{
-									ui32 rowSkip = findRowSkip();
+									int rowSkip = findRowSkip();
+
 									if (rowSkip > stateCount[2])
 									{
 										// Skip rows between row of lower confirmed center
@@ -155,10 +158,13 @@ void findFinderPatterns()
 							else
 							{
 
-								do
-								{
-									++j;
-								} while (j < maxJ && !image[j + i * imageWidth]);
+								stateCount[0] = stateCount[2];
+								stateCount[1] = stateCount[3];
+								stateCount[2] = stateCount[4];
+								stateCount[3] = 1;
+								stateCount[4] = 0;
+								currentState = 3;
+								continue;
 							}
 
 							currentState = 0;
@@ -180,8 +186,12 @@ void findFinderPatterns()
 					}
 					else
 					{
-						++stateCount[++currentState];
+						stateCount[++currentState]++;
 					}
+				}
+				else
+				{ // Counting white pixels
+					stateCount[currentState]++;
 				}
 			}
 			if (foundPatternCross(stateCount))
@@ -189,7 +199,7 @@ void findFinderPatterns()
 				bool confirmed = handlePossibleCenter(stateCount, i, maxJ);
 				if (confirmed)
 				{
-					
+
 					iSkip = stateCount[0];
 					if (hasSkipped)
 					{
@@ -205,19 +215,24 @@ void findFinderPatterns()
 
 int findRowSkip()
 {
+
 	unsigned int max = possibleCentersSize;
 	if (max <= 1)
 	{
 		return 0;
 	}
-	struct FinderPattern *firstConfirmedCenter = 0;
+
+	int firstConfirmedCenter = 0;
 	for (unsigned int i = 0; i < max; i++)
 	{
-		if (possibleCenters[i].count >= CENTER_QUORUM)
+		printNum(possibleCenters[i].count);
+		if (possibleCenters[i].count >= 2)
 		{
+
 			if (firstConfirmedCenter == 0)
 			{
-				firstConfirmedCenter = &possibleCenters[i];
+
+				firstConfirmedCenter = i;
 			}
 			else
 			{
@@ -227,7 +242,7 @@ int findRowSkip()
 				// difference in the x / y coordinates of the two centers.
 				// This is the case where you find top left first. Draw it out.
 				hasSkipped = true;
-				return (int)(fabs(firstConfirmedCenter->posX - possibleCenters[i].posX) - fabs(firstConfirmedCenter->posY - possibleCenters[i].posY)) / 2;
+				return (int)(fabs(possibleCenters[firstConfirmedCenter].posX - possibleCenters[i].posX) - fabs(possibleCenters[firstConfirmedCenter].posY - possibleCenters[i].posY)) / 2;
 			}
 		}
 	}
@@ -247,6 +262,7 @@ bool haveMultiplyConfirmedCenters()
 			totalModuleSize += possibleCenters[i].estimatedModuleSize;
 		}
 	}
+	printNum(confirmedCount);
 	if (confirmedCount < 3)
 	{
 		return false;
@@ -264,10 +280,10 @@ bool haveMultiplyConfirmedCenters()
 	return totalDeviation <= 0.05f * totalModuleSize;
 }
 
-bool foundPatternCross(int *stateCount)
+bool foundPatternCross(int stateCount[5])
 {
-	unsigned int totalModuleSize = 0;
-	for (unsigned int i = 0; i < 5; ++i)
+	int totalModuleSize = 0;
+	for (unsigned int i = 0; i < 5; i++)
 	{
 		if (stateCount[i] == 0)
 		{
@@ -282,10 +298,10 @@ bool foundPatternCross(int *stateCount)
 	float moduleSize = (float)totalModuleSize / 7.0f;
 	float maxVariance = moduleSize / 2.0f;
 	// Allow less than 50% variance from 1-1-3-1-1 proportions
-	return fabs(moduleSize - stateCount[0]) < maxVariance && fabs(moduleSize - stateCount[1]) < maxVariance && fabs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && abs(moduleSize - stateCount[3]) < maxVariance && fabs(moduleSize - stateCount[4]) < maxVariance;
+	return fabs(moduleSize - stateCount[0]) < maxVariance && fabs(moduleSize - stateCount[1]) < maxVariance && fabs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && fabs(moduleSize - stateCount[3]) < maxVariance && fabs(moduleSize - stateCount[4]) < maxVariance;
 }
 
-bool handlePossibleCenter(int *stateCount, unsigned int i, unsigned int j)
+bool handlePossibleCenter(int stateCount[5], unsigned int i, unsigned int j)
 {
 	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
 	float centerJ = centerFromEnd(stateCount, j);
@@ -302,9 +318,9 @@ bool handlePossibleCenter(int *stateCount, unsigned int i, unsigned int j)
 			for (unsigned int index = 0; index < max; index++)
 			{
 				// Look for about the same center and module size:
-				if (aboutEquals(possibleCenters + index, estimatedModuleSize, centerI, centerJ))
+				if (aboutEquals(&possibleCenters[index], estimatedModuleSize, centerI, centerJ))
 				{
-					combineEstimate(&possibleCenters[index], &possibleCenters[index], centerI, centerJ, estimatedModuleSize);
+					possibleCenters[index] = combineEstimate(&possibleCenters[index], centerI, centerJ, estimatedModuleSize);
 					found = true;
 					break;
 				}
@@ -322,8 +338,11 @@ bool handlePossibleCenter(int *stateCount, unsigned int i, unsigned int j)
 float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount,
 						 int originalStateCountTotal)
 {
+
 	int maxI = imageHeight;
-	int stateCount[5] = {0, 0, 0, 0, 0};
+	int stateCount[5];
+	for (int i = 0; i < 5; i++)
+		stateCount[i] = 0;
 
 	// Start counting up from center
 	int i = startI;
@@ -336,7 +355,7 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 	{
 		return NaN;
 	}
-	while (i >= 0 && getBitmapPixel(centerJ, i) && stateCount[1] <= maxCount)
+	while (i >= 0 && !getBitmapPixel(centerJ, i) && stateCount[1] <= maxCount)
 	{
 		stateCount[1]++;
 		i--;
@@ -346,7 +365,7 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 	{
 		return NaN;
 	}
-	while (i >= 0 && !getBitmapPixel(centerJ, i) && stateCount[0] <= maxCount)
+	while (i >= 0 && getBitmapPixel(centerJ, i) && stateCount[0] <= maxCount)
 	{
 		stateCount[0]++;
 		i--;
@@ -358,26 +377,37 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 
 	// Now also count down from center
 	i = startI + 1;
-	while (i < maxI && getBitmapPixel(centerJ, i) && stateCount[1] <= maxCount)
-	{
-		stateCount[1]++;
-		i++;
-	}
-	if (i == maxI || stateCount[1] > maxCount)
-	{
-		return NaN;
-	}
-	while (i < maxI && !getBitmapPixel(centerJ, i) && stateCount[2] <= maxCount)
+	while (i < maxI && getBitmapPixel(centerJ, i))
 	{
 		stateCount[2]++;
 		i++;
 	}
-	if (stateCount[2] > maxCount)
+	if (i == maxI)
+	{
+		return NaN;
+	}
+	while (i < maxI && !getBitmapPixel(centerJ, i) && stateCount[3] < maxCount)
+	{
+		stateCount[3]++;
+		i++;
+	}
+	if (i == maxI || stateCount[3] >= maxCount)
+	{
+		return NaN;
+	}
+	while (i < maxI && getBitmapPixel(centerJ, i) && stateCount[4] < maxCount)
+	{
+		stateCount[4]++;
+		i++;
+	}
+	if (stateCount[4] >= maxCount)
 	{
 		return NaN;
 	}
 
-	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
+	// If we found a finder-pattern-like section, but its size is more than 40% different than
+	// the original, assume it's a false positive
+	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
 	if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
 	{
 		return NaN;
@@ -389,7 +419,6 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 float crossCheckHorizontal(unsigned int startJ, unsigned int centerI, int maxCount,
 						   int originalStateCountTotal)
 {
-
 	int maxJ = imageWidth;
 	int stateCount[5];
 	for (int i = 0; i < 5; i++)
@@ -464,9 +493,9 @@ float crossCheckHorizontal(unsigned int startJ, unsigned int centerI, int maxCou
 	return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : NaN;
 }
 
-float centerFromEnd(int *stateCount, int end)
+float centerFromEnd(int stateCount[5], int end)
 {
-	return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
+	return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
 }
 
 struct FinderPattern *addPossibleCenter(float posX, float posY,
@@ -477,7 +506,15 @@ struct FinderPattern *addPossibleCenter(float posX, float posY,
 	possibleCenters[possibleCentersSize].posY = posY;
 	possibleCenters[possibleCentersSize].estimatedModuleSize = estimatedModuleSize;
 	possibleCenters[possibleCentersSize].count = count;
-	return &possibleCenters[possibleCentersSize++];
+	printNum(possibleCentersSize);
+	if (possibleCentersSize > 10)
+	{
+		return &possibleCenters[possibleCentersSize];
+	}
+	else
+	{
+		return &possibleCenters[possibleCentersSize++];
+	}
 }
 
 void sortPossibleCenters(float average)
@@ -514,8 +551,8 @@ void sortCenterComparator(float averageModuleSize)
 			else
 			{
 				float dA = fabs(possibleCenters[j].estimatedModuleSize - averageModuleSize);
-				float dB = fabs(possibleCenters[j].estimatedModuleSize - averageModuleSize);
-				swap = dA > dB;
+				float dB = fabs(possibleCenters[j + 1].estimatedModuleSize - averageModuleSize);
+				swap = dA < dB;
 			}
 			if (swap)
 			{
@@ -526,7 +563,6 @@ void sortCenterComparator(float averageModuleSize)
 		}
 }
 
-
 //selectBestPatterns
 void selectBestPatterns()
 {
@@ -535,7 +571,7 @@ void selectBestPatterns()
 	if (startSize < 3)
 	{
 		// Couldn't find enough finder patterns
-		throw();//zxing::ReaderException("Could not find three finder patterns");
+		//throw(); //zxing::ReaderException("Could not find three finder patterns");
 	}
 
 	// Filter outlier possibilities whose module size is too different
@@ -551,13 +587,12 @@ void selectBestPatterns()
 			square += size * size;
 		}
 		float average = totalModuleSize / (float)startSize;
-		float stdDev = (float)sqrt(square / startSize - average * average);
+		float stdDev = (float)fsqrt(square / startSize - average * average);
 
 		sortPossibleCenters(average);
 
 		float limit = max(0.2f * average, stdDev);
 
-		unsigned int readIndex = 0, writeIndex = 0;
 		for (unsigned int i = 0; i < possibleCentersSize && possibleCentersSize > 3; i++)
 		{
 			if (fabs(possibleCenters[i].estimatedModuleSize - average) > limit)

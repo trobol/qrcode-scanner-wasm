@@ -2082,7 +2082,7 @@ qrcode.decode = function () {
 
 
 	qrcode.imagedata.data.set(qrcode.pixeldata);
-	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+	//qrcode.context.putImageData(qrcode.imagedata, 0, 0);
 
 	if (qrcode.callback != null)
 		qrcode.callback(qrcode.result);
@@ -2182,15 +2182,25 @@ qrcode.load = (() => {
 
 	let imports = {
 		env: {
-			memory: new WebAssembly.Memory({ initial: 512 })
+			memory: new WebAssembly.Memory({ initial: 512 }),
+			printNum(n) {
+				console.log("Num", n);
+			},
+			drawPoint(x, y) {
+				console.log("draw", x, y);
+				qrcode.context.fillStyle = "red";
+				qrcode.context.fillRect(x, y, 10, 10); // fill in the pixel at (10,10)
+			},
+			fsqrt: Math.sqrt
 		}
 	}
-	
+
 
 	WebAssembly.instantiateStreaming(
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
-		
+		qrcode.instance = instance;
+		window.printNum
 		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
 		class FinderPattern {
@@ -2606,6 +2616,7 @@ function FinderPatternFinder() {
 				if (!found) {
 					var point = new FinderPattern(centerJ, centerI, estimatedModuleSize);
 					this.possibleCenters.push(point);
+					console.log(this.possibleCenters.length);
 					if (this.resultPointCallback != null) {
 						this.resultPointCallback.foundPossibleResultPoint(point);
 					}

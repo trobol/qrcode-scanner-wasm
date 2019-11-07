@@ -1,2 +1,2 @@
 @echo off
-clang -include ./c/wasm.h --include-directory include --target=wasm32 -O0 -flto -fno-builtin -nostdlib -Wl,--no-gc-sections -Wl,--import-memory -Wl,--no-entry -Wl,--export-all -Wl,--lto-O3 -o qrcode.wasm c/FinderPattern.c c/qrcode.c c/FinderPatternFinder.c c/math.c
+clang -include ./c/wasm.h --include-directory include -g --target=wasm32 -O0 -flto -fno-builtin -nostdlib -Wl,--no-gc-sections -Wl,--import-memory -Wl,--no-entry -Wl,--export-all -Wl,--lto-O0 -Wl,--allow-undefined -o qrcode.wasm c/FinderPattern.c c/qrcode.c c/FinderPatternFinder.c c/math.c

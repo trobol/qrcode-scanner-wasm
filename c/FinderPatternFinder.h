@@ -14,7 +14,7 @@ extern bool hasSkipped;
 struct FinderPattern *addPossibleCenter(float posX, float posY,
 										float estimatedModuleSize,
 										unsigned int count);
-extern struct FinderPattern possibleCenters[4];
+extern struct FinderPattern possibleCenters[12];
 extern unsigned int possibleCentersSize;
 
 //returns pattern finder
@@ -42,4 +42,7 @@ int findRowSkip();
 struct FinderPattern *get_pattern(int i);
 
 bool getBitmapPixel(unsigned int x, unsigned int y);
+
+import void printNum(int n);
+import void drawPoint(int x, int y);
 #endif

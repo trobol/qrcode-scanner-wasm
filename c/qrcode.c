@@ -11,8 +11,8 @@ unsigned char *image = &__heap_base;
 unsigned int bitmapSize = 0;
 unsigned char *bitmapIndex;
 
-
-int get_int(int* i) {
+int get_int(int *i)
+{
 	return *i;
 }
 export void *setImageSize(unsigned int x, unsigned int y)
@@ -104,7 +104,13 @@ export void decode()
 	//process data
 	imageToBitmap();
 	//detect findpatterns
+	possibleCentersSize = 0;
 	findFinderPatterns();
+
+	for (int i = 0; i < possibleCentersSize; i++)
+	{
+		drawPoint(possibleCenters[i].posX, possibleCenters[i].posY);
+	}
 
 	//create detector
 	//detect
