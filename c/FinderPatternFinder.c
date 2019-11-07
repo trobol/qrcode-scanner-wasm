@@ -1,8 +1,8 @@
-#include "../c/qrcode.h"
-#include "../c/wasm.h"
-#include "../c/FinderPatternFinder.h"
-#include "./math.h"
-#include "./qrcode.h"
+#include "qrcode.h"
+#include "wasm.h"
+#include "FinderPatternFinder.h"
+#include "math.h"
+#include "qrcode.h"
 
 void throw(){};
 bool hasSkipped = false;

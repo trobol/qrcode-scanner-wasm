@@ -3,6 +3,7 @@
 #include "Version.h"
 #include "math.h"
 #include "AlignmentPattern.h"
+#include "AlignmentPatternFinder.h"
 
 void processFinderPatternInfo()
 {
@@ -134,6 +135,12 @@ struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int e
 	{
 		//region too small to hold alignment pattern
 	}
+
+	AlignmentPatternFinder_startX = alignmentAreaLeftX;
+		AlignmentPatternFinder_startY;
+	AlignmentPatternFinder_width;
+	AlignmentPatternFinder_height;
+	AlignmentPatternFinder_moduleSize;
 
 	AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
 	return alignmentFinder.find();

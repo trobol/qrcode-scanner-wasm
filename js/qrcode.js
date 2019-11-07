@@ -2212,7 +2212,6 @@ qrcode.load = (() => {
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
 		qrcode.instance = instance;
-		window.printNum
 		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
 		class FinderPattern {
@@ -2245,7 +2244,7 @@ qrcode.load = (() => {
 			let bitmap = new Array(qrcode.width * qrcode.height);
 			for (let x = 0; x < qrcode.width; x++) {
 				for (let y = 0; y < qrcode.height; y++) {
-					bitmap[x + y * qrcode.width] = !(qrcode.pixeldata[x * 4 + (qrcode.width * y) * 4] > 0);
+					bitmap[x + y * qrcode.width] = qrcode.pixeldata[x * 4 + (qrcode.width * y) * 4] == 0;
 				}
 			}
 			return bitmap;

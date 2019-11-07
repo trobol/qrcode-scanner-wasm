@@ -43,8 +43,6 @@ export void imageToBitmap()
 		{
 			pixel = x * 4 + (imageWidth * y) * 4;
 			image[pixel] = (image[pixel] * 33 + image[pixel + 1] * 34 + image[pixel + 2] * 33) / 100;
-			image[pixel + 1] = image[pixel];
-			image[pixel + 2] = image[pixel];
 		}
 	}
 
@@ -59,6 +57,7 @@ export void imageToBitmap()
 
 	unsigned int middle;
 	unsigned int areaX, areaY, imageX, imageY;
+	unsigned int bitmapTarget;
 	for (areaX = 0; areaX < numSqrtArea; ++areaX)
 	{
 		for (areaY = 0; areaY < numSqrtArea; ++areaY)
@@ -82,17 +81,20 @@ export void imageToBitmap()
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
 					target = (areaWidth * areaX + imageX) * 4 + (imageWidth * (areaHeight * areaY + imageY)) * 4;
+					bitmapTarget = (areaWidth * areaX + imageX)  + (imageWidth * (areaHeight * areaY + imageY));
 					if (image[target] > middle)
 					{
 						image[target] = 255;
 						image[target + 1] = 255;
 						image[target + 2] = 255;
+						bitmapIndex[bitmapTarget] = 1;
 					}
 					else
 					{
 						image[target] = 0;
 						image[target + 1] = 0;
 						image[target + 2] = 0;
+						bitmapIndex[bitmapTarget] = 0;
 					}
 				}
 			}
@@ -108,7 +110,7 @@ export void decode()
 	possibleCentersSize = 0;
 	findFinderPatterns();
 
-	//processFinderPatternInfo();
+	processFinderPatternInfo();
 	//create detector
 	//detect
 	//decode
