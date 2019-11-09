@@ -1,35 +1,38 @@
 (module
   (type (;0;) (func (param f32) (result f32)))
   (type (;1;) (func (param i32)))
-  (type (;2;) (func))
-  (type (;3;) (func (param i32 i32) (result f32)))
-  (type (;4;) (func (param i32) (result f32)))
-  (type (;5;) (func (param i32) (result i32)))
-  (type (;6;) (func (param i32 f32 f32 f32 i32)))
-  (type (;7;) (func (param i32 i32 f32 f32 f32)))
-  (type (;8;) (func (param i32 f32 f32 f32) (result i32)))
-  (type (;9;) (func (param i32 i32) (result i32)))
+  (type (;2;) (func (param f32 f32)))
+  (type (;3;) (func))
+  (type (;4;) (func (param i32 i32) (result f32)))
+  (type (;5;) (func (param i32) (result f32)))
+  (type (;6;) (func (param i32) (result i32)))
+  (type (;7;) (func (param i32 f32 f32 f32 i32)))
+  (type (;8;) (func (param i32 i32 f32 f32 f32)))
+  (type (;9;) (func (param i32 f32 f32 f32) (result i32)))
   (type (;10;) (func (result i32)))
-  (type (;11;) (func (param i32 i32)))
-  (type (;12;) (func (param i32 i32 i32) (result i32)))
-  (type (;13;) (func (param i32 i32 i32 i32) (result f32)))
-  (type (;14;) (func (param f32 f32 f32 i32) (result i32)))
-  (type (;15;) (func (param f32)))
-  (type (;16;) (func (param f32 f32) (result f32)))
-  (type (;17;) (func (param f32) (result i32)))
-  (type (;18;) (func (param f32 f32 f32 f32) (result f32)))
-  (type (;19;) (func (param i32 i32 i32) (result f32)))
-  (type (;20;) (func (param i32 i32 i32 f32) (result i32)))
-  (type (;21;) (func (param f32 i32 i32 f32) (result i32)))
-  (type (;22;) (func (param i32 i32 i32 i32 i32 i32)))
-  (type (;23;) (func (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32)))
-  (type (;24;) (func (param i32 f32 f32 f32 f32 f32 f32 f32 f32)))
-  (type (;25;) (func (param i32 i32 i32)))
+  (type (;11;) (func (param i32 i32) (result i32)))
+  (type (;12;) (func (param i32 i32)))
+  (type (;13;) (func (param i32 i32 i32) (result i32)))
+  (type (;14;) (func (param i32 i32 i32 i32) (result f32)))
+  (type (;15;) (func (param f32 f32 f32 i32) (result i32)))
+  (type (;16;) (func (param f32)))
+  (type (;17;) (func (param f32 f32) (result f32)))
+  (type (;18;) (func (param f32) (result i32)))
+  (type (;19;) (func (param f32 f32 f32 f32) (result f32)))
+  (type (;20;) (func (param i32 i32 i32) (result f32)))
+  (type (;21;) (func (param i32 i32 i32 f32) (result i32)))
+  (type (;22;) (func (param f32 i32 i32 f32) (result i32)))
+  (type (;23;) (func (param i32 i32 i32 i32 i32 i32)))
+  (type (;24;) (func (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32)))
+  (type (;25;) (func (param i32 f32 f32 f32 f32 f32 f32 f32 f32)))
+  (type (;26;) (func (param i32 i32 i32)))
+  (type (;27;) (func (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32)))
   (import "env" "memory" (memory (;0;) 2))
   (import "env" "fsqrt" (func $fsqrt (type 0)))
   (import "env" "printNum" (func $printNum (type 1)))
-  (func $__wasm_call_ctors (type 2))
-  (func $FinderPattern_distance (type 3) (param i32 i32) (result f32)
+  (import "env" "drawDot" (func $drawDot (type 2)))
+  (func $__wasm_call_ctors (type 3))
+  (func $FinderPattern_distance (type 4) (param i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 16
@@ -78,7 +81,7 @@
     i32.add
     global.set 0
     local.get 3)
-  (func $get_posX (type 4) (param i32) (result f32)
+  (func $get_posX (type 5) (param i32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -89,7 +92,7 @@
     local.get 1
     i32.load offset=12
     f32.load)
-  (func $get_posY (type 4) (param i32) (result f32)
+  (func $get_posY (type 5) (param i32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -100,7 +103,7 @@
     local.get 1
     i32.load offset=12
     f32.load offset=4)
-  (func $get_estimatedModuleSize (type 4) (param i32) (result f32)
+  (func $get_estimatedModuleSize (type 5) (param i32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -111,7 +114,7 @@
     local.get 1
     i32.load offset=12
     f32.load offset=8)
-  (func $get_count (type 5) (param i32) (result i32)
+  (func $get_count (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -122,7 +125,7 @@
     local.get 1
     i32.load offset=12
     i32.load offset=12)
-  (func $createFinderPattern (type 6) (param i32 f32 f32 f32 i32)
+  (func $createFinderPattern (type 7) (param i32 f32 f32 f32 i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -162,7 +165,7 @@
     local.get 5
     i32.load offset=12
     i32.store offset=12)
-  (func $combineEstimate (type 7) (param i32 i32 f32 f32 f32)
+  (func $combineEstimate (type 8) (param i32 i32 f32 f32 f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -237,7 +240,7 @@
     f32.convert_i32_u
     f32.div
     f32.store offset=8)
-  (func $aboutEquals (type 8) (param i32 f32 f32 f32) (result i32)
+  (func $aboutEquals (type 9) (param i32 f32 f32 f32) (result i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -362,7 +365,7 @@
       local.set 0
     end
     local.get 0)
-  (func $get_int (type 5) (param i32) (result i32)
+  (func $get_int (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -373,7 +376,13 @@
     local.get 1
     i32.load offset=12
     i32.load)
-  (func $setImageSize (type 9) (param i32 i32) (result i32)
+  (func $get_bits (type 10) (result i32)
+    i32.const 0
+    i32.load offset=1044)
+  (func $get_size (type 10) (result i32)
+    i32.const 0
+    i32.load offset=1032)
+  (func $setImageSize (type 11) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -387,11 +396,11 @@
     i32.const 0
     local.get 2
     i32.load offset=12
-    i32.store offset=1024
+    i32.store offset=1052
     i32.const 0
     local.get 2
     i32.load offset=8
-    i32.store offset=1028
+    i32.store offset=1056
     i32.const 0
     local.get 2
     i32.load offset=12
@@ -400,22 +409,22 @@
     i32.mul
     i32.const 2
     i32.shl
-    i32.store offset=1032
+    i32.store offset=1060
     i32.const 0
     i32.const 0
     i32.load offset=1376
     i32.const 0
-    i32.load offset=1032
+    i32.load offset=1060
     i32.const 2
     i32.shl
     i32.add
-    i32.store offset=1056
+    i32.store offset=1044
     i32.const 0
     i32.load offset=1376)
   (func $getImageSize (type 10) (result i32)
     i32.const 0
-    i32.load offset=1032)
-  (func $imageToBitmap (type 2)
+    i32.load offset=1060)
+  (func $imageToBitmap (type 3)
     (local i32)
     global.get 0
     i32.const 64
@@ -428,7 +437,7 @@
         local.get 0
         i32.load offset=56
         i32.const 0
-        i32.load offset=1028
+        i32.load offset=1056
         i32.lt_u
         i32.const 1
         i32.and
@@ -442,7 +451,7 @@
             local.get 0
             i32.load offset=52
             i32.const 0
-            i32.load offset=1024
+            i32.load offset=1052
             i32.lt_u
             i32.const 1
             i32.and
@@ -454,7 +463,7 @@
             i32.const 2
             i32.shl
             i32.const 0
-            i32.load offset=1024
+            i32.load offset=1052
             local.get 0
             i32.load offset=56
             i32.mul
@@ -531,14 +540,14 @@
     i32.store offset=48
     local.get 0
     i32.const 0
-    i32.load offset=1024
+    i32.load offset=1052
     local.get 0
     i32.load offset=48
     i32.div_u
     i32.store offset=44
     local.get 0
     i32.const 0
-    i32.load offset=1028
+    i32.load offset=1056
     local.get 0
     i32.load offset=48
     i32.div_u
@@ -625,7 +634,7 @@
                     i32.load offset=8
                     i32.add
                     i32.const 0
-                    i32.load offset=1024
+                    i32.load offset=1052
                     i32.mul
                     i32.add
                     i32.const 2
@@ -730,7 +739,7 @@
                     i32.const 2
                     i32.shl
                     i32.const 0
-                    i32.load offset=1024
+                    i32.load offset=1052
                     local.get 0
                     i32.load offset=40
                     local.get 0
@@ -862,13 +871,19 @@
         br 0 (;@2;)
       end
     end)
-  (func $decode (type 2)
+  (func $decode (type 3)
     i32.const 0
     i32.const 0
     i32.store offset=1268
     call $findFinderPatterns
-    call $processFinderPatternInfo)
-  (func $findFinderPatterns (type 2)
+    call $processFinderPatternInfo
+    i32.const 0
+    i32.load offset=1032
+    call $printNum
+    i32.const 0
+    i32.load offset=1036
+    call $printNum)
+  (func $findFinderPatterns (type 3)
     (local i32 i32)
     global.get 0
     i32.const 64
@@ -883,11 +898,11 @@
     i32.store offset=60
     local.get 0
     i32.const 0
-    i32.load offset=1028
+    i32.load offset=1056
     i32.store offset=56
     local.get 0
     i32.const 0
-    i32.load offset=1024
+    i32.load offset=1052
     i32.store offset=52
     local.get 0
     i32.const 0
@@ -1287,7 +1302,7 @@
     i32.const 64
     i32.add
     global.set 0)
-  (func $processFinderPatternInfo (type 2)
+  (func $processFinderPatternInfo (type 3)
     (local i32 i32 i32 i32 f32)
     global.get 0
     i32.const 176
@@ -1694,7 +1709,7 @@
     i32.const 176
     i32.add
     global.set 0)
-  (func $getBitmapPixel (type 9) (param i32 i32) (result i32)
+  (func $getBitmapPixel (type 11) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -1714,7 +1729,7 @@
     i32.const 2
     i32.shl
     i32.const 0
-    i32.load offset=1024
+    i32.load offset=1052
     local.get 2
     i32.load offset=8
     i32.mul
@@ -1737,17 +1752,17 @@
     i32.const 0
     local.get 1
     i32.load offset=12
-    i32.store offset=1036
+    i32.store offset=1024
     i32.const 0
     local.get 1
     i32.load offset=12
-    i32.store offset=1040
+    i32.store offset=1028
     i32.const 0
     local.get 1
     i32.load offset=12
     i32.const 5
     i32.shr_s
-    i32.store offset=1052
+    i32.store offset=1040
     block  ;; label = @1
       local.get 1
       i32.load offset=12
@@ -1757,33 +1772,33 @@
       br_if 0 (;@1;)
       i32.const 0
       i32.const 0
-      i32.load offset=1052
+      i32.load offset=1040
       i32.const 1
       i32.add
-      i32.store offset=1052
+      i32.store offset=1040
     end
     i32.const 0
     i32.const 0
-    i32.load offset=1052
-    i32.const 0
     i32.load offset=1040
+    i32.const 0
+    i32.load offset=1028
     i32.mul
-    i32.store offset=1044
+    i32.store offset=1032
     i32.const 0
-    i32.const 0
-    i32.load offset=1056
     i32.const 0
     i32.load offset=1044
+    i32.const 0
+    i32.load offset=1032
     i32.const 2
     i32.shl
     i32.add
-    i32.store offset=1060
+    i32.store offset=1048
     i32.const 0
     local.get 1
     i32.load offset=12
     i32.const 1
     i32.shl
-    i32.store offset=1048
+    i32.store offset=1036
     local.get 1
     i32.const 0
     i32.store offset=8
@@ -1792,14 +1807,14 @@
         local.get 1
         i32.load offset=8
         i32.const 0
-        i32.load offset=1044
+        i32.load offset=1032
         i32.lt_u
         i32.const 1
         i32.and
         i32.eqz
         br_if 1 (;@1;)
         i32.const 0
-        i32.load offset=1056
+        i32.load offset=1044
         local.get 1
         i32.load offset=8
         i32.const 2
@@ -1816,7 +1831,7 @@
         br 0 (;@2;)
       end
     end)
-  (func $BitMatrix_set (type 11) (param i32 i32)
+  (func $BitMatrix_set (type 12) (param i32 i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -1831,7 +1846,7 @@
     local.get 2
     i32.load offset=8
     i32.const 0
-    i32.load offset=1052
+    i32.load offset=1040
     i32.mul
     local.get 2
     i32.load offset=12
@@ -1840,7 +1855,7 @@
     i32.add
     i32.store offset=4
     i32.const 0
-    i32.load offset=1056
+    i32.load offset=1044
     local.get 2
     i32.load offset=4
     i32.const 2
@@ -1857,8 +1872,8 @@
     i32.shl
     i32.or
     i32.store)
-  (func $throw (type 2))
-  (func $get_pattern (type 5) (param i32) (result i32)
+  (func $throw (type 3))
+  (func $get_pattern (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -1872,7 +1887,7 @@
     i32.const 4
     i32.shl
     i32.add)
-  (func $orderBestPatterns (type 2)
+  (func $orderBestPatterns (type 3)
     (local i32 i32 i32 i32)
     global.get 0
     i32.const 80
@@ -2178,7 +2193,7 @@
     i32.const 80
     i32.add
     global.set 0)
-  (func $foundPatternCross (type 5) (param i32) (result i32)
+  (func $foundPatternCross (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -2369,7 +2384,7 @@
     i32.add
     global.set 0
     local.get 0)
-  (func $handlePossibleCenter (type 12) (param i32 i32 i32) (result i32)
+  (func $handlePossibleCenter (type 13) (param i32 i32 i32) (result i32)
     (local i32 f32)
     global.get 0
     i32.const 80
@@ -2954,7 +2969,7 @@
     i32.add
     global.set 0
     local.get 2)
-  (func $selectBestPatterns (type 2)
+  (func $selectBestPatterns (type 3)
     (local i32 f32 i32 i32)
     global.get 0
     i32.const 64
@@ -3304,7 +3319,7 @@
     i32.const 64
     i32.add
     global.set 0)
-  (func $centerFromEnd (type 3) (param i32 i32) (result f32)
+  (func $centerFromEnd (type 4) (param i32 i32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -3333,7 +3348,7 @@
     f32.const 0x1p+1 (;=2;)
     f32.div
     f32.sub)
-  (func $crossCheckVertical (type 13) (param i32 i32 i32 i32) (result f32)
+  (func $crossCheckVertical (type 14) (param i32 i32 i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 64
@@ -3354,7 +3369,7 @@
     i32.store offset=44
     local.get 4
     i32.const 0
-    i32.load offset=1028
+    i32.load offset=1056
     i32.store offset=40
     local.get 4
     i32.const 0
@@ -3859,7 +3874,7 @@
     i32.add
     global.set 0
     local.get 5)
-  (func $crossCheckHorizontal (type 13) (param i32 i32 i32 i32) (result f32)
+  (func $crossCheckHorizontal (type 14) (param i32 i32 i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 64
@@ -3880,7 +3895,7 @@
     i32.store offset=44
     local.get 4
     i32.const 0
-    i32.load offset=1024
+    i32.load offset=1052
     i32.store offset=40
     local.get 4
     i32.const 0
@@ -4383,7 +4398,7 @@
     i32.add
     global.set 0
     local.get 5)
-  (func $addPossibleCenter (type 14) (param f32 f32 f32 i32) (result i32)
+  (func $addPossibleCenter (type 15) (param f32 f32 f32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -4473,7 +4488,7 @@
     end
     local.get 4
     i32.load offset=28)
-  (func $sortPossibleCenters (type 15) (param f32)
+  (func $sortPossibleCenters (type 16) (param f32)
     (local i32 i32 i32 i32)
     global.get 0
     i32.const 48
@@ -4646,7 +4661,7 @@
     i32.const 48
     i32.add
     global.set 0)
-  (func $max (type 9) (param i32 i32) (result i32)
+  (func $max (type 11) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -4678,7 +4693,7 @@
       local.set 2
     end
     local.get 2)
-  (func $sortCenterComparator (type 15) (param f32)
+  (func $sortCenterComparator (type 16) (param f32)
     (local i32 i32 i32 i32)
     global.get 0
     i32.const 48
@@ -4905,7 +4920,7 @@
     i32.const 48
     i32.add
     global.set 0)
-  (func $abs (type 5) (param i32) (result i32)
+  (func $abs (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -4935,7 +4950,7 @@
       local.set 1
     end
     local.get 1)
-  (func $fmax (type 16) (param f32 f32) (result f32)
+  (func $fmax (type 17) (param f32 f32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -4967,7 +4982,7 @@
       local.set 1
     end
     local.get 1)
-  (func $min (type 9) (param i32 i32) (result i32)
+  (func $min (type 11) (param i32 i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -4999,7 +5014,7 @@
       local.set 2
     end
     local.get 2)
-  (func $fmin (type 16) (param f32 f32) (result f32)
+  (func $fmin (type 17) (param f32 f32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -5031,7 +5046,7 @@
       local.set 1
     end
     local.get 1)
-  (func $round (type 17) (param f32) (result i32)
+  (func $round (type 18) (param f32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -5060,7 +5075,7 @@
       local.set 1
     end
     local.get 1)
-  (func $distance (type 18) (param f32 f32 f32 f32) (result f32)
+  (func $distance (type 19) (param f32 f32 f32 f32) (result f32)
     (local i32)
     global.get 0
     i32.const 32
@@ -5111,7 +5126,7 @@
     i32.add
     global.set 0
     local.get 3)
-  (func $calculateModuleSize (type 19) (param i32 i32 i32) (result f32)
+  (func $calculateModuleSize (type 20) (param i32 i32 i32) (result f32)
     (local i32 f32 f32)
     global.get 0
     i32.const 16
@@ -5148,7 +5163,7 @@
     f32.add
     f32.const 0x1p+1 (;=2;)
     f32.div)
-  (func $computeDimension (type 20) (param i32 i32 i32 f32) (result i32)
+  (func $computeDimension (type 21) (param i32 i32 i32 f32) (result i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -5240,7 +5255,7 @@
     i32.add
     global.set 0
     local.get 2)
-  (func $getProvisionalVersionForDimension (type 5) (param i32) (result i32)
+  (func $getProvisionalVersionForDimension (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -5277,7 +5292,7 @@
     i32.add
     global.set 0
     local.get 0)
-  (func $getDimensionForVersion (type 5) (param i32) (result i32)
+  (func $getDimensionForVersion (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -5292,7 +5307,7 @@
     i32.shl
     i32.const 17
     i32.add)
-  (func $findAlignmentInRegion (type 21) (param f32 i32 i32 f32) (result i32)
+  (func $findAlignmentInRegion (type 22) (param f32 i32 i32 f32) (result i32)
     (local i32)
     global.get 0
     i32.const 48
@@ -5346,7 +5361,7 @@
     i32.store offset=24
     local.get 4
     i32.const 0
-    i32.load offset=1024
+    i32.load offset=1052
     i32.const 1
     i32.sub
     local.get 4
@@ -5386,7 +5401,7 @@
     i32.store offset=16
     local.get 4
     i32.const 0
-    i32.load offset=1028
+    i32.load offset=1056
     i32.const 1
     i32.sub
     local.get 4
@@ -5448,7 +5463,7 @@
     i32.add
     global.set 0
     local.get 2)
-  (func $Detector_createTransform (type 22) (param i32 i32 i32 i32 i32 i32)
+  (func $Detector_createTransform (type 23) (param i32 i32 i32 i32 i32 i32)
     (local i32)
     global.get 0
     i32.const 48
@@ -5584,7 +5599,7 @@
     i32.const 48
     i32.add
     global.set 0)
-  (func $Detector_sampleGrid (type 11) (param i32 i32)
+  (func $Detector_sampleGrid (type 12) (param i32 i32)
     (local i32)
     global.get 0
     i32.const 48
@@ -5650,7 +5665,7 @@
     i32.const 48
     i32.add
     global.set 0)
-  (func $calculateModuleSizeOneWay (type 3) (param i32 i32) (result f32)
+  (func $calculateModuleSizeOneWay (type 4) (param i32 i32) (result f32)
     (local i32 f32 i32 i32)
     global.get 0
     i32.const 32
@@ -6261,7 +6276,7 @@
     i32.add
     global.set 0
     local.get 1)
-  (func $PerspectiveTransform_quadrilateralToQuadrilateral (type 23) (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32)
+  (func $PerspectiveTransform_quadrilateralToQuadrilateral (type 24) (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32 f32)
     (local i32)
     global.get 0
     i32.const 224
@@ -6462,8 +6477,8 @@
     i32.const 224
     i32.add
     global.set 0)
-  (func $GridSampler_sampleGrid (type 11) (param i32 i32)
-    (local i32 f32 i32)
+  (func $GridSampler_sampleGrid (type 12) (param i32 i32)
+    (local i32 f32 i32 i32)
     global.get 0
     i32.const 64
     i32.sub
@@ -6491,7 +6506,7 @@
         br_if 1 (;@1;)
         local.get 2
         i32.const 0
-        i32.load offset=1048
+        i32.load offset=1036
         i32.store offset=52
         local.get 2
         local.get 2
@@ -6515,7 +6530,7 @@
             i32.eqz
             br_if 1 (;@3;)
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 2
             i32.load offset=44
             i32.const 2
@@ -6530,7 +6545,7 @@
             f32.add
             f32.store
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 2
             i32.load offset=44
             i32.const 1
@@ -6588,7 +6603,6 @@
         i64.store
         local.get 2
         call $PerspectiveTransform_transformPoints
-        call $GridSampler_checkAndNudgePoints
         local.get 2
         i32.const 0
         i32.store offset=40
@@ -6596,6 +6610,49 @@
           loop  ;; label = @4
             local.get 2
             i32.load offset=40
+            local.get 2
+            i32.load offset=52
+            i32.lt_u
+            i32.const 1
+            i32.and
+            i32.eqz
+            br_if 1 (;@3;)
+            i32.const 0
+            i32.load offset=1048
+            local.get 2
+            i32.load offset=40
+            i32.const 2
+            i32.shl
+            i32.add
+            f32.load
+            i32.const 0
+            i32.load offset=1048
+            local.get 2
+            i32.load offset=40
+            i32.const 1
+            i32.add
+            i32.const 2
+            i32.shl
+            i32.add
+            f32.load
+            call $drawDot
+            local.get 2
+            local.get 2
+            i32.load offset=40
+            i32.const 2
+            i32.add
+            i32.store offset=40
+            br 0 (;@4;)
+          end
+        end
+        call $GridSampler_checkAndNudgePoints
+        local.get 2
+        i32.const 0
+        i32.store offset=36
+        block  ;; label = @3
+          loop  ;; label = @4
+            local.get 2
+            i32.load offset=36
             local.get 2
             i32.load offset=52
             i32.lt_s
@@ -6606,9 +6663,84 @@
             block  ;; label = @5
               block  ;; label = @6
                 i32.const 0
-                i32.load offset=1060
+                i32.load offset=1048
                 local.get 2
-                i32.load offset=40
+                i32.load offset=36
+                i32.const 2
+                i32.shl
+                i32.add
+                f32.load
+                local.tee 3
+                f32.abs
+                f32.const 0x1p+31 (;=2.14748e+09;)
+                f32.lt
+                i32.eqz
+                br_if 0 (;@6;)
+                local.get 3
+                i32.trunc_f32_s
+                local.set 0
+                br 1 (;@5;)
+              end
+              i32.const -2147483648
+              local.set 0
+            end
+            local.get 0
+            i32.const 2
+            i32.shl
+            local.set 4
+            i32.const 0
+            i32.load offset=1052
+            local.set 5
+            block  ;; label = @5
+              block  ;; label = @6
+                i32.const 0
+                i32.load offset=1048
+                local.get 2
+                i32.load offset=36
+                i32.const 1
+                i32.add
+                i32.const 2
+                i32.shl
+                i32.add
+                f32.load
+                local.tee 3
+                f32.abs
+                f32.const 0x1p+31 (;=2.14748e+09;)
+                f32.lt
+                i32.eqz
+                br_if 0 (;@6;)
+                local.get 3
+                i32.trunc_f32_s
+                local.set 0
+                br 1 (;@5;)
+              end
+              i32.const -2147483648
+              local.set 0
+            end
+            block  ;; label = @5
+              local.get 4
+              local.get 5
+              local.get 0
+              i32.mul
+              i32.const 2
+              i32.shl
+              i32.add
+              i32.const 0
+              i32.load offset=1060
+              i32.gt_u
+              i32.const 1
+              i32.and
+              i32.eqz
+              br_if 0 (;@5;)
+              i32.const 310
+              call $printNum
+            end
+            block  ;; label = @5
+              block  ;; label = @6
+                i32.const 0
+                i32.load offset=1048
+                local.get 2
+                i32.load offset=36
                 i32.const 2
                 i32.shl
                 i32.add
@@ -6630,9 +6762,9 @@
             block  ;; label = @5
               block  ;; label = @6
                 i32.const 0
-                i32.load offset=1060
+                i32.load offset=1048
                 local.get 2
-                i32.load offset=40
+                i32.load offset=36
                 i32.const 1
                 i32.add
                 i32.const 2
@@ -6660,7 +6792,7 @@
               i32.eqz
               br_if 0 (;@5;)
               local.get 2
-              i32.load offset=40
+              i32.load offset=36
               i32.const 1
               i32.shr_s
               local.get 2
@@ -6669,10 +6801,10 @@
             end
             local.get 2
             local.get 2
-            i32.load offset=40
+            i32.load offset=36
             i32.const 2
             i32.add
-            i32.store offset=40
+            i32.store offset=36
             br 0 (;@4;)
           end
         end
@@ -6689,7 +6821,7 @@
     i32.const 64
     i32.add
     global.set 0)
-  (func $sizeOfBlackWhiteBlackRunBothWays (type 13) (param i32 i32 i32 i32) (result f32)
+  (func $sizeOfBlackWhiteBlackRunBothWays (type 14) (param i32 i32 i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 32
@@ -6763,7 +6895,7 @@
         local.get 4
         i32.load offset=4
         i32.const 0
-        i32.load offset=1024
+        i32.load offset=1052
         i32.ge_s
         i32.const 1
         i32.and
@@ -6775,7 +6907,7 @@
         i32.const -1
         i32.xor
         i32.const 0
-        i32.load offset=1024
+        i32.load offset=1052
         i32.add
         f32.convert_i32_u
         local.get 4
@@ -6788,7 +6920,7 @@
         f32.store offset=8
         local.get 4
         i32.const 0
-        i32.load offset=1024
+        i32.load offset=1052
         i32.const 1
         i32.sub
         i32.store offset=4
@@ -6860,7 +6992,7 @@
         local.get 4
         i32.load
         i32.const 0
-        i32.load offset=1028
+        i32.load offset=1056
         i32.ge_s
         i32.const 1
         i32.and
@@ -6872,7 +7004,7 @@
         i32.const -1
         i32.xor
         i32.const 0
-        i32.load offset=1028
+        i32.load offset=1056
         i32.add
         f32.convert_i32_u
         local.get 4
@@ -6885,7 +7017,7 @@
         f32.store offset=8
         local.get 4
         i32.const 0
-        i32.load offset=1028
+        i32.load offset=1056
         i32.const 1
         i32.sub
         i32.store
@@ -6947,7 +7079,7 @@
     local.get 5
     f32.const 0x1p+0 (;=1;)
     f32.sub)
-  (func $sizeOfBlackWhiteBlackRun (type 13) (param i32 i32 i32 i32) (result f32)
+  (func $sizeOfBlackWhiteBlackRun (type 14) (param i32 i32 i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 80
@@ -7270,7 +7402,7 @@
     i32.add
     global.set 0
     local.get 5)
-  (func $getVersionForNumber (type 5) (param i32) (result i32)
+  (func $getVersionForNumber (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -7305,7 +7437,7 @@
     i32.const 96
     i32.mul
     i32.add)
-  (func $AlignmentPatternFinder_centerFromEnd (type 3) (param i32 i32) (result f32)
+  (func $AlignmentPatternFinder_centerFromEnd (type 4) (param i32 i32) (result f32)
     (local i32)
     global.get 0
     i32.const 16
@@ -7330,7 +7462,7 @@
     f32.const 0x1p+1 (;=2;)
     f32.div
     f32.sub)
-  (func $AlignmentPatternFinder_foundPatternCross (type 5) (param i32) (result i32)
+  (func $AlignmentPatternFinder_foundPatternCross (type 6) (param i32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -7407,7 +7539,7 @@
     i32.add
     global.set 0
     local.get 0)
-  (func $AlignmentPatternFinder_crossCheckVertical (type 13) (param i32 i32 i32 i32) (result f32)
+  (func $AlignmentPatternFinder_crossCheckVertical (type 14) (param i32 i32 i32 i32) (result f32)
     (local i32 f32)
     global.get 0
     i32.const 48
@@ -7428,7 +7560,7 @@
     i32.store offset=28
     local.get 4
     i32.const 0
-    i32.load offset=1028
+    i32.load offset=1056
     i32.store offset=24
     local.get 4
     i32.const 12
@@ -7794,7 +7926,7 @@
     i32.add
     global.set 0
     local.get 5)
-  (func $AlignmentPatternFinder_handlePossibleCenter (type 12) (param i32 i32 i32) (result i32)
+  (func $AlignmentPatternFinder_handlePossibleCenter (type 13) (param i32 i32 i32) (result i32)
     (local i32 f32)
     global.get 0
     i32.const 48
@@ -7999,7 +8131,7 @@
     i32.add
     global.set 0
     local.get 2)
-  (func $AlignmentPattern_aboutEquals (type 8) (param i32 f32 f32 f32) (result i32)
+  (func $AlignmentPattern_aboutEquals (type 9) (param i32 f32 f32 f32) (result i32)
     (local i32)
     global.get 0
     i32.const 32
@@ -8094,7 +8226,7 @@
     i32.add
     global.set 0
     local.get 0)
-  (func $AlignmentPattern_combineEstimate (type 8) (param i32 f32 f32 f32) (result i32)
+  (func $AlignmentPattern_combineEstimate (type 9) (param i32 f32 f32 f32) (result i32)
     (local i32)
     global.get 0
     i32.const 16
@@ -8153,7 +8285,7 @@
     i32.sub
     local.tee 1
     i32.const 0
-    i32.load offset=1048
+    i32.load offset=1036
     i32.store offset=28
     local.get 1
     i32.const 0
@@ -8171,7 +8303,7 @@
         br_if 1 (;@1;)
         local.get 1
         i32.const 0
-        i32.load offset=1060
+        i32.load offset=1048
         local.get 1
         i32.load offset=24
         i32.const 2
@@ -8181,7 +8313,7 @@
         f32.store offset=20
         local.get 1
         i32.const 0
-        i32.load offset=1060
+        i32.load offset=1048
         local.get 1
         i32.load offset=24
         i32.const 1
@@ -8208,7 +8340,7 @@
         f32.add
         f32.store offset=12
         i32.const 0
-        i32.load offset=1060
+        i32.load offset=1048
         local.get 1
         i32.load offset=24
         i32.const 2
@@ -8233,7 +8365,7 @@
         f32.div
         f32.store
         i32.const 0
-        i32.load offset=1060
+        i32.load offset=1048
         local.get 1
         i32.load offset=24
         i32.const 1
@@ -8268,18 +8400,18 @@
         br 0 (;@2;)
       end
     end)
-  (func $GridSampler_checkAndNudgePoints (type 2)
+  (func $GridSampler_checkAndNudgePoints (type 3)
     (local i32 f32 i32)
     global.get 0
     i32.const 32
     i32.sub
     local.tee 0
     i32.const 0
-    i32.load offset=1036
+    i32.load offset=1024
     i32.store offset=28
     local.get 0
     i32.const 0
-    i32.load offset=1040
+    i32.load offset=1028
     i32.store offset=24
     local.get 0
     i32.const 0
@@ -8289,7 +8421,7 @@
         local.get 0
         i32.load offset=20
         i32.const 0
-        i32.load offset=1048
+        i32.load offset=1036
         i32.lt_u
         i32.const 1
         i32.and
@@ -8298,7 +8430,7 @@
         block  ;; label = @3
           block  ;; label = @4
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 2
@@ -8325,7 +8457,7 @@
         block  ;; label = @3
           block  ;; label = @4
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 1
@@ -8397,7 +8529,7 @@
             i32.eqz
             br_if 0 (;@4;)
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 2
@@ -8419,7 +8551,7 @@
             i32.eqz
             br_if 0 (;@4;)
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 2
@@ -8444,7 +8576,7 @@
             i32.eqz
             br_if 0 (;@4;)
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 1
@@ -8468,7 +8600,7 @@
             i32.eqz
             br_if 0 (;@4;)
             i32.const 0
-            i32.load offset=1060
+            i32.load offset=1048
             local.get 0
             i32.load offset=20
             i32.const 1
@@ -8493,7 +8625,7 @@
         br 0 (;@2;)
       end
     end)
-  (func $PerspectiveTransform_quadrilateralToSquare (type 24) (param i32 f32 f32 f32 f32 f32 f32 f32 f32)
+  (func $PerspectiveTransform_quadrilateralToSquare (type 25) (param i32 f32 f32 f32 f32 f32 f32 f32 f32)
     (local i32)
     global.get 0
     i32.const 112
@@ -8595,12 +8727,14 @@
     i32.const 112
     i32.add
     global.set 0)
-  (func $PerspectiveTransform_squareToQuadrilateral (type 24) (param i32 f32 f32 f32 f32 f32 f32 f32 f32)
+  (func $PerspectiveTransform_squareToQuadrilateral (type 25) (param i32 f32 f32 f32 f32 f32 f32 f32 f32)
     (local i32)
     global.get 0
     i32.const 80
     i32.sub
     local.tee 9
+    global.set 0
+    local.get 9
     local.get 1
     f32.store offset=76
     local.get 9
@@ -8676,47 +8810,31 @@
         local.get 9
         f32.load offset=76
         f32.sub
-        f32.store
-        local.get 0
         local.get 9
         f32.load offset=60
         local.get 9
         f32.load offset=68
         f32.sub
-        f32.store offset=12
-        local.get 0
         local.get 9
         f32.load offset=76
-        f32.store offset=24
-        local.get 0
         local.get 9
         f32.load offset=64
         local.get 9
         f32.load offset=72
         f32.sub
-        f32.store offset=4
-        local.get 0
         local.get 9
         f32.load offset=56
         local.get 9
         f32.load offset=64
         f32.sub
-        f32.store offset=16
-        local.get 0
         local.get 9
         f32.load offset=72
-        f32.store offset=24
-        local.get 0
         i32.const 0
         f32.convert_i32_s
         local.tee 8
-        f32.store offset=8
-        local.get 0
         local.get 8
-        f32.store offset=20
-        local.get 0
         f32.const 0x1p+0 (;=1;)
-        f32.store offset=32
+        call $new_PerspectiveTransform
         br 1 (;@1;)
       end
       local.get 9
@@ -8804,8 +8922,6 @@
       f32.load offset=68
       f32.mul
       f32.add
-      f32.store
-      local.get 0
       local.get 9
       f32.load offset=52
       local.get 9
@@ -8817,12 +8933,8 @@
       f32.load offset=52
       f32.mul
       f32.add
-      f32.store offset=12
-      local.get 0
       local.get 9
       f32.load offset=76
-      f32.store offset=24
-      local.get 0
       local.get 9
       f32.load offset=64
       local.get 9
@@ -8834,8 +8946,6 @@
       f32.load offset=64
       f32.mul
       f32.add
-      f32.store offset=4
-      local.get 0
       local.get 9
       f32.load offset=48
       local.get 9
@@ -8847,24 +8957,20 @@
       f32.load offset=48
       f32.mul
       f32.add
-      f32.store offset=16
-      local.get 0
       local.get 9
       f32.load offset=72
-      f32.store offset=24
-      local.get 0
       local.get 9
       f32.load offset=16
-      f32.store offset=8
-      local.get 0
       local.get 9
       f32.load offset=12
-      f32.store offset=20
-      local.get 0
       f32.const 0x1p+0 (;=1;)
-      f32.store offset=32
-    end)
-  (func $PerspectiveTransform_times (type 25) (param i32 i32 i32)
+      call $new_PerspectiveTransform
+    end
+    local.get 9
+    i32.const 80
+    i32.add
+    global.set 0)
+  (func $PerspectiveTransform_times (type 26) (param i32 i32 i32)
     local.get 0
     local.get 1
     f32.load
@@ -8883,8 +8989,6 @@
     f32.load offset=8
     f32.mul
     f32.add
-    f32.store
-    local.get 0
     local.get 1
     f32.load
     local.get 2
@@ -8902,257 +9006,295 @@
     f32.load offset=20
     f32.mul
     f32.add
+    local.get 1
+    f32.load
+    local.get 2
+    f32.load offset=24
+    f32.mul
+    local.get 1
+    f32.load offset=12
+    local.get 2
+    f32.load offset=28
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=24
+    local.get 2
+    f32.load offset=32
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=4
+    local.get 2
+    f32.load
+    f32.mul
+    local.get 1
+    f32.load offset=16
+    local.get 2
+    f32.load offset=4
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=28
+    local.get 2
+    f32.load offset=8
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=4
+    local.get 2
+    f32.load offset=12
+    f32.mul
+    local.get 1
+    f32.load offset=16
+    local.get 2
+    f32.load offset=16
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=28
+    local.get 2
+    f32.load offset=20
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=4
+    local.get 2
+    f32.load offset=24
+    f32.mul
+    local.get 1
+    f32.load offset=16
+    local.get 2
+    f32.load offset=28
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=28
+    local.get 2
+    f32.load offset=32
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=8
+    local.get 2
+    f32.load
+    f32.mul
+    local.get 1
+    f32.load offset=20
+    local.get 2
+    f32.load offset=4
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=32
+    local.get 2
+    f32.load offset=8
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=8
+    local.get 2
+    f32.load offset=12
+    f32.mul
+    local.get 1
+    f32.load offset=20
+    local.get 2
+    f32.load offset=16
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=32
+    local.get 2
+    f32.load offset=20
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=8
+    local.get 2
+    f32.load offset=24
+    f32.mul
+    local.get 1
+    f32.load offset=20
+    local.get 2
+    f32.load offset=28
+    f32.mul
+    f32.add
+    local.get 1
+    f32.load offset=32
+    local.get 2
+    f32.load offset=32
+    f32.mul
+    f32.add
+    call $new_PerspectiveTransform)
+  (func $PerspectiveTransform_buildAjoint (type 12) (param i32 i32)
+    local.get 0
+    local.get 1
+    f32.load offset=16
+    local.get 1
+    f32.load offset=32
+    f32.mul
+    local.get 1
+    f32.load offset=20
+    local.get 1
+    f32.load offset=28
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=20
+    local.get 1
+    f32.load offset=24
+    f32.mul
+    local.get 1
+    f32.load offset=12
+    local.get 1
+    f32.load offset=32
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=12
+    local.get 1
+    f32.load offset=28
+    f32.mul
+    local.get 1
+    f32.load offset=16
+    local.get 1
+    f32.load offset=24
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=8
+    local.get 1
+    f32.load offset=28
+    f32.mul
+    local.get 1
+    f32.load offset=4
+    local.get 1
+    f32.load offset=32
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load
+    local.get 1
+    f32.load offset=32
+    f32.mul
+    local.get 1
+    f32.load offset=8
+    local.get 1
+    f32.load offset=24
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=4
+    local.get 1
+    f32.load offset=24
+    f32.mul
+    local.get 1
+    f32.load
+    local.get 1
+    f32.load offset=28
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=4
+    local.get 1
+    f32.load offset=20
+    f32.mul
+    local.get 1
+    f32.load offset=8
+    local.get 1
+    f32.load offset=16
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load offset=8
+    local.get 1
+    f32.load offset=12
+    f32.mul
+    local.get 1
+    f32.load
+    local.get 1
+    f32.load offset=20
+    f32.mul
+    f32.sub
+    local.get 1
+    f32.load
+    local.get 1
+    f32.load offset=16
+    f32.mul
+    local.get 1
+    f32.load offset=4
+    local.get 1
+    f32.load offset=12
+    f32.mul
+    f32.sub
+    call $new_PerspectiveTransform)
+  (func $new_PerspectiveTransform (type 27) (param i32 f32 f32 f32 f32 f32 f32 f32 f32 f32)
+    (local i32)
+    global.get 0
+    i32.const 48
+    i32.sub
+    local.tee 10
+    local.get 1
+    f32.store offset=44
+    local.get 10
+    local.get 2
+    f32.store offset=40
+    local.get 10
+    local.get 3
+    f32.store offset=36
+    local.get 10
+    local.get 4
+    f32.store offset=32
+    local.get 10
+    local.get 5
+    f32.store offset=28
+    local.get 10
+    local.get 6
+    f32.store offset=24
+    local.get 10
+    local.get 7
+    f32.store offset=20
+    local.get 10
+    local.get 8
+    f32.store offset=16
+    local.get 10
+    local.get 9
     f32.store offset=12
     local.get 0
-    local.get 1
-    f32.load
-    local.get 2
-    f32.load offset=24
-    f32.mul
-    local.get 1
-    f32.load offset=12
-    local.get 2
-    f32.load offset=28
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=24
-    local.get 2
-    f32.load offset=32
-    f32.mul
-    f32.add
-    f32.store offset=24
-    local.get 0
-    local.get 1
-    f32.load offset=4
-    local.get 2
-    f32.load
-    f32.mul
-    local.get 1
-    f32.load offset=16
-    local.get 2
-    f32.load offset=4
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=28
-    local.get 2
-    f32.load offset=8
-    f32.mul
-    f32.add
-    f32.store offset=4
-    local.get 0
-    local.get 1
-    f32.load offset=4
-    local.get 2
-    f32.load offset=12
-    f32.mul
-    local.get 1
-    f32.load offset=16
-    local.get 2
-    f32.load offset=16
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=28
-    local.get 2
-    f32.load offset=20
-    f32.mul
-    f32.add
-    f32.store offset=16
-    local.get 0
-    local.get 1
-    f32.load offset=4
-    local.get 2
-    f32.load offset=24
-    f32.mul
-    local.get 1
-    f32.load offset=16
-    local.get 2
-    f32.load offset=28
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=28
-    local.get 2
-    f32.load offset=32
-    f32.mul
-    f32.add
-    f32.store offset=24
-    local.get 0
-    local.get 1
-    f32.load offset=8
-    local.get 2
-    f32.load
-    f32.mul
-    local.get 1
-    f32.load offset=20
-    local.get 2
-    f32.load offset=4
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=32
-    local.get 2
-    f32.load offset=8
-    f32.mul
-    f32.add
-    f32.store offset=8
-    local.get 0
-    local.get 1
-    f32.load offset=8
-    local.get 2
-    f32.load offset=12
-    f32.mul
-    local.get 1
-    f32.load offset=20
-    local.get 2
-    f32.load offset=16
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=32
-    local.get 2
-    f32.load offset=20
-    f32.mul
-    f32.add
-    f32.store offset=20
-    local.get 0
-    local.get 1
-    f32.load offset=8
-    local.get 2
-    f32.load offset=24
-    f32.mul
-    local.get 1
-    f32.load offset=20
-    local.get 2
-    f32.load offset=28
-    f32.mul
-    f32.add
-    local.get 1
-    f32.load offset=32
-    local.get 2
-    f32.load offset=32
-    f32.mul
-    f32.add
-    f32.store offset=32)
-  (func $PerspectiveTransform_buildAjoint (type 11) (param i32 i32)
-    local.get 0
-    local.get 1
-    f32.load offset=16
-    local.get 1
-    f32.load offset=32
-    f32.mul
-    local.get 1
-    f32.load offset=20
-    local.get 1
-    f32.load offset=28
-    f32.mul
-    f32.sub
+    local.get 10
+    f32.load offset=44
     f32.store
     local.get 0
-    local.get 1
-    f32.load offset=20
-    local.get 1
-    f32.load offset=24
-    f32.mul
-    local.get 1
-    f32.load offset=12
-    local.get 1
-    f32.load offset=32
-    f32.mul
-    f32.sub
+    local.get 10
+    f32.load offset=40
     f32.store offset=12
     local.get 0
-    local.get 1
-    f32.load offset=12
-    local.get 1
-    f32.load offset=28
-    f32.mul
-    local.get 1
-    f32.load offset=16
-    local.get 1
-    f32.load offset=24
-    f32.mul
-    f32.sub
+    local.get 10
+    f32.load offset=36
     f32.store offset=24
     local.get 0
-    local.get 1
-    f32.load offset=8
-    local.get 1
-    f32.load offset=28
-    f32.mul
-    local.get 1
-    f32.load offset=4
-    local.get 1
+    local.get 10
     f32.load offset=32
-    f32.mul
-    f32.sub
     f32.store offset=4
     local.get 0
-    local.get 1
-    f32.load
-    local.get 1
-    f32.load offset=32
-    f32.mul
-    local.get 1
-    f32.load offset=8
-    local.get 1
-    f32.load offset=24
-    f32.mul
-    f32.sub
+    local.get 10
+    f32.load offset=28
     f32.store offset=16
     local.get 0
-    local.get 1
-    f32.load offset=4
-    local.get 1
+    local.get 10
     f32.load offset=24
-    f32.mul
-    local.get 1
-    f32.load
-    local.get 1
-    f32.load offset=28
-    f32.mul
-    f32.sub
-    f32.store offset=24
+    f32.store offset=28
     local.get 0
-    local.get 1
-    f32.load offset=4
-    local.get 1
+    local.get 10
     f32.load offset=20
-    f32.mul
-    local.get 1
-    f32.load offset=8
-    local.get 1
-    f32.load offset=16
-    f32.mul
-    f32.sub
     f32.store offset=8
     local.get 0
-    local.get 1
-    f32.load offset=8
-    local.get 1
-    f32.load offset=12
-    f32.mul
-    local.get 1
-    f32.load
-    local.get 1
-    f32.load offset=20
-    f32.mul
-    f32.sub
+    local.get 10
+    f32.load offset=16
     f32.store offset=20
     local.get 0
-    local.get 1
-    f32.load
-    local.get 1
-    f32.load offset=16
-    f32.mul
-    local.get 1
-    f32.load offset=4
-    local.get 1
+    local.get 10
     f32.load offset=12
-    f32.mul
-    f32.sub
     f32.store offset=32)
   (table (;0;) 1 1 funcref)
   (global (;0;) (mut i32) (i32.const 71488))
@@ -9160,11 +9302,11 @@
   (global (;2;) i32 (i32.const 1024))
   (global (;3;) i32 (i32.const 71488))
   (global (;4;) i32 (i32.const 1024))
-  (global (;5;) i32 (i32.const 1024))
-  (global (;6;) i32 (i32.const 1028))
-  (global (;7;) i32 (i32.const 1032))
+  (global (;5;) i32 (i32.const 1052))
+  (global (;6;) i32 (i32.const 1056))
+  (global (;7;) i32 (i32.const 1060))
   (global (;8;) i32 (i32.const 1376))
-  (global (;9;) i32 (i32.const 1036))
+  (global (;9;) i32 (i32.const 1024))
   (global (;10;) i32 (i32.const 1268))
   (global (;11;) i32 (i32.const 1264))
   (global (;12;) i32 (i32.const 1072))
@@ -9192,6 +9334,8 @@
   (export "aboutEquals" (func $aboutEquals))
   (export "fabs" (func $fabs))
   (export "get_int" (func $get_int))
+  (export "get_bits" (func $get_bits))
+  (export "get_size" (func $get_size))
   (export "setImageSize" (func $setImageSize))
   (export "getImageSize" (func $getImageSize))
   (export "imageToBitmap" (func $imageToBitmap))
@@ -9264,6 +9408,7 @@
   (export "PerspectiveTransform_quadrilateralToSquare" (func $PerspectiveTransform_quadrilateralToSquare))
   (export "PerspectiveTransform_squareToQuadrilateral" (func $PerspectiveTransform_squareToQuadrilateral))
   (export "PerspectiveTransform_times" (func $PerspectiveTransform_times))
+  (export "new_PerspectiveTransform" (func $new_PerspectiveTransform))
   (export "PerspectiveTransform_buildAjoint" (func $PerspectiveTransform_buildAjoint))
   (data (;0;) (i32.const 1024) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
   (data (;1;) (i32.const 1376) "@\17\01\00\00\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\01\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00\0a\00\00\00\01\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\01\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00\11\00\00\00\01\00\00\00\09\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00,\00\00\00\02\00\00\00p\14\00\00\0a\00\00\00\01\00\00\00\22\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\01\00\00\00\1c\00\00\00\00\00\00\00\00\00\00\00\16\00\00\00\01\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00\1c\00\00\00\01\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00F\00\00\00\02\00\00\00x\14\00\00\0f\00\00\00\01\00\00\007\00\00\00\00\00\00\00\00\00\00\00\1a\00\00\00\01\00\00\00,\00\00\00\00\00\00\00\00\00\00\00$\00\00\00\02\00\00\00\11\00\00\00\00\00\00\00\00\00\00\00,\00\00\00\02\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00d\00\00\00\02\00\00\00\80\14\00\00\14\00\00\00\01\00\00\00P\00\00\00\00\00\00\00\00\00\00\00$\00\00\00\02\00\00\00 \00\00\00\00\00\00\00\00\00\00\004\00\00\00\02\00\00\00\18\00\00\00\00\00\00\00\00\00\00\00@\00\00\00\04\00\00\00\09\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\86\00\00\00\02\00\00\00\88\14\00\00\1a\00\00\00\01\00\00\00l\00\00\00\00\00\00\00\00\00\00\000\00\00\00\02\00\00\00+\00\00\00\00\00\00\00\00\00\00\00H\00\00\00\02\00\00\00\0f\00\00\00\02\00\00\00\10\00\00\00X\00\00\00\02\00\00\00\0b\00\00\00\02\00\00\00\0c\00\00\00\06\00\00\00\ac\00\00\00\02\00\00\00\90\14\00\00$\00\00\00\02\00\00\00D\00\00\00\00\00\00\00\00\00\00\00@\00\00\00\04\00\00\00\1b\00\00\00\00\00\00\00\00\00\00\00`\00\00\00\04\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00p\00\00\00\04\00\00\00\0f\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\c4\00\00\00\03\00\00\00\98\14\00\00(\00\00\00\02\00\00\00N\00\00\00\00\00\00\00\00\00\00\00H\00\00\00\04\00\00\00\1f\00\00\00\00\00\00\00\00\00\00\00l\00\00\00\02\00\00\00\0e\00\00\00\04\00\00\00\0f\00\00\00\82\00\00\00\04\00\00\00\0d\00\00\00\01\00\00\00\0e\00\00\00\08\00\00\00\f2\00\00\00\03\00\00\00\a4\14\00\000\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00X\00\00\00\02\00\00\00&\00\00\00\02\00\00\00'\00\00\00\84\00\00\00\04\00\00\00\12\00\00\00\02\00\00\00\13\00\00\00\9c\00\00\00\04\00\00\00\0e\00\00\00\02\00\00\00\0f\00\00\00\09\00\00\00$\01\00\00\03\00\00\00\b0\14\00\00<\00\00\00\02\00\00\00t\00\00\00\00\00\00\00\00\00\00\00n\00\00\00\03\00\00\00$\00\00\00\02\00\00\00%\00\00\00\a0\00\00\00\04\00\00\00\10\00\00\00\04\00\00\00\11\00\00\00\c0\00\00\00\04\00\00\00\0c\00\00\00\04\00\00\00\0d\00\00\00\0a\00\00\00Z\01\00\00\03\00\00\00\bc\14\00\00H\00\00\00\02\00\00\00D\00\00\00\02\00\00\00E\00\00\00\82\00\00\00\04\00\00\00+\00\00\00\01\00\00\00,\00\00\00\c0\00\00\00\06\00\00\00\13\00\00\00\02\00\00\00\14\00\00\00\e0\00\00\00\06\00\00\00\0f\00\00\00\02\00\00\00\10\00\00\00\0b\00\00\00\94\01\00\00\03\00\00\00\c8\14\00\00P\00\00\00\04\00\00\00Q\00\00\00\00\00\00\00\00\00\00\00\96\00\00\00\01\00\00\002\00\00\00\04\00\00\003\00\00\00\e0\00\00\00\04\00\00\00\16\00\00\00\04\00\00\00\17\00\00\00\08\01\00\00\03\00\00\00\0c\00\00\00\08\00\00\00\0d\00\00\00\0c\00\00\00\d2\01\00\00\03\00\00\00\d4\14\00\00`\00\00\00\02\00\00\00\5c\00\00\00\02\00\00\00]\00\00\00\b0\00\00\00\06\00\00\00$\00\00\00\02\00\00\00%\00\00\00\04\01\00\00\04\00\00\00\14\00\00\00\06\00\00\00\15\00\00\004\01\00\00\07\00\00\00\0e\00\00\00\04\00\00\00\0f\00\00\00\0d\00\00\00\14\02\00\00\03\00\00\00\e0\14\00\00h\00\00\00\04\00\00\00k\00\00\00\00\00\00\00\00\00\00\00\c6\00\00\00\08\00\00\00%\00\00\00\01\00\00\00&\00\00\00 \01\00\00\08\00\00\00\14\00\00\00\04\00\00\00\15\00\00\00`\01\00\00\0c\00\00\00\0b\00\00\00\04\00\00\00\0c\00\00\00\0e\00\00\00E\02\00\00\04\00\00\00\ec\14\00\00x\00\00\00\03\00\00\00s\00\00\00\01\00\00\00t\00\00\00\d8\00\00\00\04\00\00\00(\00\00\00\05\00\00\00)\00\00\00@\01\00\00\0b\00\00\00\10\00\00\00\05\00\00\00\11\00\00\00\80\01\00\00\0b\00\00\00\0c\00\00\00\05\00\00\00\0d\00\00\00\0f\00\00\00\8f\02\00\00\04\00\00\00\fc\14\00\00\84\00\00\00\05\00\00\00W\00\00\00\01\00\00\00X\00\00\00\f0\00\00\00\05\00\00\00)\00\00\00\05\00\00\00*\00\00\00h\01\00\00\05\00\00\00\18\00\00\00\07\00\00\00\19\00\00\00\b0\01\00\00\0b\00\00\00\0c\00\00\00\07\00\00\00\0d\00\00\00\10\00\00\00\dd\02\00\00\04\00\00\00\0c\15\00\00\90\00\00\00\05\00\00\00b\00\00\00\01\00\00\00c\00\00\00\18\01\00\00\07\00\00\00-\00\00\00\03\00\00\00.\00\00\00\98\01\00\00\0f\00\00\00\13\00\00\00\02\00\00\00\14\00\00\00\e0\01\00\00\03\00\00\00\0f\00\00\00\0d\00\00\00\10\00\00\00\11\00\00\00/\03\00\00\04\00\00\00\1c\15\00\00\a8\00\00\00\01\00\00\00k\00\00\00\05\00\00\00l\00\00\004\01\00\00\0a\00\00\00.\00\00\00\01\00\00\00/\00\00\00\c0\01\00\00\01\00\00\00\16\00\00\00\0f\00\00\00\17\00\00\00\14\02\00\00\02\00\00\00\0e\00\00\00\11\00\00\00\0f\00\00\00\12\00\00\00\85\03\00\00\04\00\00\00,\15\00\00\a8\00\00\00\05\00\00\00x\00\00\00\01\00\00\00y\00\00\004\01\00\00\09\00\00\00+\00\00\00\04\00\00\00,\00\00\00\c0\01\00\00\11\00\00\00\16\00\00\00\01\00\00\00\17\00\00\00\14\02\00\00\02\00\00\00\0e\00\00\00\13\00\00\00\0f\00\00\00\13\00\00\00\df\03\00\00\04\00\00\00<\15\00\00\c4\00\00\00\03\00\00\00q\00\00\00\04\00\00\00r\00\00\00l\01\00\00\03\00\00\00,\00\00\00\0b\00\00\00-\00\00\00\22\02\00\00\11\00\00\00\15\00\00\00\04\00\00\00\16\00\00\00\8a\02\00\00\09\00\00\00\0d\00\00\00\10\00\00\00\0e\00\00\00\14\00\00\00=\04\00\00\04\00\00\00L\15\00\00\e0\00\00\00\03\00\00\00k\00\00\00\05\00\00\00l\00\00\00\a0\01\00\00\03\00\00\00)\00\00\00\0d\00\00\00*\00\00\00X\02\00\00\0f\00\00\00\18\00\00\00\05\00\00\00\19\00\00\00\bc\02\00\00\0f\00\00\00\0f\00\00\00\0a\00\00\00\10\00\00\00\15\00\00\00\84\04\00\00\05\00\00\00\5c\15\00\00\e0\00\00\00\04\00\00\00t\00\00\00\04\00\00\00u\00\00\00\ba\01\00\00\11\00\00\00*\00\00\00\00\00\00\00\00\00\00\00\84\02\00\00\11\00\00\00\16\00\00\00\06\00\00\00\17\00\00\00\ee\02\00\00\13\00\00\00\10\00\00\00\06\00\00\00\11\00\00\00\16\00\00\00\ea\04\00\00\05\00\00\00p\15\00\00\fc\00\00\00\02\00\00\00o\00\00\00\07\00\00\00p\00\00\00\dc\01\00\00\11\00\00\00.\00\00\00\00\00\00\00\00\00\00\00\b2\02\00\00\07\00\00\00\18\00\00\00\10\00\00\00\19\00\00\000\03\00\00\22\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00\17\00\00\00T\05\00\00\05\00\00\00\84\15\00\00\0e\01\00\00\04\00\00\00y\00\00\00\05\00\00\00z\00\00\00\f8\01\00\00\04\00\00\00/\00\00\00\0e\00\00\000\00\00\00\ee\02\00\00\0b\00\00\00\18\00\00\00\0e\00\00\00\19\00\00\00\84\03\00\00\10\00\00\00\0f\00\00\00\0e\00\00\00\10\00\00\00\18\00\00\00\c2\05\00\00\05\00\00\00\98\15\00\00,\01\00\00\06\00\00\00u\00\00\00\04\00\00\00v\00\00\000\02\00\00\06\00\00\00-\00\00\00\0e\00\00\00.\00\00\00*\03\00\00\0b\00\00\00\18\00\00\00\10\00\00\00\19\00\00\00\c0\03\00\00\1e\00\00\00\10\00\00\00\02\00\00\00\11\00\00\00\19\00\00\004\06\00\00\05\00\00\00\ac\15\00\008\01\00\00\08\00\00\00j\00\00\00\04\00\00\00k\00\00\00L\02\00\00\08\00\00\00/\00\00\00\0d\00\00\000\00\00\00f\03\00\00\07\00\00\00\18\00\00\00\16\00\00\00\19\00\00\00\1a\04\00\00\16\00\00\00\0f\00\00\00\0d\00\00\00\10\00\00\00\1a\00\00\00\aa\06\00\00\05\00\00\00\c0\15\00\00P\01\00\00\0a\00\00\00r\00\00\00\02\00\00\00s\00\00\00\84\02\00\00\13\00\00\00.\00\00\00\04\00\00\00/\00\00\00\b8\03\00\00\1c\00\00\00\16\00\00\00\06\00\00\00\17\00\00\00V\04\00\00!\00\00\00\10\00\00\00\04\00\00\00\11\00\00\00\1b\00\00\00$\07\00\00\05\00\00\00\d4\15\00\00h\01\00\00\08\00\00\00z\00\00\00\04\00\00\00{\00\00\00\bc\02\00\00\16\00\00\00-\00\00\00\03\00\00\00.\00\00\00\fc\03\00\00\08\00\00\00\17\00\00\00\1a\00\00\00\18\00\00\00\b0\04\00\00\0c\00\00\00\0f\00\00\00\1c\00\00\00\10\00\00\00\1c\00\00\00\81\07\00\00\06\00\00\00\e8\15\00\00\ea\01\00\00\03\00\00\00u\00\00\00\0a\00\00\00v\00\00\00\d8\02\00\00\03\00\00\00-\00\00\00\17\00\00\00.\00\00\00\1a\04\00\00\04\00\00\00\18\00\00\00\1f\00\00\00\19\00\00\00\ec\04\00\00\0b\00\00\00\0f\00\00\00\1f\00\00\00\10\00\00\00\1d\00\00\00\03\08\00\00\06\00\00\00\00\16\00\00\a4\01\00\00\07\00\00\00t\00\00\00\07\00\00\00u\00\00\00\10\03\00\00\15\00\00\00-\00\00\00\07\00\00\00.\00\00\00t\04\00\00\01\00\00\00\17\00\00\00%\00\00\00\18\00\00\00F\05\00\00\13\00\00\00\0f\00\00\00\1a\00\00\00\10\00\00\00\1e\00\00\00\89\08\00\00\06\00\00\00\18\16\00\00\c2\01\00\00\05\00\00\00s\00\00\00\0a\00\00\00t\00\00\00,\03\00\00\13\00\00\00/\00\00\00\0a\00\00\000\00\00\00\b0\04\00\00\0f\00\00\00\18\00\00\00\19\00\00\00\19\00\00\00\a0\05\00\00\17\00\00\00\0f\00\00\00\19\00\00\00\10\00\00\00\1f\00\00\00\13\09\00\00\06\00\00\000\16\00\00\e0\01\00\00\0d\00\00\00s\00\00\00\03\00\00\00t\00\00\00d\03\00\00\02\00\00\00.\00\00\00\1d\00\00\00/\00\00\00\0a\05\00\00*\00\00\00\18\00\00\00\01\00\00\00\19\00\00\00\fa\05\00\00\17\00\00\00\0f\00\00\00\1c\00\00\00\10\00\00\00 \00\00\00\a1\09\00\00\06\00\00\00H\16\00\00\fe\01\00\00\11\00\00\00s\00\00\00\00\00\00\00\00\00\00\00\9c\03\00\00\0a\00\00\00.\00\00\00\17\00\00\00/\00\00\00F\05\00\00\0a\00\00\00\18\00\00\00#\00\00\00\19\00\00\00T\06\00\00\13\00\00\00\0f\00\00\00#\00\00\00\10\00\00\00!\00\00\003\0a\00\00\06\00\00\00`\16\00\00\1c\02\00\00\11\00\00\00s\00\00\00\01\00\00\00t\00\00\00\d4\03\00\00\0e\00\00\00.\00\00\00\15\00\00\00/\00\00\00\a0\05\00\00\1d\00\00\00\18\00\00\00\13\00\00\00\19\00\00\00\ae\06\00\00\0b\00\00\00\0f\00\00\00.\00\00\00\10\00\00\00\22\00\00\00\c9\0a\00\00\06\00\00\00x\16\00\00:\02\00\00\0d\00\00\00s\00\00\00\06\00\00\00t\00\00\00\0c\04\00\00\0e\00\00\00.\00\00\00\17\00\00\00/\00\00\00\fa\05\00\00,\00\00\00\18\00\00\00\07\00\00\00\19\00\00\00\08\07\00\00;\00\00\00\10\00\00\00\01\00\00\00\11\00\00\00#\00\00\00<\0b\00\00\07\00\00\00\90\16\00\00:\02\00\00\0c\00\00\00y\00\00\00\07\00\00\00z\00\00\00(\04\00\00\0c\00\00\00/\00\00\00\1a\00\00\000\00\00\006\06\00\00'\00\00\00\18\00\00\00\0e\00\00\00\19\00\00\00b\07\00\00\16\00\00\00\0f\00\00\00)\00\00\00\10\00\00\00$\00\00\00\da\0b\00\00\07\00\00\00\ac\16\00\00X\02\00\00\06\00\00\00y\00\00\00\0e\00\00\00z\00\00\00`\04\00\00\06\00\00\00/\00\00\00\22\00\00\000\00\00\00\90\06\00\00.\00\00\00\18\00\00\00\0a\00\00\00\19\00\00\00\bc\07\00\00\02\00\00\00\0f\00\00\00@\00\00\00\10\00\00\00%\00\00\00|\0c\00\00\07\00\00\00\c8\16\00\00v\02\00\00\11\00\00\00z\00\00\00\04\00\00\00{\00\00\00\b4\04\00\00\1d\00\00\00.\00\00\00\0e\00\00\00/\00\00\00\ea\06\00\001\00\00\00\18\00\00\00\0a\00\00\00\19\00\00\004\08\00\00\18\00\00\00\0f\00\00\00.\00\00\00\10\00\00\00&\00\00\00\22\0d\00\00\07\00\00\00\e4\16\00\00\94\02\00\00\04\00\00\00z\00\00\00\12\00\00\00{\00\00\00\ec\04\00\00\0d\00\00\00.\00\00\00 \00\00\00/\00\00\00D\07\00\000\00\00\00\18\00\00\00\0e\00\00\00\19\00\00\00\ac\08\00\00*\00\00\00\0f\00\00\00 \00\00\00\10\00\00\00'\00\00\00\cc\0d\00\00\07\00\00\00\00\17\00\00\d0\02\00\00\14\00\00\00u\00\00\00\04\00\00\00v\00\00\00$\05\00\00(\00\00\00/\00\00\00\07\00\00\000\00\00\00\9e\07\00\00+\00\00\00\18\00\00\00\16\00\00\00\19\00\00\00\06\09\00\00\0a\00\00\00\0f\00\00\00C\00\00\00\10\00\00\00(\00\00\00z\0e\00\00\07\00\00\00\1c\17\00\00\ee\02\00\00\13\00\00\00v\00\00\00\06\00\00\00w\00\00\00\5c\05\00\00\12\00\00\00/\00\00\00\1f\00\00\000\00\00\00\f8\07\00\00\22\00\00\00\18\00\00\00\22\00\00\00\19\00\00\00~\09\00\00\14\00\00\00\0f\00\00\00=\00\00\00\10\00\00\00\06\00\00\00\12\00\00\00\06\00\00\00\16\00\00\00\06\00\00\00\1a\00\00\00\06\00\00\00\1e\00\00\00\06\00\00\00\22\00\00\00\06\00\00\00\16\00\00\00&\00\00\00\06\00\00\00\18\00\00\00*\00\00\00\06\00\00\00\1a\00\00\00.\00\00\00\06\00\00\00\1c\00\00\002\00\00\00\06\00\00\00\1e\00\00\006\00\00\00\06\00\00\00 \00\00\00:\00\00\00\06\00\00\00\22\00\00\00>\00\00\00\06\00\00\00\1a\00\00\00.\00\00\00B\00\00\00\06\00\00\00\1a\00\00\000\00\00\00F\00\00\00\06\00\00\00\1a\00\00\002\00\00\00J\00\00\00\06\00\00\00\1e\00\00\006\00\00\00N\00\00\00\06\00\00\00\1e\00\00\008\00\00\00R\00\00\00\06\00\00\00\1e\00\00\00:\00\00\00V\00\00\00\06\00\00\00\22\00\00\00>\00\00\00Z\00\00\00\06\00\00\00\1c\00\00\002\00\00\00H\00\00\00^\00\00\00\06\00\00\00\1a\00\00\002\00\00\00J\00\00\00b\00\00\00\06\00\00\00\1e\00\00\006\00\00\00N\00\00\00f\00\00\00\06\00\00\00\1c\00\00\006\00\00\00P\00\00\00j\00\00\00\06\00\00\00 \00\00\00:\00\00\00T\00\00\00n\00\00\00\06\00\00\00\1e\00\00\00:\00\00\00V\00\00\00r\00\00\00\06\00\00\00\22\00\00\00>\00\00\00Z\00\00\00v\00\00\00\06\00\00\00\1a\00\00\002\00\00\00J\00\00\00b\00\00\00z\00\00\00\06\00\00\00\1e\00\00\006\00\00\00N\00\00\00f\00\00\00~\00\00\00\06\00\00\00\1a\00\00\004\00\00\00N\00\00\00h\00\00\00\82\00\00\00\06\00\00\00\1e\00\00\008\00\00\00R\00\00\00l\00\00\00\86\00\00\00\06\00\00\00\22\00\00\00<\00\00\00V\00\00\00p\00\00\00\8a\00\00\00\06\00\00\00\1e\00\00\00:\00\00\00V\00\00\00r\00\00\00\8e\00\00\00\06\00\00\00\22\00\00\00>\00\00\00Z\00\00\00v\00\00\00\92\00\00\00\06\00\00\00\1e\00\00\006\00\00\00N\00\00\00f\00\00\00~\00\00\00\96\00\00\00\06\00\00\00\18\00\00\002\00\00\00L\00\00\00f\00\00\00\80\00\00\00\9a\00\00\00\06\00\00\00\1c\00\00\006\00\00\00P\00\00\00j\00\00\00\84\00\00\00\9e\00\00\00\06\00\00\00 \00\00\00:\00\00\00T\00\00\00n\00\00\00\88\00\00\00\a2\00\00\00\06\00\00\00\1a\00\00\006\00\00\00R\00\00\00n\00\00\00\8a\00\00\00\a6\00\00\00\06\00\00\00\1e\00\00\00:\00\00\00V\00\00\00r\00\00\00\8e\00\00\00\aa\00\00\00"))

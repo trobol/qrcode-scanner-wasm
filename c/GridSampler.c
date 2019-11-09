@@ -24,7 +24,10 @@ void GridSampler_sampleGrid(int dimension, struct PerspectiveTransform transform
 		GridSampler_checkAndNudgePoints();
 		for (int x = 0; x < max; x += 2)
 		{
-
+			if ((int)BitMatrix.points[x] * 4 + (imageWidth * (int)BitMatrix.points[x + 1]) * 4 > imageSize)
+			{
+				printNum(310);
+			}
 			if (getBitmapPixel((int)BitMatrix.points[x], (int)BitMatrix.points[x + 1]))
 			{
 				BitMatrix_set(x >> 1, y);

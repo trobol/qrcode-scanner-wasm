@@ -7,6 +7,7 @@ struct Version *getVersionForNumber(int versionNumber)
 	{
 		//ERROR
 		//throw(); // ReaderException("versionNumber must be between 1 and 40");
+		return (struct Version *)NaN;
 	}
 
 	return &VERSIONS[versionNumber - 1];
@@ -18,7 +19,7 @@ struct Version *getProvisionalVersionForDimension(int dimension)
 	{
 		//ERROR
 		//throw();// FormatException();
-		printNum(123);
+		return (struct Version *)NaN;
 	}
 
 	return getVersionForNumber((dimension - 17) >> 2);

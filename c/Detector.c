@@ -25,7 +25,7 @@ void processFinderPatternInfo()
 	printNum(dimension);
 
 	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
-	printNum(provisionalVersion->versionNumber);
+	return;
 	printNum(provisionalVersion->alignmentPatternCount);
 	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
 	printNum(modulesBetweenFPCenters);

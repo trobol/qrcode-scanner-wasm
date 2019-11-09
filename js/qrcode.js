@@ -2180,6 +2180,10 @@ qrcode.process = function (image) {
 			qrcode.imagedata.data[point+2] = qRCodeMatrix.bits.get_Renamed(x,y)?255:0;
 		}
 	}*/
+	var bits = getBitMatrix();
+	if (bits.length == 0) return null;
+
+	qRCodeMatrix.bits.bits = bits;
 	if (qrcode.debug)
 		ctx.putImageData(qrcode.imagedata, 0, 0);
 
