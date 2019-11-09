@@ -82,9 +82,12 @@ GridSampler.checkAndNudgePoints = function (image, points) {
 	}
 }
 
-
+function drawDot(x, y) {
+	qrcode.context.fillRect(x - 1, y - 1, 2, 2);
+}
 
 GridSampler.sampleGrid3 = function (image, dimension, transform) {
+
 	var bits = new BitMatrix(dimension);
 	var points = new Array(dimension << 1);
 	for (var y = 0; y < dimension; y++) {
@@ -97,6 +100,10 @@ GridSampler.sampleGrid3 = function (image, dimension, transform) {
 		transform.transformPoints1(points);
 		// Quick check to see if points transformed to something inside the image;
 		// sufficient to check the endpoints
+		qrcode.context.fillStyle = "green";
+		for (let i = 0; i < points.length; i += 2) {
+			//drawDot(points[i], points[i + 1]);
+		}
 		GridSampler.checkAndNudgePoints(image, points);
 		try {
 			for (var x = 0; x < max; x += 2) {
@@ -742,6 +749,7 @@ function Detector(image) {
 		else {
 			points = new Array(bottomLeft, topLeft, topRight, alignmentPattern);
 		}
+
 		return new DetectorResult(bits, points);
 	}
 	function drawPoint(x, y) {
@@ -2089,12 +2097,13 @@ qrcode.decode = function () {
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height)
 	qrcode.pixeldata.set(qrcode.imagedata.data);
 	var bitmap = qrcode.imageToBitmap();
+	//qrcode.imagedata.data.set(qrcode.pixeldata);
+	//qrcode.context.putImageData(qrcode.imagedata, 0, 0);
 	qrcode.decodeWasm();
 	qrcode.result = qrcode.process(bitmap);
 
 
-	qrcode.imagedata.data.set(qrcode.pixeldata);
-	//qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+
 
 	if (qrcode.callback != null)
 		qrcode.callback(qrcode.result);
@@ -2194,7 +2203,7 @@ qrcode.load = (() => {
 
 	let imports = {
 		env: {
-			memory: new WebAssembly.Memory({ initial: 512 }),
+			memory: new WebAssembly.Memory({ initial: 1024 }),
 			printNum(n) {
 				console.log("Num", n);
 			},
@@ -2203,7 +2212,8 @@ qrcode.load = (() => {
 				qrcode.context.fillRect(x, y, 10, 10); // fill in the pixel at (10,10)
 			},
 			fsqrt: Math.sqrt,
-			round: Math.round
+			round: Math.round,
+			drawDot
 		}
 	}
 
@@ -2211,6 +2221,12 @@ qrcode.load = (() => {
 	WebAssembly.instantiateStreaming(
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
+
+		window.getBitMatrix = function () {
+
+			return new Uint32Array(imports.env.memory.buffer, instance.exports.get_bits(), instance.exports.get_size());
+		}
+
 		qrcode.instance = instance;
 		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
@@ -2236,7 +2252,7 @@ qrcode.load = (() => {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
 
-			qrcode.pixeldata = new Uint8Array(imports.env.memory.buffer, imageIndex, imageSize);
+			qrcode.pixeldata = new Uint32Array(imports.env.memory.buffer, imageIndex, imageSize);
 		}
 
 		qrcode.imageToBitmap = function () {

@@ -8,4 +8,5 @@ struct AlignmentPattern
 
 struct AlignmentPattern *AlignmentPattern_combineEstimate(struct AlignmentPattern *pat, float i, float j,
 														  float newModuleSize);
+bool AlignmentPattern_aboutEquals(struct AlignmentPattern *pat, float moduleSize, float i, float j);
 #endif

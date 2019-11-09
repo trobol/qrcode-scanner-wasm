@@ -23,8 +23,9 @@ struct Version
 };
 
 #define N_VERSIONS 40
-extern const struct Version VERSIONS[40];
+extern struct Version VERSIONS[40];
 
 struct Version *getProvisionalVersionForDimension(int dimension);
+struct Version *getVersionForNumber(int versionNumber);
 int getDimensionForVersion(struct Version *version);
 #endif

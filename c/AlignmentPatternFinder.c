@@ -1,5 +1,6 @@
 #include "AlignmentPatternFinder.h"
 #include "qrcode.h"
+#include "math.h"
 
 int AlignmentPatternFinder_startX;
 int AlignmentPatternFinder_startY;
@@ -20,7 +21,7 @@ bool AlignmentPatternFinder_foundPatternCross(int stateCount[5])
 	float maxVariance = AlignmentPatternFinder_moduleSize / 2.0f;
 	for (int i = 0; i < 3; i++)
 	{
-		if (abs(AlignmentPatternFinder_moduleSize - stateCount[i]) >= maxVariance)
+		if (fabs(AlignmentPatternFinder_moduleSize - stateCount[i]) >= maxVariance)
 		{
 			return false;
 		}
@@ -78,12 +79,12 @@ float AlignmentPatternFinder_crossCheckVertical(int startI, int centerJ, int max
 	}
 
 	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-	if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
+	if (5 * fabs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
 	{
 		return NaN;
 	}
 
-	return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NaN;
+	return AlignmentPatternFinder_foundPatternCross(stateCount) ? AlignmentPatternFinder_centerFromEnd(stateCount, i) : NaN;
 }
 
 struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCount[5], int i, int j)
@@ -100,9 +101,10 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 			//POSSIBLE OPTIMIZATION
 			struct AlignmentPattern *center = &AlignmentPatternFinder_possibleCenters[index];
 			// Look for about the same center and module size:
-			if (aboutEquals(center, estimatedModuleSize, centerI, centerJ))
+			if (AlignmentPattern_aboutEquals(center, estimatedModuleSize, centerI, centerJ))
 			{
-				return AlignmentPatternFinder_combineEstimate(center, centerI, centerJ, estimatedModuleSize);
+				printNum(900);
+				return AlignmentPattern_combineEstimate(center, centerI, centerJ, estimatedModuleSize);
 			}
 		}
 
@@ -111,12 +113,14 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 		AlignmentPatternFinder_possibleCenters[AlignmentPatternFinder_possibleCentersSize].estimatedModuleSize = estimatedModuleSize;
 		++AlignmentPatternFinder_possibleCentersSize;
 	}
+	printNum(200);
 	//POSSIBLE ERROR
 	return 0;
 }
 
 struct AlignmentPattern *AlignmentPatternFinder_find()
 {
+	printNum(40);
 	AlignmentPatternFinder_possibleCentersSize = 0;
 	int maxJ = AlignmentPatternFinder_startX + AlignmentPatternFinder_width;
 	int middleI = AlignmentPatternFinder_startY + (AlignmentPatternFinder_height >> 1);
@@ -154,7 +158,7 @@ struct AlignmentPattern *AlignmentPatternFinder_find()
 				{ // Counting white pixels
 					if (currentState == 2)
 					{ // A winner?
-						if (foundPatternCross(stateCount))
+						if (AlignmentPatternFinder_foundPatternCross(stateCount))
 						{ // Yes
 							struct AlignmentPattern *confirmed = AlignmentPatternFinder_handlePossibleCenter(stateCount, i, j);
 							if (confirmed != 0)
@@ -183,7 +187,7 @@ struct AlignmentPattern *AlignmentPatternFinder_find()
 			}
 			j++;
 		}
-		if (foundPatternCross(stateCount))
+		if (AlignmentPatternFinder_foundPatternCross(stateCount))
 		{
 			struct AlignmentPattern *confirmed = AlignmentPatternFinder_handlePossibleCenter(stateCount, i, maxJ);
 			if (confirmed != 0)
@@ -203,4 +207,5 @@ struct AlignmentPattern *AlignmentPatternFinder_find()
 
 	//Could not find alignment pattern
 	//THROW
+	return 0;
 }

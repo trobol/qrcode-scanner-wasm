@@ -43,6 +43,4 @@ struct FinderPattern *get_pattern(int i);
 
 bool getBitmapPixel(unsigned int x, unsigned int y);
 
-import void printNum(int n);
-import void drawPoint(int x, int y);
 #endif

@@ -1,10 +1,12 @@
 #include "Version.h"
+#include "qrcode.h"
+
 struct Version *getVersionForNumber(int versionNumber)
 {
 	if (versionNumber < 1 || versionNumber > N_VERSIONS)
 	{
 		//ERROR
-		throw();// ReaderException("versionNumber must be between 1 and 40");
+		//throw(); // ReaderException("versionNumber must be between 1 and 40");
 	}
 
 	return &VERSIONS[versionNumber - 1];
@@ -15,7 +17,8 @@ struct Version *getProvisionalVersionForDimension(int dimension)
 	if (dimension % 4 != 1)
 	{
 		//ERROR
-		throw();// FormatException();
+		//throw();// FormatException();
+		printNum(123);
 	}
 
 	return getVersionForNumber((dimension - 17) >> 2);
@@ -26,7 +29,7 @@ int getDimensionForVersion(struct Version *version)
 	return 17 + 4 * version->versionNumber;
 }
 
-const struct Version VERSIONS[40] = {
+struct Version VERSIONS[40] = {
 	{
 		1,
 		26,

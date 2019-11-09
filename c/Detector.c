@@ -4,8 +4,12 @@
 #include "math.h"
 #include "AlignmentPatternFinder.h"
 #include "qrcode.h"
+#include "GridSampler.h"
+#include "PerspectiveTransform.h"
 
-struct DetectorResult *processFinderPatternInfo()
+struct struct_DetectorResult DetectorResult;
+
+void processFinderPatternInfo()
 {
 	struct FinderPattern bottomLeft = possibleCenters[0];
 	struct FinderPattern topLeft = possibleCenters[1];
@@ -15,18 +19,21 @@ struct DetectorResult *processFinderPatternInfo()
 	if (moduleSize < 1.0f)
 	{
 		//TODO: EXIT
-		throw(); // zxing::ReaderException("bad module size");
+		//throw(); // zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
 	printNum(dimension);
-	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
-	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
 
-	struct AlignmentPattern *alignmentPattern;
+	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
+	printNum(provisionalVersion->versionNumber);
+	printNum(provisionalVersion->alignmentPatternCount);
+	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
+	printNum(modulesBetweenFPCenters);
+	struct AlignmentPattern *alignmentPattern = 0;
 	// Anything above version 1 has an alignment pattern
 	if (provisionalVersion->alignmentPatternCount > 0)
 	{
-
+		printNum(100);
 		// Guess where a "bottom right" finder pattern would have been
 		float bottomRightX = topRight.posX - topLeft.posX + bottomLeft.posX;
 		float bottomRightY = topRight.posY - topLeft.posY + bottomLeft.posY;
@@ -42,30 +49,37 @@ struct DetectorResult *processFinderPatternInfo()
 		{
 
 			alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
-			if (alignmentPattern == 0)
+			if (alignmentPattern != 0)
 				break;
 		}
 		if (alignmentPattern == 0)
 		{
 			// Try anyway
+			printNum(4000);
 		}
 	}
-	/*
-	PerspectiveTransform transform = createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
-	Ref<BitMatrix> bits(sampleGrid(image_, dimension, transform));
-	ArrayRef<Ref<ResultPoint>> points(new Array<Ref<ResultPoint>>(alignmentPattern == 0 ? 3 : 4));
-	points[0].reset(bottomLeft);
-	points[1].reset(topLeft);
-	points[2].reset(topRight);
+	printNum(80);
+	printNum((int)alignmentPattern);
+	struct PerspectiveTransform transform = Detector_createTransform(&topLeft, &topRight, &bottomLeft, alignmentPattern, dimension);
+
+	Detector_sampleGrid(dimension, transform);
+
+	DetectorResult.points[0] = bottomLeft.posX;
+	DetectorResult.points[1] = bottomLeft.posY;
+	DetectorResult.points[2] = topLeft.posX;
+	DetectorResult.points[3] = topLeft.posY;
+	DetectorResult.points[4] = topRight.posX;
+	DetectorResult.points[5] = topRight.posY;
 	if (alignmentPattern != 0)
 	{
-		points[3].reset(alignmentPattern);
+		DetectorResult.points[6] = alignmentPattern->posX;
+		DetectorResult.points[7] = alignmentPattern->posY;
 	}
-
-	Ref<DetectorResult> result(new DetectorResult(bits, points));
-	
-	return result;
-	*/
+	else
+	{
+		DetectorResult.points[6] = 0;
+		DetectorResult.points[7] = 0;
+	}
 }
 
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft)
@@ -127,12 +141,14 @@ struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int e
 	if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
+		printNum(320);
 	}
 	int alignmentAreaTopY = max(0, estAlignmentY - allowance);
 	int alignmentAreaBottomY = min((int)(imageHeight - 1), estAlignmentY + allowance);
 	if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
+		printNum(350);
 	}
 
 	AlignmentPatternFinder_startX = alignmentAreaLeftX;
@@ -242,4 +258,39 @@ float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
 	}
 	// else we didn't find even black-white-black; no estimate is really possible
 	return NaN;
+}
+
+struct PerspectiveTransform Detector_createTransform(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft, struct AlignmentPattern *alignmentPattern, int dimension)
+{
+
+	float dimMinusThree = (float)dimension - 3.5f;
+	float bottomRightX;
+	float bottomRightY;
+	float sourceBottomRightX;
+	float sourceBottomRightY;
+	if (alignmentPattern != 0)
+	{
+		bottomRightX = alignmentPattern->posX;
+		bottomRightY = alignmentPattern->posY;
+		sourceBottomRightX = dimMinusThree - 3.0f;
+		sourceBottomRightY = sourceBottomRightX;
+	}
+	else
+	{
+		// Don't have an alignment pattern, just make up the bottom-right point
+		bottomRightX = (topRight->posX - topLeft->posX) + bottomLeft->posX;
+		bottomRightY = (topRight->posY - topLeft->posY) + bottomLeft->posY;
+		sourceBottomRightX = dimMinusThree;
+		sourceBottomRightY = dimMinusThree;
+	}
+
+	return PerspectiveTransform_quadrilateralToQuadrilateral(3.5f, 3.5f, dimMinusThree, 3.5f, sourceBottomRightX,
+															 sourceBottomRightY, 3.5f, dimMinusThree, topLeft->posX, topLeft->posY, topRight->posX,
+															 topRight->posY, bottomRightX, bottomRightY, bottomLeft->posX, bottomLeft->posY);
+}
+
+void Detector_sampleGrid(int dimension, struct PerspectiveTransform transform)
+{
+
+	GridSampler_sampleGrid(dimension, transform);
 }

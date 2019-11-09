@@ -1,13 +1,16 @@
+#ifndef DETECTOR_H
+#define DETECTOR_H
+
 #include "FinderPattern.h"
 #include "AlignmentPattern.h"
+#include "PerspectiveTransform.h"
 
-struct DetectorResult
+struct struct_DetectorResult
 {
-	//struct BitMatrix bits;
-	struct ResultPoint *points;
+	float points[8];
 };
-
-struct DetectorResult *processFinderPatternInfo();
+extern struct struct_DetectorResult DetectorResult;
+void processFinderPatternInfo();
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft);
 
 float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPattern *otherPattern);
@@ -20,3 +23,6 @@ float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY);
 float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY);
 
 float Detector_distance(float, float);
+struct PerspectiveTransform Detector_createTransform(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft, struct AlignmentPattern *alignmentPattern, int dimension);
+void Detector_sampleGrid(int dimension, struct PerspectiveTransform transform);
+#endif
