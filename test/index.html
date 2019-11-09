@@ -68,7 +68,9 @@
 			try {
 
 				var decoded = qrcode.decode();
-				successCount++;
+				console.log(decoded);
+				if (decoded == "testing testing 1")
+					successCount++;
 			} catch (e) {
 				console.error(e);
 			}
@@ -76,6 +78,7 @@
 			totalTime += endTime - startTime;
 
 			if (decoded) {
+
 				this.onRead(decoded);
 			}
 			updateCount++;

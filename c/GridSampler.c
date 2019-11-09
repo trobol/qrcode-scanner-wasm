@@ -1,9 +1,10 @@
 #include "qrcode.h"
 #include "GridSampler.h"
+#include "Memory.h"
 
 void GridSampler_sampleGrid(int dimension, struct PerspectiveTransform transform)
 {
-	BitMatrix_setDimension(dimension);
+	struct BitMatrix matrix = BitMatrix_setDimension(dimension);
 
 	for (int y = 0; y < dimension; y++)
 	{

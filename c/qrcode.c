@@ -2,14 +2,14 @@
 #include "FinderPatternFinder.h"
 #include "../c/wasm.h"
 #include "Detector.h"
+#include "Bitmatrix.h"
+#include "Memory.h"
 
 unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
 
 unsigned int imageSize = 0;
 unsigned int *image = (unsigned int *)&__heap_base;
-
-struct struct_BitMatrix BitMatrix;
 
 export int get_int(int *i)
 {
@@ -30,7 +30,7 @@ export void *setImageSize(unsigned int x, unsigned int y)
 
 	imageSize = x * y * 4;
 
-	BitMatrix.bits = (unsigned int *)image + imageSize;
+	Memory_allocate(MEMORY_ITEM_IMAGE, imageSize);
 
 	return (void *)image;
 }
@@ -120,33 +120,4 @@ export void decode()
 	//create detector
 	//detect
 	//decode
-}
-
-bool getBitmapPixel(unsigned int x, unsigned int y)
-{
-	return image[x * 4 + (imageWidth * y) * 4] != 0 ? 0 : 1;
-}
-
-void BitMatrix_setDimension(int dimension)
-{
-	BitMatrix.width = dimension;
-	BitMatrix.height = dimension;
-	BitMatrix.rowSize = dimension >> 5;
-	if ((dimension & 0x1f) != 0)
-	{
-		BitMatrix.rowSize++;
-	}
-	BitMatrix.bitSize = BitMatrix.rowSize * BitMatrix.height;
-	BitMatrix.points = (float *)BitMatrix.bits + BitMatrix.bitSize;
-	BitMatrix.pointSize = dimension << 1;
-	for (unsigned int i = 0; i < BitMatrix.bitSize; i++)
-	{
-		BitMatrix.bits[i] = 0;
-	}
-}
-
-void BitMatrix_set(int x, int y)
-{
-	unsigned int offset = y * BitMatrix.rowSize + (x >> 5);
-	BitMatrix.bits[offset] |= 1 << (x & 0x1f);
 }
