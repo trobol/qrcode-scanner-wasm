@@ -4,16 +4,16 @@
 
 struct BitMatrix
 {
-	unsigned int width;
-	unsigned int height;
-	unsigned int bitSize;
-	unsigned int pointSize;
-	unsigned int rowSize;
-	unsigned int *bits;
+	int width;
+	int height;
+	int bitSize;
+	int pointSize;
+	int rowSize;
+	int *bits;
 	float *points;
 };
 
-void new_BitMatrix(struct BitMatrix *matrix, int dimension, enum Memory_Item index);
+void new_BitMatrix(struct BitMatrix *matrix, int dimension);
 
 void BitMatrix_set(struct BitMatrix *matrix, int x, int y);
 bool BitMatrix_get(struct BitMatrix *matrix, int x, int y);

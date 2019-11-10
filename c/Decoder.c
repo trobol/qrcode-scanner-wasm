@@ -14,8 +14,9 @@ void Decoder_decode()
 	char *codewords = BitMatrixParser_readCodewords();
 
 	// Separate into data blocks
-	int blockCount = DataBlock_getDataBlocks(codewords, version, ecLevel);
-	struct DataBlock *dataBlocks = Memory_get(DATA_BLOCKS);
+	struct ArrayRef blockArray = DataBlock_getDataBlocks(codewords, version, ecLevel);
+	struct DataBlock *dataBlocks = blockArray.ptr;
+	unsigned int blockCount = blockArray.size;
 
 	// Count total number of data bytes
 	int totalBytes = 0;
@@ -23,7 +24,7 @@ void Decoder_decode()
 	{
 		totalBytes += dataBlocks[i].numDataCodeWords;
 	}
-	char *resultBytes = Memory_allocate(RESULT_BYTES, totalBytes, 1);
+	char *resultBytes = Memory_allocate(totalBytes * SIZEOF_CHAR);
 
 	int resultOffset = 0;
 
@@ -50,7 +51,7 @@ void Decoder_decode()
 void Decoder_correctErrors(char *codewordBytes, int ecCodeWords, int numDataCodewords)
 {
 	int numCodewords = ecCodeWords + numDataCodewords;
-	ArrayRef<int> codewordInts(numCodewords);
+	int *codewordInts = Memory_allocate(numCodewords * SIZEOF_INT);
 	for (int i = 0; i < numCodewords; i++)
 	{
 		codewordInts[i] = codewordBytes[i] & 0xff;
@@ -59,7 +60,7 @@ void Decoder_correctErrors(char *codewordBytes, int ecCodeWords, int numDataCode
 
 	try
 	{
-		rsDecoder_.decode(codewordInts, numECCodewords);
+		ReedSolomon_decode(codewordInts, numCodewords, numECCodewords);
 	}
 	catch (ReedSolomonException const &ignored)
 	{

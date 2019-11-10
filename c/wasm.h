@@ -12,14 +12,16 @@
 
 #define import extern
 
-typedef int i32;
-typedef long long int i64;
+//sizes for wasm32
 
-typedef unsigned int ui32;
-typedef unsigned long long int ui64;
 
-typedef float f32;
-typedef double f64;
+#define SIZEOF_INT 4
+#define SIZEOF_CHAR 1
+#define SIZEOF_PTR 4
+#define SIZEOF_FLOAT 4
+#define SIZEOF_BOOL SIZEOF_INT
+
+
 
 typedef int bool;
 #define true 1

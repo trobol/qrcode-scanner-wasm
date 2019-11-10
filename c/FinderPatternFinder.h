@@ -31,7 +31,7 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 float crossCheckHorizontal(unsigned int startJ, unsigned int centerI, int maxCount,
 						   int originalStateCountTotal);
 
-bool foundPatternCross(i32 *stateCount);
+bool foundPatternCross(int *stateCount);
 
 float centerFromEnd(int *stateCount, int end);
 
@@ -41,6 +41,6 @@ int findRowSkip();
 
 struct FinderPattern *get_pattern(int i);
 
-bool getBitmapPixel(unsigned int x, unsigned int y);
+
 
 #endif

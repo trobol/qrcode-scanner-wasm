@@ -4,10 +4,10 @@
 
 void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct PerspectiveTransform transform)
 {
-	BitMatrix_setDimension(matrix, dimension, DETECTOR_BITS);
+	new_BitMatrix(matrix, dimension);
 
 	int max = dimension << 1;
-	int *points = Memory_allocate(POINTS, max, 4);
+	int *points = Memory_allocate(max * SIZEOF_INT);
 	for (int y = 0; y < dimension; y++)
 	{
 		float yValue = (float)y + 0.5f;
@@ -36,7 +36,7 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 			}
 		}
 	}
-	Memory_delete(POINTS);
+	Memory_delete(max*SIZEOF_INT);
 }
 
 void GridSampler_checkAndNudgePoints(int width, int height, int *points, int max)

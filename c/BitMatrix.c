@@ -1,12 +1,7 @@
 #include "BitMatrix.h"
 #include "qrcode.h"
 
-bool getBitmapPixel(unsigned int x, unsigned int y)
-{
-	return image[x * 4 + (imageWidth * y) * 4] != 0 ? 0 : 1;
-}
-
-void new_BitMatrix(struct BitMatrix *matrix, int dimension, enum Memory_Item index)
+void new_BitMatrix(struct BitMatrix *matrix, int dimension)
 {
 	matrix->width = dimension;
 	matrix->height = dimension;
@@ -17,7 +12,7 @@ void new_BitMatrix(struct BitMatrix *matrix, int dimension, enum Memory_Item ind
 	}
 	matrix->bitSize = matrix->rowSize * matrix->height;
 
-	matrix->bits = Memory_allocate(index, matrix->bitSize, 4);
+	matrix->bits = Memory_allocate(matrix->bitSize * SIZEOF_INT);
 	for (unsigned int i = 0; i < matrix->bitSize; i++)
 	{
 		matrix->bits[i] = 0;

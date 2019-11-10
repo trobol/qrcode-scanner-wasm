@@ -134,7 +134,7 @@ char *BitMatrixParser_readCodewords()
 
 	bool readingUp = true;
 
-	char *result = Memory_allocate(CODEWORDS, version->totalCodewords, 1);
+	char *result = Memory_allocate(version->totalCodewords * SIZEOF_CHAR);
 	for (int i = 0; i < version->totalCodewords; i++)
 	{
 		result[i] = 0;

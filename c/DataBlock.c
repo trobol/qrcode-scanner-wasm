@@ -1,9 +1,8 @@
 #include "DataBlock.h"
-#include "Memory.h"
 
-int DataBlock_getDataBlocks(char *rawCodewords, struct Version *version, struct ErrorCorrectionLevel *ecLevel)
+
+struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *version, struct ErrorCorrectionLevel *ecLevel)
 {
-
 	// Figure out the number and size of data blocks used by this version and
 	// error correction level
 	struct ECBlocks ecBlocks = version->ecBlocks[ecLevel->ordinal];
@@ -20,8 +19,8 @@ int DataBlock_getDataBlocks(char *rawCodewords, struct Version *version, struct 
 	// Now establish DataBlocks of the appropriate size and number of data codewords
 	//std::vector<Ref<DataBlock>> result(totalBlocks);
 	//MIGHT BE ERRORS HERE
-	struct DataBlock *result = Memory_allocate(DATA_BLOCKS, totalBlocks, 8);
-	char *buffer = Memory_allocate(CODEWORDS_BUFFER, version->totalCodewords, 4);
+	struct DataBlock *result = Memory_allocate(totalBlocks * SIZEOF_DATA_BLOCK);
+	char *buffer = Memory_allocate(version->totalCodewords * SIZEOF_CHAR);
 	int numResultBlocks = 0;
 	int bufferIndex = 0;
 	for (unsigned int j = 0; j < 2; j++)
@@ -92,5 +91,6 @@ int DataBlock_getDataBlocks(char *rawCodewords, struct Version *version, struct 
 		//throw rawCodewordsOffset != rawCodewords.length
 	}
 	*/
-	return totalBlocks;
+	struct ArrayRef ref =  {totalBlocks, result};
+	return ref;
 }

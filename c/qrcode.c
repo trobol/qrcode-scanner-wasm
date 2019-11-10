@@ -1,6 +1,6 @@
-#include "../c/qrcode.h"
+#include "qrcode.h"
 #include "FinderPatternFinder.h"
-#include "../c/wasm.h"
+#include "wasm.h"
 #include "Detector.h"
 #include "BitMatrix.h"
 #include "Memory.h"
@@ -9,22 +9,34 @@ unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
 
 unsigned int imageSize = 0;
-unsigned char *image = &__heap_base;
+unsigned char *image;
+bool *bitMap;
 
 export int get_int(int *i)
 {
 	return *i;
 }
+export unsigned char* getImage() {
+	return image;
+}
+
 export void *setImageSize(unsigned int x, unsigned int y)
 {
+	
+
 	imageWidth = x;
 	imageHeight = y;
 
 	imageSize = x * y * 4;
 
-	Memory_allocate(IMAGE, imageSize, 1);
+
 
 	return (void *)image;
+}
+
+void *allocateImage() {
+	bitMap = Memory_allocate(imageHeight * imageHeight * SIZEOF_BOOL);
+	image = Memory_allocate(imageSize * SIZEOF_CHAR);
 }
 
 export unsigned int getImageSize()
@@ -78,18 +90,14 @@ export void imageToBitmap()
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
-					target = (areaWidth * areaX + imageX) * 4 + (imageWidth * (areaHeight * areaY + imageY)) * 4;
+					target = (areaWidth * areaX + imageX) + (imageWidth * (areaHeight * areaY + imageY));
 					if (image[target] > middle)
 					{
-						image[target] = 255;
-						image[target + 1] = 255;
-						image[target + 2] = 255;
+						bitMap[target] = false;
 					}
 					else
 					{
-						image[target] = 0;
-						image[target + 1] = 0;
-						image[target + 2] = 0;
+						bitMap[target] = true;
 					}
 				}
 			}
@@ -97,11 +105,20 @@ export void imageToBitmap()
 	}
 }
 
+
+bool getBitmapPixel(unsigned int x, unsigned int y)
+{
+	return bitMap[x  + (imageWidth * y)] != 0 ? 0 : 1;
+}
+
+
 export void decode()
 {
+	
 	//process data
 	//imageToBitmap();
 	//detect findpatterns
+	Memory_clear(imageSize);
 	possibleCentersSize = 0;
 	findFinderPatterns();
 
@@ -114,4 +131,6 @@ export void decode()
 	//create detector
 	//detect
 	//decode
+	Memory_clear();
+	allocateImage();
 }

@@ -1,22 +1,21 @@
 #include "Memory.h"
 #include "wasm.h"
 
-void *Memory_pointers[MEMORY_ITEM_COUNT] = {
-	&__heap_base};
+unsigned char *Memory_head = &__heap_base;
 
-void *Memory_allocate(enum Memory_Item index, unsigned int size, unsigned int dataSize)
+void *Memory_allocate(unsigned int size)
 {
-	Memory_pointers[index + 1] = &Memory_pointers + index + size * dataSize;
-	return Memory_pointers[index];
+	void* ptr = Memory_head;
+	Memory_head += size;
+	return ptr;
 }
 
-void *Memory_get(enum Memory_Item index)
+
+void Memory_clear()
 {
-	return Memory_pointers[index];
+	Memory_head = &__heap_base;
 }
 
-//items should be delete before the next one is created or that memory will remain empty
-void Memory_delete(enum Memory_Item index)
-{
-	Memory_pointers[index + 1] = Memory_pointers[index];
+void Memory_delete(unsigned int size) {
+	Memory_head -= size;
 }
