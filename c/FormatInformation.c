@@ -1,5 +1,7 @@
 #include "FormatInformation.h"
 
+
+
 void new_FormatInformation(struct FormatInformation *result, int formatInfo)
 {
 	result->errorCorrectionLevel = ErrorCorrectionLevel_forBits((formatInfo >> 3) & 0x03);
@@ -37,7 +39,7 @@ void FormatInformation_doDecodeFormatInformation(struct FormatInformation *resul
 			new_FormatInformation(result, decodeInfo[1]);
 			return;
 		}
-		int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
+		int bitsDifference = FormatInformation_numBitsDiffering(maskedFormatInfo1, targetInfo);
 		if (bitsDifference < bestDifference)
 		{
 			bestFormatInfo = decodeInfo[1];
@@ -46,7 +48,7 @@ void FormatInformation_doDecodeFormatInformation(struct FormatInformation *resul
 		if (maskedFormatInfo1 != maskedFormatInfo2)
 		{
 			// also try the other option
-			bitsDifference = numBitsDiffering(maskedFormatInfo2, targetInfo);
+			bitsDifference = FormatInformation_numBitsDiffering(maskedFormatInfo2, targetInfo);
 			if (bitsDifference < bestDifference)
 			{
 				bestFormatInfo = decodeInfo[1];
@@ -61,8 +63,17 @@ void FormatInformation_doDecodeFormatInformation(struct FormatInformation *resul
 	}
 }
 
+int FormatInformation_numBitsDiffering(int a, int b) {
+  a ^= b;
+  return BITS_SET_IN_HALF_BYTE[a & 0x0F] + BITS_SET_IN_HALF_BYTE[(a >> 4 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 8
+         & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 12 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 16 & 0x0F)]
+         + BITS_SET_IN_HALF_BYTE[(a >> 20 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 24 & 0x0F)]
+         + BITS_SET_IN_HALF_BYTE[(a >> 28 & 0x0F)];
+}
+
+
 int BITS_SET_IN_HALF_BYTE[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
-int FormatInformation_FORMAT_INFO_DECODE_LOOKUP[][2] = {
+int FORMAT_INFO_DECODE_LOOKUP[][2] = {
 	{0x5412, 0x00},
 	{0x5125, 0x01},
 	{0x5E7C, 0x02},

@@ -65,8 +65,8 @@ void findFinderPatterns()
 	bool tryHarder = false;
 	//image
 
-	ui32 maxI = imageHeight;
-	ui32 maxJ = imageWidth;
+	unsigned int maxI = imageHeight;
+	unsigned int maxJ = imageWidth;
 
 	// We are looking for black/white/black/white/black modules in
 	// 1:1:3:1:1 ratio; this tracks the number of such modules seen so far

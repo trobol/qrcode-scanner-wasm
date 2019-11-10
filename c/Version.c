@@ -67,7 +67,7 @@ struct BitMatrix Version_buildFunctionPattern(struct Version *version)
 {
 	int dimension = getDimensionForVersion(version);
 	struct BitMatrix functionPattern;
-	new_BitMatrix(&functionPattern, dimension, FUNCTION_PATTERN);
+	new_BitMatrix(&functionPattern, dimension);
 
 	// Top left finder pattern + separator + format
 	BitMatrix_setRegion(&functionPattern, 0, 0, 9, 9);

@@ -4,6 +4,7 @@
 #include "Detector.h"
 #include "BitMatrix.h"
 #include "Memory.h"
+#include "Decoder.h"
 
 unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
@@ -37,6 +38,7 @@ export void *setImageSize(unsigned int x, unsigned int y)
 void *allocateImage() {
 	bitMap = Memory_allocate(imageHeight * imageHeight * SIZEOF_BOOL);
 	image = Memory_allocate(imageSize * SIZEOF_CHAR);
+	return image;
 }
 
 export unsigned int getImageSize()
@@ -125,7 +127,7 @@ export void decode()
 	//detector results
 	struct BitMatrix matrix;
 	processFinderPatternInfo(&matrix);
-	Decoder_decode(matrix);
+	//Decoder_decode(matrix);
 	printNum(matrix.bitSize);
 	printNum(matrix.pointSize);
 	//create detector

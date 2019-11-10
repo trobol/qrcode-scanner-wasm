@@ -9,6 +9,7 @@ clang -include ./c/wasm.h --include-directory include -g --target=wasm32 -O0 -fl
  c/AlignmentPattern.c^
  c/GridSampler.c^
  c/PerspectiveTransform.c^
- c/GridSampler.c^
  c/Memory.c^
- c/FormatInformation.c
+ c/FormatInformation.c^
+ c/BitMatrix.c^
+ c/ErrorCorrectionLevel.c

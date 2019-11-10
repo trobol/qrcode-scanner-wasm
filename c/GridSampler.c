@@ -32,7 +32,7 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 			}
 			if (getBitmapPixel((int)points[x], (int)points[x + 1]))
 			{
-				BitMatrix_set(&matrix, x >> 1, y);
+				BitMatrix_set(matrix, x >> 1, y);
 			}
 		}
 	}

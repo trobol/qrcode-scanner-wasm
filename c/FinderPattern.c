@@ -25,7 +25,7 @@ int get_count(struct FinderPattern *pat)
     return pat->count;
 }
 
-void createFinderPattern(struct FinderPattern *pat, f32 posX, f32 posY, float estimatedModuleSize, i32 count)
+void createFinderPattern(struct FinderPattern *pat, float posX, float posY, float estimatedModuleSize, int count)
 {
     pat->posX = posX;
     pat->posY = posY;
@@ -33,7 +33,7 @@ void createFinderPattern(struct FinderPattern *pat, f32 posX, f32 posY, float es
     pat->count = count;
 }
 
-struct FinderPattern combineEstimate(struct FinderPattern *from, f32 i, f32 j, f32 newModuleSize)
+struct FinderPattern combineEstimate(struct FinderPattern *from, float i, float j, float newModuleSize)
 {
     struct FinderPattern to;
     to.count = from->count + 1;
@@ -43,7 +43,7 @@ struct FinderPattern combineEstimate(struct FinderPattern *from, f32 i, f32 j, f
     return to;
 }
 
-bool aboutEquals(struct FinderPattern *pat, f32 moduleSize, f32 i, f32 j)
+bool aboutEquals(struct FinderPattern *pat, float moduleSize, float i, float j)
 {
     if (fabs(i - pat->posY) <= moduleSize && fabs(j - pat->posX) <= moduleSize)
     {
