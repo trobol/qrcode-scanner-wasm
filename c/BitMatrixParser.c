@@ -1,27 +1,28 @@
 #include "BitMatrixParser.h"
 #include "qrcode.h"
+#include "DataMask.h"
+#include "Memory.h"
 
 struct Version *BitMatrixParser_parsedVersion = 0;
 struct FormatInformation *BitMatrixParser_parsedFormatInfo = 0;
 
-void BitMatrixParser_parser()
+void BitMatrixParser_setBitMatrix(struct BitMatrix bitMatrix)
 {
-}
-int BitMatrixParser_copyBit(unsigned int x, unsigned int y, int versionBits)
-{
-	return BitMatrix_get(x, y) ? (versionBits << 1) | 0x1 : versionBits << 1;
-}
+	BitMatrixParser_bitMatrix = bitMatrix;
+	BitMatrixParser_parsedVersion = 0;
+	BitMatrixParser_parsedFormatInfo = 0;
 
-/*
-BitMatrixParser_BitMatrixParser(Ref<BitMatrix> bitMatrix) : bitMatrix_(bitMatrix), parsedVersion_(0), parsedFormatInfo_()
-{
-	size_t dimension = bitMatrix->getHeight();
+	unsigned int dimension = bitMatrix.height;
 	if ((dimension < 21) || (dimension & 0x03) != 1)
 	{
-		throw ReaderException("Dimension must be 1 mod 4 and >= 21");
+		//ERROR
 	}
 }
-*/
+
+int BitMatrixParser_copyBit(unsigned int x, unsigned int y, int versionBits)
+{
+	return BitMatrix_get(&BitMatrixParser_bitMatrix, x, y) ? (versionBits << 1) | 0x1 : versionBits << 1;
+}
 
 struct FormatInformation *BitMatrixParser_readFormatInformation()
 {
@@ -47,7 +48,7 @@ struct FormatInformation *BitMatrixParser_readFormatInformation()
 	}
 
 	// Read the top-right/bottom-left pattern
-	int dimension = BitMatrix.height;
+	int dimension = BitMatrixParser_bitMatrix.height;
 	int formatInfoBits2 = 0;
 	int jMin = dimension - 7;
 	for (int j = dimension - 1; j >= jMin; j--)
@@ -74,7 +75,7 @@ struct Version *BitMatrixParser_readVersion()
 		return BitMatrixParser_parsedVersion;
 	}
 
-	int dimension = BitMatrix.height;
+	int dimension = BitMatrixParser_bitMatrix.height;
 
 	int provisionalVersion = (dimension - 17) >> 2;
 	if (provisionalVersion <= 6)
@@ -118,27 +119,26 @@ struct Version *BitMatrixParser_readVersion()
 	return (struct Version *)NaN;
 }
 
-void BitMatrixParser_readCodewords()
+char *BitMatrixParser_readCodewords()
 {
 	struct FormatInformation *formatInfo = BitMatrixParser_readFormatInformation();
 	struct Version *version = BitMatrixParser_readVersion();
 
 	// Get the data mask for the format used in this QR Code. This will exclude
 	// some bits from reading as we wind through the bit matrix.
-	struct DataMask *dataMask = DataMask_forReference((int)formatInfo->getDataMask());
-	//	cout << (int)formatInfo->getDataMask() << endl;
-	int dimension = bitMatrix_->getHeight();
-	dataMask.unmaskBitMatrix(*bitMatrix_, dimension);
 
-	//		cerr << *bitMatrix_ << endl;
-	//	cerr << version->getTotalCodewords() << endl;
+	int dimension = BitMatrixParser_bitMatrix.height;
+	DataMask_unmaskBitMatrix(BitMatrixParser_bitMatrix, dimension, formatInfo->dataMask);
 
-	Ref<BitMatrix> functionPattern = version->buildFunctionPattern();
-
-	//	cout << *functionPattern << endl;
+	struct BitMatrix functionPattern = Version_buildFunctionPattern(version);
 
 	bool readingUp = true;
-	ArrayRef<char> result(version->getTotalCodewords());
+
+	char *result = Memory_allocate(CODEWORDS, version->totalCodewords, 1);
+	for (int i = 0; i < version->totalCodewords; i++)
+	{
+		result[i] = 0;
+	}
 	int resultOffset = 0;
 	int currentByte = 0;
 	int bitsRead = 0;
@@ -158,12 +158,12 @@ void BitMatrixParser_readCodewords()
 			for (int col = 0; col < 2; col++)
 			{
 				// Ignore bits covered by the function pattern
-				if (!functionPattern->get(x - col, y))
+				if (!BitMatrix_get(&functionPattern, x - col, y))
 				{
 					// Read a bit
 					bitsRead++;
 					currentByte <<= 1;
-					if (bitMatrix_->get(x - col, y))
+					if (BitMatrix_get(&functionPattern, x - col, y))
 					{
 						currentByte |= 1;
 					}
@@ -180,9 +180,9 @@ void BitMatrixParser_readCodewords()
 		readingUp = !readingUp; // switch directions
 	}
 
-	if (resultOffset != version->getTotalCodewords())
+	if (resultOffset != version->totalCodewords)
 	{
-		throw ReaderException("Did not read all codewords");
+		//ERROR
 	}
 	return result;
 }

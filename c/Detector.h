@@ -4,13 +4,14 @@
 #include "FinderPattern.h"
 #include "AlignmentPattern.h"
 #include "PerspectiveTransform.h"
+#include "BitMatrix.h"
 
 struct struct_DetectorResult
 {
 	float points[8];
 };
 extern struct struct_DetectorResult DetectorResult;
-void processFinderPatternInfo();
+void processFinderPatternInfo(struct BitMatrix *matrix);
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft);
 
 float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPattern *otherPattern);

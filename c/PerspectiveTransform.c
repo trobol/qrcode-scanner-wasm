@@ -90,16 +90,15 @@ struct PerspectiveTransform PerspectiveTransform_times(struct PerspectiveTransfo
 		first.a13 * other.a21 + first.a23 * other.a22 + first.a33 * other.a23,
 		first.a13 * other.a31 + first.a23 * other.a32 + first.a33 * other.a33);
 }
-void PerspectiveTransform_transformPoints(struct PerspectiveTransform first)
+void PerspectiveTransform_transformPoints(struct PerspectiveTransform first, int *points, int max)
 {
-	int max = BitMatrix.pointSize;
 	for (int i = 0; i < max; i += 2)
 	{
-		float x = BitMatrix.points[i];
-		float y = BitMatrix.points[i + 1];
+		float x = points[i];
+		float y = points[i + 1];
 		float denominator = first.a13 * x + first.a23 * y + first.a33;
-		BitMatrix.points[i] = (first.a11 * x + first.a21 * y + first.a31) / denominator;
-		BitMatrix.points[i + 1] = (first.a12 * x + first.a22 * y + first.a32) / denominator;
+		points[i] = (first.a11 * x + first.a21 * y + first.a31) / denominator;
+		points[i + 1] = (first.a12 * x + first.a22 * y + first.a32) / denominator;
 	}
 }
 

@@ -16,5 +16,5 @@ extern int FormatInformation_FORMAT_INFO_DECODE_LOOKUP[][2];
 struct FormatInformation *FormatInformation_decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
 void FormatInformation_doDecodeFormatInformation(struct FormatInformation *result, int maskedFormatInfo1, int maskedFormatInfo2);
 
-new_FormatInformation(struct FormatInformation *result)
+void new_FormatInformation(struct FormatInformation *result);
 #endif

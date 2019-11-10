@@ -1,6 +1,7 @@
 #include "Version.h"
 #include "qrcode.h"
 #include "FormatInformation.h"
+#include "Memory.h"
 
 struct Version *getVersionForNumber(int versionNumber)
 {
@@ -60,6 +61,51 @@ struct Version *decodeVersionInformation(unsigned int versionBits)
 	}
 	// If we didn't find a close enough match, fail
 	return 0;
+}
+
+struct BitMatrix Version_buildFunctionPattern(struct Version *version)
+{
+	int dimension = getDimensionForVersion(version);
+	struct BitMatrix functionPattern;
+	new_BitMatrix(&functionPattern, dimension, FUNCTION_PATTERN);
+
+	// Top left finder pattern + separator + format
+	BitMatrix_setRegion(&functionPattern, 0, 0, 9, 9);
+	// Top right finder pattern + separator + format
+	BitMatrix_setRegion(&functionPattern, dimension - 8, 0, 8, 9);
+	// Bottom left finder pattern + separator + format
+	BitMatrix_setRegion(&functionPattern, 0, dimension - 8, 9, 8);
+
+	// Alignment patterns
+	unsigned int max = version->alignmentPatternCount;
+	for (unsigned int x = 0; x < max; x++)
+	{
+		int i = version->alignmentPatternCenters[x] - 2;
+		for (unsigned int y = 0; y < max; y++)
+		{
+			if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0))
+			{
+				// No alignment patterns near the three finder patterns
+				continue;
+			}
+			BitMatrix_setRegion(&functionPattern, version->alignmentPatternCenters[y] - 2, i, 5, 5);
+		}
+	}
+
+	// Vertical timing pattern
+	BitMatrix_setRegion(&functionPattern, 6, 9, 1, dimension - 17);
+	// Horizontal timing pattern
+	BitMatrix_setRegion(&functionPattern, 9, 6, dimension - 17, 1);
+
+	if (version->versionNumber > 6)
+	{
+		// Version info, top right
+		BitMatrix_setRegion(&functionPattern, dimension - 11, 0, 3, 6);
+		// Version info, bottom left
+		BitMatrix_setRegion(&functionPattern, 0, dimension - 11, 6, 3);
+	}
+
+	return functionPattern;
 }
 
 unsigned int VERSION_DECODE_INFO[] = {0x07C94, 0x085BC, 0x09A99, 0x0A4D3, 0x0BBF6, 0x0C762, 0x0D847, 0x0E60D,

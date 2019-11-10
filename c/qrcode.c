@@ -2,26 +2,18 @@
 #include "FinderPatternFinder.h"
 #include "../c/wasm.h"
 #include "Detector.h"
-#include "Bitmatrix.h"
+#include "BitMatrix.h"
 #include "Memory.h"
 
 unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
 
 unsigned int imageSize = 0;
-unsigned int *image = (unsigned int *)&__heap_base;
+unsigned char *image = &__heap_base;
 
 export int get_int(int *i)
 {
 	return *i;
-}
-export unsigned int *get_bits()
-{
-	return BitMatrix.bits;
-}
-export int get_size()
-{
-	return BitMatrix.bitSize;
 }
 export void *setImageSize(unsigned int x, unsigned int y)
 {
@@ -30,7 +22,7 @@ export void *setImageSize(unsigned int x, unsigned int y)
 
 	imageSize = x * y * 4;
 
-	Memory_allocate(MEMORY_ITEM_IMAGE, imageSize);
+	Memory_allocate(IMAGE, imageSize, 1);
 
 	return (void *)image;
 }
@@ -114,9 +106,11 @@ export void decode()
 	findFinderPatterns();
 
 	//detector results
-	processFinderPatternInfo();
-	printNum(BitMatrix.bitSize);
-	printNum(BitMatrix.pointSize);
+	struct BitMatrix matrix;
+	processFinderPatternInfo(&matrix);
+	Decoder_decode(matrix);
+	printNum(matrix.bitSize);
+	printNum(matrix.pointSize);
 	//create detector
 	//detect
 	//decode

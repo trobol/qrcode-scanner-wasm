@@ -2,54 +2,53 @@
 #include "GridSampler.h"
 #include "Memory.h"
 
-void GridSampler_sampleGrid(int dimension, struct PerspectiveTransform transform)
+void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct PerspectiveTransform transform)
 {
-	struct BitMatrix matrix = BitMatrix_setDimension(dimension);
+	BitMatrix_setDimension(matrix, dimension, DETECTOR_BITS);
 
+	int max = dimension << 1;
+	int *points = Memory_allocate(POINTS, max, 4);
 	for (int y = 0; y < dimension; y++)
 	{
-		int max = BitMatrix.pointSize;
 		float yValue = (float)y + 0.5f;
 		for (int x = 0; x < max; x += 2)
 		{
-			BitMatrix.points[x] = (float)(x >> 1) + 0.5f;
-			BitMatrix.points[x + 1] = yValue;
+			points[x] = (float)(x >> 1) + 0.5f;
+			points[x + 1] = yValue;
 		}
 
-		PerspectiveTransform_transformPoints(transform);
+		PerspectiveTransform_transformPoints(transform, points, max);
 
 		for (unsigned int i = 0; i < max; i += 2)
 		{
-			drawDot(BitMatrix.points[i], BitMatrix.points[i + 1]);
+			drawDot(points[i], points[i + 1]);
 		}
-		GridSampler_checkAndNudgePoints();
+		GridSampler_checkAndNudgePoints(matrix->width, matrix->height, points, max);
 		for (int x = 0; x < max; x += 2)
 		{
-			if ((int)BitMatrix.points[x] * 4 + (imageWidth * (int)BitMatrix.points[x + 1]) * 4 > imageSize)
+			if ((int)points[x] * 4 + (imageWidth * (int)points[x + 1]) * 4 > imageSize)
 			{
 				printNum(310);
 			}
-			if (getBitmapPixel((int)BitMatrix.points[x], (int)BitMatrix.points[x + 1]))
+			if (getBitmapPixel((int)points[x], (int)points[x + 1]))
 			{
-				BitMatrix_set(x >> 1, y);
+				BitMatrix_set(&matrix, x >> 1, y);
 			}
 		}
 	}
+	Memory_delete(POINTS);
 }
 
-void GridSampler_checkAndNudgePoints()
+void GridSampler_checkAndNudgePoints(int width, int height, int *points, int max)
 {
-	int width = BitMatrix.width;
-	int height = BitMatrix.height;
-
 	// The Java code assumes that if the start and end points are in bounds, the rest will also be.
 	// However, in some unusual cases points in the middle may also be out of bounds.
 	// Since we can't rely on an ArrayIndexOutOfBoundsException like Java, we check every point.
 
-	for (unsigned int offset = 0; offset < BitMatrix.pointSize; offset += 2)
+	for (unsigned int offset = 0; offset < max; offset += 2)
 	{
-		int x = (int)BitMatrix.points[offset];
-		int y = (int)BitMatrix.points[offset + 1];
+		int x = (int)points[offset];
+		int y = (int)points[offset + 1];
 		if (x < -1 || x > width || y < -1 || y > height)
 		{
 			//ERROR
@@ -57,19 +56,19 @@ void GridSampler_checkAndNudgePoints()
 
 		if (x == -1)
 		{
-			BitMatrix.points[offset] = 0.0f;
+			points[offset] = 0.0f;
 		}
 		else if (x == width)
 		{
-			BitMatrix.points[offset] = (float)(width - 1);
+			points[offset] = (float)(width - 1);
 		}
 		if (y == -1)
 		{
-			BitMatrix.points[offset + 1] = 0.0f;
+			points[offset + 1] = 0.0f;
 		}
 		else if (y == height)
 		{
-			BitMatrix.points[offset + 1] = (float)(height - 1);
+			points[offset + 1] = (float)(height - 1);
 		}
 	}
 }

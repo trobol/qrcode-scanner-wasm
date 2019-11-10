@@ -3,12 +3,14 @@
 
 #include "Version.h"
 #include "FormatInformation.h"
+#include "BitMatrix.h"
 
-void BitMatrixParser_parser();
+struct BitMatrix BitMatrixParser_bitMatrix;
+void BitMatrixParser_setBitMatrix(struct BitMatrix bitMatrix);
 
 struct Version *BitMatrixParser_readVersion();
 struct FormatInformation *BitMatrixParser_readFormatInformation();
-void BitMatrixParser_readCodewords();
+char *BitMatrixParser_readCodewords();
 
 int BitMatrixParser_copyBit(unsigned int x, unsigned int y, int versionBits);
 

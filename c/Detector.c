@@ -5,11 +5,10 @@
 #include "AlignmentPatternFinder.h"
 #include "qrcode.h"
 #include "GridSampler.h"
-#include "PerspectiveTransform.h"
 
 struct struct_DetectorResult DetectorResult;
 
-void processFinderPatternInfo()
+void processFinderPatternInfo(struct BitMatrix *matrix)
 {
 	struct FinderPattern bottomLeft = possibleCenters[0];
 	struct FinderPattern topLeft = possibleCenters[1];
@@ -63,8 +62,9 @@ void processFinderPatternInfo()
 	printNum((int)alignmentPattern);
 	struct PerspectiveTransform transform = Detector_createTransform(&topLeft, &topRight, &bottomLeft, alignmentPattern, dimension);
 
-	Detector_sampleGrid(dimension, transform);
+	GridSampler_sampleGrid(matrix, dimension, transform);
 
+	/*
 	DetectorResult.points[0] = bottomLeft.posX;
 	DetectorResult.points[1] = bottomLeft.posY;
 	DetectorResult.points[2] = topLeft.posX;
@@ -81,6 +81,7 @@ void processFinderPatternInfo()
 		DetectorResult.points[6] = 0;
 		DetectorResult.points[7] = 0;
 	}
+	*/
 }
 
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft)
@@ -288,10 +289,4 @@ struct PerspectiveTransform Detector_createTransform(struct FinderPattern *topLe
 	return PerspectiveTransform_quadrilateralToQuadrilateral(3.5f, 3.5f, dimMinusThree, 3.5f, sourceBottomRightX,
 															 sourceBottomRightY, 3.5f, dimMinusThree, topLeft->posX, topLeft->posY, topRight->posX,
 															 topRight->posY, bottomRightX, bottomRightY, bottomLeft->posX, bottomLeft->posY);
-}
-
-void Detector_sampleGrid(int dimension, struct PerspectiveTransform transform)
-{
-
-	GridSampler_sampleGrid(dimension, transform);
 }

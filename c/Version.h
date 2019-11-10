@@ -2,6 +2,7 @@
 #define VERSION_H
 #include "wasm.h"
 #include "qrcode.h"
+#include "BitMatrix.h"
 
 #define N_VERSION_DECODE_INFOS 34
 struct ECB
@@ -25,8 +26,6 @@ struct Version
 	struct ECBlocks ecBlocks[4];
 };
 
-extern struct struct_BitMatrix functionPattern;
-
 #define N_VERSIONS 40
 extern struct Version VERSIONS[40];
 extern unsigned int VERSION_DECODE_INFO[];
@@ -35,4 +34,6 @@ struct Version *getProvisionalVersionForDimension(int dimension);
 struct Version *getVersionForNumber(int versionNumber);
 int getDimensionForVersion(struct Version *version);
 struct Version *decodeVersionInformation(unsigned int versionBits);
+
+struct BitMatrix Version_buildFunctionPattern(struct Version *version);
 #endif
