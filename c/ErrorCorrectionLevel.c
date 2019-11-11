@@ -2,10 +2,11 @@
 #include "qrcode.h"
 
 struct ErrorCorrectionLevel FOR_BITS[4] = {
-	{0, 0x01, 'L'},
 	{1, 0x00, 'M'},
+	{0, 0x01, 'L'},
+	{3, 0x02, 'H'},
 	{2, 0x03, 'Q'},
-	{3, 0x02, 'H'}};
+};
 
 struct ErrorCorrectionLevel *ErrorCorrectionLevel_forBits(int bits)
 {

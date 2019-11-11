@@ -103,7 +103,6 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 			// Look for about the same center and module size:
 			if (AlignmentPattern_aboutEquals(center, estimatedModuleSize, centerI, centerJ))
 			{
-				printNum(900);
 				return AlignmentPattern_combineEstimate(center, centerI, centerJ, estimatedModuleSize);
 			}
 		}
@@ -113,14 +112,13 @@ struct AlignmentPattern *AlignmentPatternFinder_handlePossibleCenter(int stateCo
 		AlignmentPatternFinder_possibleCenters[AlignmentPatternFinder_possibleCentersSize].estimatedModuleSize = estimatedModuleSize;
 		++AlignmentPatternFinder_possibleCentersSize;
 	}
-	printNum(200);
 	//POSSIBLE ERROR
 	return 0;
 }
 
 struct AlignmentPattern *AlignmentPatternFinder_find()
 {
-	printNum(40);
+
 	AlignmentPatternFinder_possibleCentersSize = 0;
 	int maxJ = AlignmentPatternFinder_startX + AlignmentPatternFinder_width;
 	int middleI = AlignmentPatternFinder_startY + (AlignmentPatternFinder_height >> 1);

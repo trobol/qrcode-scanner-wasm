@@ -4,13 +4,14 @@
 #include "Memory.h"
 
 struct Version *BitMatrixParser_parsedVersion = 0;
-struct FormatInformation *BitMatrixParser_parsedFormatInfo = 0;
+struct FormatInformation BitMatrixParser_parsedFormatInfo;
+extern struct BitMatrix BitMatrixParser_bitMatrix;
+struct BitMatrix BitMatrixParser_bitMatrix;
 
 void BitMatrixParser_setBitMatrix(struct BitMatrix bitMatrix)
 {
 	BitMatrixParser_bitMatrix = bitMatrix;
 	BitMatrixParser_parsedVersion = 0;
-	BitMatrixParser_parsedFormatInfo = 0;
 
 	unsigned int dimension = bitMatrix.height;
 	if ((dimension < 21) || (dimension & 0x03) != 1)
@@ -24,13 +25,8 @@ int BitMatrixParser_copyBit(unsigned int x, unsigned int y, int versionBits)
 	return BitMatrix_get(&BitMatrixParser_bitMatrix, x, y) ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
-struct FormatInformation *BitMatrixParser_readFormatInformation()
+struct FormatInformation BitMatrixParser_readFormatInformation()
 {
-	if ((int)BitMatrixParser_parsedFormatInfo != 0)
-	{
-		return BitMatrixParser_parsedFormatInfo;
-	}
-
 	// Read top-left format info bits
 	int formatInfoBits1 = 0;
 	for (int i = 0; i < 6; i++)
@@ -61,11 +57,14 @@ struct FormatInformation *BitMatrixParser_readFormatInformation()
 	}
 
 	BitMatrixParser_parsedFormatInfo = FormatInformation_decodeFormatInformation(formatInfoBits1, formatInfoBits2);
-	if (BitMatrixParser_parsedFormatInfo != 0)
+	/*
+	if (BitMatrixParser_parsedFormatInfo.errorCorrectionLevel != 0)
 	{
 		return BitMatrixParser_parsedFormatInfo;
 	}
-	return (struct FormatInformation *)NaN;
+	//fail handle missing
+	*/
+	return BitMatrixParser_parsedFormatInfo;
 }
 
 struct Version *BitMatrixParser_readVersion()
@@ -121,14 +120,13 @@ struct Version *BitMatrixParser_readVersion()
 
 char *BitMatrixParser_readCodewords()
 {
-	struct FormatInformation *formatInfo = BitMatrixParser_readFormatInformation();
 	struct Version *version = BitMatrixParser_readVersion();
 
 	// Get the data mask for the format used in this QR Code. This will exclude
 	// some bits from reading as we wind through the bit matrix.
 
 	int dimension = BitMatrixParser_bitMatrix.height;
-	DataMask_unmaskBitMatrix(BitMatrixParser_bitMatrix, dimension, formatInfo->dataMask);
+	DataMask_unmaskBitMatrix(BitMatrixParser_bitMatrix, dimension, BitMatrixParser_parsedFormatInfo.dataMask);
 
 	struct BitMatrix functionPattern = Version_buildFunctionPattern(version);
 
@@ -163,7 +161,7 @@ char *BitMatrixParser_readCodewords()
 					// Read a bit
 					bitsRead++;
 					currentByte <<= 1;
-					if (BitMatrix_get(&functionPattern, x - col, y))
+					if (BitMatrix_get(&BitMatrixParser_bitMatrix, x - col, y))
 					{
 						currentByte |= 1;
 					}
@@ -183,6 +181,7 @@ char *BitMatrixParser_readCodewords()
 	if (resultOffset != version->totalCodewords)
 	{
 		//ERROR
+		return 0;
 	}
 	return result;
 }

@@ -20,22 +20,17 @@ export int get_int(int *i)
 	return *i;
 }
 
-export void* get_bits() {
-	return matrix.bits;
-}
-
-export int get_size() {
-	return matrix.bitSize;
-}
-
-export unsigned char* getImage() {
+export unsigned char *getImage()
+{
 	return image;
 }
-export void* getBitMap() {
+export void *getBitMap()
+{
 	return bitMap;
 }
 
-void *allocateImage() {
+void *allocateImage()
+{
 	Memory_clear();
 	bitMap = Memory_allocate(imageWidth * imageHeight * SIZEOF_BOOL);
 	image = Memory_allocate(imageSize);
@@ -44,18 +39,14 @@ void *allocateImage() {
 
 export void *setImageSize(unsigned int x, unsigned int y)
 {
-	
 
 	imageWidth = x;
 	imageHeight = y;
 
 	imageSize = x * y * 4;
 
-
 	return allocateImage();
 }
-
-
 
 export unsigned int getImageSize()
 {
@@ -116,15 +107,15 @@ export void imageToBitmap()
 					if (image[target] > middle)
 					{
 						image[target] = 255;
-						image[target+1] = 255;
-						image[target+2] = 255;
+						image[target + 1] = 255;
+						image[target + 2] = 255;
 						bitMap[bitTarget] = false;
 					}
 					else
 					{
 						image[target] = 0;
-						image[target+1] = 0;
-						image[target+2] = 0;
+						image[target + 1] = 0;
+						image[target + 2] = 0;
 						bitMap[bitTarget] = true;
 					}
 				}
@@ -133,16 +124,24 @@ export void imageToBitmap()
 	}
 }
 
-
 bool getBitmapPixel(unsigned int x, unsigned int y)
 {
-	return bitMap[x  + (imageWidth * y)];
+	return bitMap[x + (imageWidth * y)];
+}
+struct DecoderResult result;
+export int get_size()
+{
+	return result.size;
 }
 
+export void *get_bytes()
+{
+	return result.resultBytes;
+}
 
 export void decode()
 {
-	
+
 	//process data
 	//imageToBitmap();
 	//detect findpatterns
@@ -150,14 +149,14 @@ export void decode()
 	findFinderPatterns();
 
 	//detector results
-	
+
 	processFinderPatternInfo(&matrix);
-	//Decoder_decode(matrix);
-	printNum(matrix.bitSize);
-	printNum(matrix.pointSize);
+
+	result = Decoder_decode(matrix);
+
 	//create detector
 	//detect
 	//decode
-	
+
 	allocateImage();
 }

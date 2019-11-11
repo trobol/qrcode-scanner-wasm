@@ -28,7 +28,6 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 		{
 			if ((int)points[x] * 4 + (imageWidth * (int)points[x + 1]) * 4 > imageSize)
 			{
-				printNum(310);
 			}
 			if (getBitmapPixel((int)points[x], (int)points[x + 1]))
 			{
@@ -36,7 +35,7 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 			}
 		}
 	}
-	Memory_delete(max*SIZEOF_INT);
+	Memory_delete(max * SIZEOF_INT);
 }
 
 void GridSampler_checkAndNudgePoints(int width, int height, float *points, int max)

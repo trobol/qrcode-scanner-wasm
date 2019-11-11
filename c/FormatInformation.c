@@ -1,29 +1,27 @@
 #include "FormatInformation.h"
 
-
-
-void new_FormatInformation(struct FormatInformation *result, int formatInfo)
+struct FormatInformation new_FormatInformation(int formatInfo)
 {
-	result->errorCorrectionLevel = ErrorCorrectionLevel_forBits((formatInfo >> 3) & 0x03);
-	result->dataMask = (char)(formatInfo & 0x07);
+	return (struct FormatInformation){
+		ErrorCorrectionLevel_forBits((formatInfo >> 3) & 0x03),
+		(char)(formatInfo & 0x07)};
 }
-struct FormatInformation *FormatInformation_decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2)
+struct FormatInformation FormatInformation_decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2)
 {
-	struct FormatInformation *result;
-	FormatInformation_doDecodeFormatInformation(result, maskedFormatInfo1, maskedFormatInfo2);
-	if (result != 0)
+
+	struct FormatInformation result = FormatInformation_doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
+	if (result.errorCorrectionLevel != 0)
 	{
 		return result;
 	}
 	// Should return null, but, some QR codes apparently
 	// do not mask this info. Try again by actually masking the pattern
 	// first
-	FormatInformation_doDecodeFormatInformation(result, maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
-												maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
-	return result;
+	return FormatInformation_doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
+													   maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
 }
 
-void FormatInformation_doDecodeFormatInformation(struct FormatInformation *result, int maskedFormatInfo1, int maskedFormatInfo2)
+struct FormatInformation FormatInformation_doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2)
 {
 	// Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
 	int bestDifference = 2147483647;
@@ -36,8 +34,7 @@ void FormatInformation_doDecodeFormatInformation(struct FormatInformation *resul
 		if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2)
 		{
 			// Found an exact match
-			new_FormatInformation(result, decodeInfo[1]);
-			return;
+			return new_FormatInformation(decodeInfo[1]);
 		}
 		int bitsDifference = FormatInformation_numBitsDiffering(maskedFormatInfo1, targetInfo);
 		if (bitsDifference < bestDifference)
@@ -58,19 +55,17 @@ void FormatInformation_doDecodeFormatInformation(struct FormatInformation *resul
 	}
 	if (bestDifference <= 3)
 	{
-		(new_FormatInformation(result, bestFormatInfo));
-		return;
+		return new_FormatInformation(bestFormatInfo);
 	}
+
+	return (struct FormatInformation){0, 0};
 }
 
-int FormatInformation_numBitsDiffering(int a, int b) {
-  a ^= b;
-  return BITS_SET_IN_HALF_BYTE[a & 0x0F] + BITS_SET_IN_HALF_BYTE[(a >> 4 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 8
-         & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 12 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 16 & 0x0F)]
-         + BITS_SET_IN_HALF_BYTE[(a >> 20 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 24 & 0x0F)]
-         + BITS_SET_IN_HALF_BYTE[(a >> 28 & 0x0F)];
+int FormatInformation_numBitsDiffering(int a, int b)
+{
+	a ^= b;
+	return BITS_SET_IN_HALF_BYTE[a & 0x0F] + BITS_SET_IN_HALF_BYTE[(a >> 4 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 8 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 12 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 16 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 20 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 24 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 28 & 0x0F)];
 }
-
 
 int BITS_SET_IN_HALF_BYTE[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 int FORMAT_INFO_DECODE_LOOKUP[][2] = {

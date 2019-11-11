@@ -21,19 +21,18 @@ void processFinderPatternInfo(struct BitMatrix *matrix)
 		//throw(); // zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
-	printNum(dimension);
 
 	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
 	if ((int)provisionalVersion == NaN)
 		return;
-	printNum(provisionalVersion->alignmentPatternCount);
+
 	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
-	printNum(modulesBetweenFPCenters);
+
 	struct AlignmentPattern *alignmentPattern = 0;
 	// Anything above version 1 has an alignment pattern
 	if (provisionalVersion->alignmentPatternCount > 0)
 	{
-		printNum(100);
+
 		// Guess where a "bottom right" finder pattern would have been
 		float bottomRightX = topRight.posX - topLeft.posX + bottomLeft.posX;
 		float bottomRightY = topRight.posY - topLeft.posY + bottomLeft.posY;
@@ -55,11 +54,9 @@ void processFinderPatternInfo(struct BitMatrix *matrix)
 		if (alignmentPattern == 0)
 		{
 			// Try anyway
-			printNum(4000);
 		}
 	}
-	printNum(80);
-	printNum((int)alignmentPattern);
+
 	struct PerspectiveTransform transform = Detector_createTransform(&topLeft, &topRight, &bottomLeft, alignmentPattern, dimension);
 
 	GridSampler_sampleGrid(matrix, dimension, transform);
@@ -143,14 +140,12 @@ struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int e
 	if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
-		printNum(320);
 	}
 	int alignmentAreaTopY = max(0, estAlignmentY - allowance);
 	int alignmentAreaBottomY = min((int)(imageHeight - 1), estAlignmentY + allowance);
 	if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
-		printNum(350);
 	}
 
 	AlignmentPatternFinder_startX = alignmentAreaLeftX;

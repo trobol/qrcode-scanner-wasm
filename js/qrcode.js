@@ -102,7 +102,7 @@ GridSampler.sampleGrid3 = function (image, dimension, transform) {
 		// sufficient to check the endpoints
 		qrcode.context.fillStyle = "green";
 		for (let i = 0; i < points.length; i += 2) {
-			drawDot(points[i], points[i + 1]);
+			//drawDot(points[i], points[i + 1]);
 		}
 		GridSampler.checkAndNudgePoints(image, points);
 		try {
@@ -2034,7 +2034,14 @@ Decoder.decode = function (bits) {
 	}
 
 	// Decode the contents of that stream of bytes
-	var reader = new QRCodeDataBlockReader(resultBytes, version.VersionNumber, ecLevel.Bits);
+	//var reader = new QRCodeDataBlockReader(resultBytes, version.VersionNumber, ecLevel.Bits);
+	console.log(version.VersionNumber, ecLevel.Bits);
+	var resultBytes2 = qrcode.getResultBytes();
+	for (let i = 0; i < resultBytes2.length; i++) {
+		if (resultBytes2[i] != resultBytes[i])
+			console.log(`${i} doesnt match. Should be ${resultBytes[i]} not ${resultBytes2[i]}`);
+	}
+	var reader = new QRCodeDataBlockReader(resultBytes2, version.VersionNumber, ecLevel.Bits);
 	return reader;
 	//return DecodedBitStreamParser.decode(resultBytes, version, ecLevel);
 }
@@ -2181,14 +2188,12 @@ qrcode.process = function (image) {
 			qrcode.imagedata.data[point+2] = qRCodeMatrix.bits.get_Renamed(x,y)?255:0;
 		}
 	}*/
-	var bits = getBitMatrix();
-	if (bits.length == 0) return null;
 
-	qRCodeMatrix.bits.bits = bits;
 	if (qrcode.debug)
 		ctx.putImageData(qrcode.imagedata, 0, 0);
 
 	var reader = Decoder.decode(qRCodeMatrix.bits);
+
 	var data = reader.DataByte;
 	var str = '';
 	for (var i = 0; i < data.length; i++) {
@@ -2226,10 +2231,8 @@ qrcode.load = (() => {
 	WebAssembly.instantiateStreaming(
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
-
-		window.getBitMatrix = function () {
-
-			return new Uint32Array(imports.env.memory.buffer, instance.exports.get_bits(), instance.exports.get_size());
+		qrcode.getResultBytes = function () {
+			return new Uint8Array(imports.env.memory.buffer, instance.exports.get_bytes(), instance.exports.get_size());
 		}
 
 		qrcode.setImageData = function (imageData) {

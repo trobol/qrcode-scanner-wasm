@@ -1,18 +1,24 @@
 #include "Decoder.h"
 #include "BitMatrixParser.h"
 #include "DataBlock.h"
+#include "decode/reedsolomon/ReedSolomonDecoder.h"
 
-void Decoder_decode()
+struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 {
 
 	// std::cerr << *bits << std::endl;
-
+	BitMatrixParser_setBitMatrix(matrix);
 	struct Version *version = BitMatrixParser_readVersion();
-	struct ErrorCorrectionLevel *ecLevel = BitMatrixParser_readFormatInformation()->errorCorrectionLevel;
+	BitMatrixParser_readFormatInformation();
+	struct ErrorCorrectionLevel *ecLevel = BitMatrixParser_parsedFormatInfo.errorCorrectionLevel;
 
 	// Read codewords
 	char *codewords = BitMatrixParser_readCodewords();
-
+	for (int i = 0; i < version->totalCodewords; i++)
+	{
+		printNum(codewords[i]);
+	}
+	printNum(BitMatrixParser_parsedFormatInfo.dataMask);
 	// Separate into data blocks
 	struct ArrayRef blockArray = DataBlock_getDataBlocks(codewords, version, ecLevel);
 	struct DataBlock *dataBlocks = blockArray.ptr;
@@ -24,6 +30,7 @@ void Decoder_decode()
 	{
 		totalBytes += dataBlocks[i].numDataCodeWords;
 	}
+	printNum(totalBytes);
 	char *resultBytes = Memory_allocate(totalBytes * SIZEOF_CHAR);
 
 	int resultOffset = 0;
@@ -41,11 +48,12 @@ void Decoder_decode()
 			resultBytes[resultOffset++] = codewordBytes[i];
 		}
 	}
-
+	/*
 	return DecodedBitStreamParser::decode(resultBytes,
 										  version,
 										  ecLevel,
-										  DecodedBitStreamParser::Hashtable());
+										  DecodedBitStreamParser::Hashtable()); */
+	return (struct DecoderResult){resultBytes, totalBytes, version, ecLevel};
 }
 
 void Decoder_correctErrors(char *codewordBytes, int ecCodeWords, int numDataCodewords)
@@ -58,15 +66,7 @@ void Decoder_correctErrors(char *codewordBytes, int ecCodeWords, int numDataCode
 	}
 	int numECCodewords = numCodewords - numDataCodewords;
 
-	try
-	{
-		ReedSolomon_decode(codewordInts, numCodewords, numECCodewords);
-	}
-	catch (ReedSolomonException const &ignored)
-	{
-		(void)ignored;
-		throw ChecksumException();
-	}
+	ReedSolomonDecoder_decode(codewordInts, numCodewords, numECCodewords);
 
 	for (int i = 0; i < numDataCodewords; i++)
 	{

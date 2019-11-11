@@ -12,4 +12,12 @@ clang -include ./c/wasm.h --include-directory include -g --target=wasm32 -O0 -fl
  c/Memory.c^
  c/FormatInformation.c^
  c/BitMatrix.c^
- c/ErrorCorrectionLevel.c
+ c/ErrorCorrectionLevel.c^
+ c/Decoder.c^
+ c/decode/reedsolomon/ReedSolomonDecoder.c^
+ c/decode/reedsolomon/GenericGF.c^
+ c/decode/reedsolomon/GenericGFPoly.c^
+ c/BitMatrixParser.c^
+ c/DataBlock.c^
+ c/DataMask.c
+

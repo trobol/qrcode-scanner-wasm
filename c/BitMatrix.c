@@ -1,11 +1,14 @@
 #include "BitMatrix.h"
 #include "qrcode.h"
 
+#define bitsMask 0x1f
+#define logBits 5
+
 void new_BitMatrix(struct BitMatrix *matrix, int dimension)
 {
 	matrix->width = dimension;
 	matrix->height = dimension;
-	matrix->rowSize = dimension >> 5;
+	matrix->rowSize = dimension >> logBits;
 	if ((dimension & 0x1f) != 0)
 	{
 		matrix->rowSize++;
@@ -21,19 +24,19 @@ void new_BitMatrix(struct BitMatrix *matrix, int dimension)
 
 void BitMatrix_set(struct BitMatrix *matrix, int x, int y)
 {
-	unsigned int offset = y * matrix->rowSize + (x >> 5);
-	matrix->bits[offset] |= 1 << (x & 0x1f);
+	unsigned int offset = y * matrix->rowSize + (x >> logBits);
+	matrix->bits[offset] |= 1 << (x & bitsMask);
 }
 
 bool BitMatrix_get(struct BitMatrix *matrix, int x, int y)
 {
-	int offset = y * matrix->rowSize + (x >> 5);
-	return ((((unsigned)matrix->bits[offset]) >> (x & 0x1f)) & 1) != 0;
+	int offset = y * matrix->rowSize + (x >> logBits);
+	return ((((unsigned)matrix->bits[offset]) >> (x & bitsMask)) & 1) != 0;
 }
 void BitMatrix_flip(struct BitMatrix *matrix, int x, int y)
 {
-	int offset = y * matrix->rowSize + (x >> 5);
-	matrix->bits[offset] ^= 1 << (x & 0x1f);
+	int offset = y * matrix->rowSize + (x >> logBits);
+	matrix->bits[offset] ^= 1 << (x & bitsMask);
 }
 
 void BitMatrix_setRegion(struct BitMatrix *matrix, int left, int top, int width, int height)

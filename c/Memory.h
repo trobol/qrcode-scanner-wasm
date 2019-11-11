@@ -12,13 +12,13 @@ struct ArrayRef {
 
 extern unsigned int Memory_head;
 
-//allocate memory at the end of stack
+//allocate memory at the end of heap
 void *Memory_allocate(unsigned int size);
 
-//reset head to the front of stack
+//reset head to the front of heap
 void Memory_clear();
 
-//delete item from front of stack
+//delete item from front of heap
 void Memory_delete(unsigned int size);
 
 #endif
