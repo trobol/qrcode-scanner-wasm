@@ -116,25 +116,9 @@ qrcode.load = (() => {
 		qrcode.instance = instance;
 		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
-		class FinderPattern {
-			constructor(i) {
-				this.ptr = instance.exports.get_pattern(i);
-			}
-			get posX() {
-				return instance.exports.get_posX(this.ptr);
-			}
-			get posY() {
-				return instance.exports.get_posY(this.ptr);
-			}
-			get estimatedModuleSize() {
-				return instance.exports.get_estimatedModuleSize(this.ptr);
-			}
-			get count() {
-				return instance.exports.get_count(this.ptr);
-			}
-		}
+
 		var exportBitmap;
-		qrcode.finderPatterns = [new FinderPattern(0), new FinderPattern(1), new FinderPattern(2)];
+
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();

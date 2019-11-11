@@ -14,14 +14,11 @@
 
 //sizes for wasm32
 
-
 #define SIZEOF_INT 4
 #define SIZEOF_CHAR 1
 #define SIZEOF_PTR 4
 #define SIZEOF_FLOAT 4
 #define SIZEOF_BOOL SIZEOF_CHAR
-
-
 
 typedef char bool;
 #define true 1
