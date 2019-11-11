@@ -90,7 +90,7 @@ struct PerspectiveTransform PerspectiveTransform_times(struct PerspectiveTransfo
 		first.a13 * other.a21 + first.a23 * other.a22 + first.a33 * other.a23,
 		first.a13 * other.a31 + first.a23 * other.a32 + first.a33 * other.a33);
 }
-void PerspectiveTransform_transformPoints(struct PerspectiveTransform first, int *points, int max)
+void PerspectiveTransform_transformPoints(struct PerspectiveTransform first, float *points, int max)
 {
 	for (int i = 0; i < max; i += 2)
 	{

@@ -1,19 +1,22 @@
 #include "Memory.h"
 #include "wasm.h"
+#include "qrcode.h"
 
-unsigned char *Memory_head = &__heap_base;
+unsigned int Memory_head = (unsigned int)(&__heap_base);
 
 void *Memory_allocate(unsigned int size)
 {
-	void* ptr = Memory_head;
+	unsigned int ptr = Memory_head;
 	Memory_head += size;
-	return ptr;
+	printNum(size);
+	printNum(Memory_head-ptr);
+	return (void*)ptr;
 }
 
 
 void Memory_clear()
 {
-	Memory_head = &__heap_base;
+	Memory_head = (unsigned int)(&__heap_base);
 }
 
 void Memory_delete(unsigned int size) {

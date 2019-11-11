@@ -7,7 +7,7 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 	new_BitMatrix(matrix, dimension);
 
 	int max = dimension << 1;
-	int *points = Memory_allocate(max * SIZEOF_INT);
+	float *points = Memory_allocate(max * SIZEOF_FLOAT);
 	for (int y = 0; y < dimension; y++)
 	{
 		float yValue = (float)y + 0.5f;
@@ -39,7 +39,7 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 	Memory_delete(max*SIZEOF_INT);
 }
 
-void GridSampler_checkAndNudgePoints(int width, int height, int *points, int max)
+void GridSampler_checkAndNudgePoints(int width, int height, float *points, int max)
 {
 	// The Java code assumes that if the start and end points are in bounds, the rest will also be.
 	// However, in some unusual cases points in the middle may also be out of bounds.

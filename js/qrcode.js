@@ -102,7 +102,7 @@ GridSampler.sampleGrid3 = function (image, dimension, transform) {
 		// sufficient to check the endpoints
 		qrcode.context.fillStyle = "green";
 		for (let i = 0; i < points.length; i += 2) {
-			//drawDot(points[i], points[i + 1]);
+			drawDot(points[i], points[i + 1]);
 		}
 		GridSampler.checkAndNudgePoints(image, points);
 		try {
@@ -2095,10 +2095,11 @@ qrcode.decode = function () {
 
 
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height)
-	qrcode.pixeldata.set(qrcode.imagedata.data);
+	qrcode.setImageData(qrcode.imagedata);
 	var bitmap = qrcode.imageToBitmap();
-	//qrcode.imagedata.data.set(qrcode.pixeldata);
-	//qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+	qrcode.imagedata.data.set(qrcode.pixeldata);
+	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+	qrcode.context.fillStyle = "orange";
 	qrcode.decodeWasm();
 	qrcode.result = qrcode.process(bitmap);
 
@@ -2231,6 +2232,10 @@ qrcode.load = (() => {
 			return new Uint32Array(imports.env.memory.buffer, instance.exports.get_bits(), instance.exports.get_size());
 		}
 
+		qrcode.setImageData = function (imageData) {
+			qrcode.pixeldata.set(imageData.data);
+		}
+
 		qrcode.instance = instance;
 		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
@@ -2251,23 +2256,18 @@ qrcode.load = (() => {
 				return instance.exports.get_count(this.ptr);
 			}
 		}
+		var exportBitmap;
 		qrcode.finderPatterns = [new FinderPattern(0), new FinderPattern(1), new FinderPattern(2)];
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
-
-			qrcode.pixeldata = new Uint32Array(imports.env.memory.buffer, imageIndex, imageSize);
+			qrcode.pixeldata = new Uint8Array(imports.env.memory.buffer, imageIndex, imageSize);
+			exportBitmap = new Int8Array(imports.env.memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
 		}
 
 		qrcode.imageToBitmap = function () {
 			instance.exports.imageToBitmap();
-			let bitmap = new Array(qrcode.width * qrcode.height);
-			for (let x = 0; x < qrcode.width; x++) {
-				for (let y = 0; y < qrcode.height; y++) {
-					bitmap[x + y * qrcode.width] = qrcode.pixeldata[x * 4 + (qrcode.width * y) * 4] == 0;
-				}
-			}
-			return bitmap;
+			return exportBitmap;
 		}
 		if (qrcode.context)
 			qrcode.setPixelData();

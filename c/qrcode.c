@@ -13,11 +13,32 @@ unsigned int imageSize = 0;
 unsigned char *image;
 bool *bitMap;
 
+struct BitMatrix matrix;
+
 export int get_int(int *i)
 {
 	return *i;
 }
+
+export void* get_bits() {
+	return matrix.bits;
+}
+
+export int get_size() {
+	return matrix.bitSize;
+}
+
 export unsigned char* getImage() {
+	return image;
+}
+export void* getBitMap() {
+	return bitMap;
+}
+
+void *allocateImage() {
+	Memory_clear();
+	bitMap = Memory_allocate(imageWidth * imageHeight * SIZEOF_BOOL);
+	image = Memory_allocate(imageSize);
 	return image;
 }
 
@@ -31,15 +52,10 @@ export void *setImageSize(unsigned int x, unsigned int y)
 	imageSize = x * y * 4;
 
 
-
-	return (void *)image;
+	return allocateImage();
 }
 
-void *allocateImage() {
-	bitMap = Memory_allocate(imageHeight * imageHeight * SIZEOF_BOOL);
-	image = Memory_allocate(imageSize * SIZEOF_CHAR);
-	return image;
-}
+
 
 export unsigned int getImageSize()
 {
@@ -69,6 +85,7 @@ export void imageToBitmap()
 
 	unsigned int middle;
 	unsigned int areaX, areaY, imageX, imageY;
+	unsigned int bitTarget;
 
 	for (areaX = 0; areaX < numSqrtArea; ++areaX)
 	{
@@ -92,14 +109,23 @@ export void imageToBitmap()
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
-					target = (areaWidth * areaX + imageX) + (imageWidth * (areaHeight * areaY + imageY));
+					unsigned int x = (areaWidth * areaX + imageX);
+					unsigned int y = (imageWidth * (areaHeight * areaY + imageY));
+					target = x * 4 + y * 4;
+					bitTarget = x + y;
 					if (image[target] > middle)
 					{
-						bitMap[target] = false;
+						image[target] = 255;
+						image[target+1] = 255;
+						image[target+2] = 255;
+						bitMap[bitTarget] = false;
 					}
 					else
 					{
-						bitMap[target] = true;
+						image[target] = 0;
+						image[target+1] = 0;
+						image[target+2] = 0;
+						bitMap[bitTarget] = true;
 					}
 				}
 			}
@@ -110,7 +136,7 @@ export void imageToBitmap()
 
 bool getBitmapPixel(unsigned int x, unsigned int y)
 {
-	return bitMap[x  + (imageWidth * y)] != 0 ? 0 : 1;
+	return bitMap[x  + (imageWidth * y)];
 }
 
 
@@ -120,12 +146,11 @@ export void decode()
 	//process data
 	//imageToBitmap();
 	//detect findpatterns
-	Memory_clear(imageSize);
 	possibleCentersSize = 0;
 	findFinderPatterns();
 
 	//detector results
-	struct BitMatrix matrix;
+	
 	processFinderPatternInfo(&matrix);
 	//Decoder_decode(matrix);
 	printNum(matrix.bitSize);
@@ -133,6 +158,6 @@ export void decode()
 	//create detector
 	//detect
 	//decode
-	Memory_clear();
+	
 	allocateImage();
 }

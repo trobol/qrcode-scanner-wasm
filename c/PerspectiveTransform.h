@@ -16,7 +16,7 @@ struct PerspectiveTransform PerspectiveTransform_times(struct PerspectiveTransfo
 
 struct PerspectiveTransform PerspectiveTransform_buildAjoint(struct PerspectiveTransform first);
 
-void PerspectiveTransform_transformPoints(struct PerspectiveTransform first, int *points, int max);
+void PerspectiveTransform_transformPoints(struct PerspectiveTransform first, float *points, int max);
 
 struct PerspectiveTransform new_PerspectiveTransform(float a11, float a21, float a31, float a12, float a22, float a32, float a13, float a23, float a33);
 #endif

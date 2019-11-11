@@ -10,7 +10,7 @@ struct ArrayRef {
 	void* ptr;
 };
 
-extern unsigned char *Memory_head;
+extern unsigned int Memory_head;
 
 //allocate memory at the end of stack
 void *Memory_allocate(unsigned int size);
