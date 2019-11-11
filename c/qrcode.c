@@ -10,8 +10,8 @@ unsigned int imageWidth = 0;
 unsigned int imageHeight = 0;
 
 unsigned int imageSize = 0;
-unsigned char *image;
-bool *bitMap;
+unsigned int *image;
+unsigned int *bitMap;
 
 struct BitMatrix matrix;
 
@@ -20,10 +20,6 @@ export int get_int(int *i)
 	return *i;
 }
 
-export unsigned char *getImage()
-{
-	return image;
-}
 export void *getBitMap()
 {
 	return bitMap;
@@ -32,7 +28,7 @@ export void *getBitMap()
 void *allocateImage()
 {
 	Memory_clear();
-	bitMap = Memory_allocate(imageWidth * imageHeight * SIZEOF_BOOL);
+	bitMap = Memory_allocate(imageWidth * imageHeight * SIZEOF_INT);
 	image = Memory_allocate(imageSize);
 	return image;
 }
@@ -56,15 +52,6 @@ export unsigned int getImageSize()
 export void imageToBitmap()
 {
 	unsigned int pixel;
-	for (unsigned int y = 0; y < imageHeight; ++y)
-	{
-		for (unsigned int x = 0; x < imageWidth; ++x)
-		{
-			pixel = x * 4 + (imageWidth * y) * 4;
-			image[pixel] = (image[pixel] * 33 + image[pixel + 1] * 34 + image[pixel + 2] * 33) / 100;
-		}
-	}
-
 	unsigned int numSqrtArea = 4;
 	//obtain middle brightness((min + max) / 2) per area
 	unsigned int areaWidth = imageWidth / numSqrtArea;
@@ -78,17 +65,18 @@ export void imageToBitmap()
 	unsigned int areaX, areaY, imageX, imageY;
 	unsigned int bitTarget;
 
-	for (areaX = 0; areaX < numSqrtArea; ++areaX)
+	for (areaX = 0; areaX < imageWidth; areaX += areaWidth)
 	{
-		for (areaY = 0; areaY < numSqrtArea; ++areaY)
+		for (areaY = 0; areaY < imageHeight; areaY += areaHeight)
 		{
 			min = 255;
 			max = 0;
-			for (imageY = 0; imageY < areaHeight; ++imageY)
+			for (imageY = 0; imageY < areaHeight; imageY += 2)
 			{
-				for (imageX = 0; imageX < areaWidth; ++imageX)
+				for (imageX = 0; imageX < areaWidth; imageX += 2)
 				{
-					target = image[areaWidth * areaX + imageX + (areaHeight * areaY + imageY) * imageWidth];
+					pixel = areaX + imageX + (areaY + imageY) * imageWidth;
+					target = (image[pixel] * 33 + image[pixel + 1] * 34 + image[pixel + 2] * 33) / 100;
 					if (target < min)
 						min = target;
 					if (target > max)
@@ -100,22 +88,22 @@ export void imageToBitmap()
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
-					unsigned int x = (areaWidth * areaX + imageX);
-					unsigned int y = (imageWidth * (areaHeight * areaY + imageY));
+					unsigned int x = (areaX + imageX);
+					unsigned int y = (imageWidth * (areaY + imageY));
 					target = x * 4 + y * 4;
 					bitTarget = x + y;
 					if (image[target] > middle)
 					{
-						image[target] = 255;
-						image[target + 1] = 255;
-						image[target + 2] = 255;
+						//image[target] = 255;
+						//image[target + 1] = 255;
+						//image[target + 2] = 255;
 						bitMap[bitTarget] = false;
 					}
 					else
 					{
-						image[target] = 0;
-						image[target + 1] = 0;
-						image[target + 2] = 0;
+						//image[target] = 0;
+						//image[target + 1] = 0;
+						//image[target + 2] = 0;
 						bitMap[bitTarget] = true;
 					}
 				}
@@ -139,11 +127,21 @@ export void *get_bytes()
 	return result.resultBytes;
 }
 
+export int getVersionNumber()
+{
+	return result.version->versionNumber;
+}
+
+export int getECLevelBits()
+{
+	return result.ecLevel->bits;
+}
+
 export void decode()
 {
 
 	//process data
-	//imageToBitmap();
+	imageToBitmap();
 	//detect findpatterns
 	possibleCentersSize = 0;
 	findFinderPatterns();

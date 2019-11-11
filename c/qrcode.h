@@ -6,7 +6,7 @@ extern unsigned int imageWidth;
 extern unsigned int imageHeight;
 
 extern unsigned int imageSize;
-extern unsigned char *image;
+extern unsigned int *image;
 
 bool getBitmapPixel(unsigned int x, unsigned int y);
 

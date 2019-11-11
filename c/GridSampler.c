@@ -18,11 +18,12 @@ void GridSampler_sampleGrid(struct BitMatrix *matrix, int dimension, struct Pers
 		}
 
 		PerspectiveTransform_transformPoints(transform, points, max);
-
+		/*
 		for (unsigned int i = 0; i < max; i += 2)
 		{
 			drawDot(points[i], points[i + 1]);
 		}
+		*/
 		GridSampler_checkAndNudgePoints(matrix->width, matrix->height, points, max);
 		for (int x = 0; x < max; x += 2)
 		{

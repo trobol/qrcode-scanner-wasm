@@ -12,6 +12,7 @@
 		"type_traits": "cpp",
 		"utility": "c",
 		"xstring": "c",
-		"xlocale": "cpp"
+		"xlocale": "cpp",
+		"iosfwd": "c"
 	}
 }

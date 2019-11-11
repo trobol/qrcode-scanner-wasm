@@ -14,11 +14,7 @@ struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 
 	// Read codewords
 	char *codewords = BitMatrixParser_readCodewords();
-	for (int i = 0; i < version->totalCodewords; i++)
-	{
-		printNum(codewords[i]);
-	}
-	printNum(BitMatrixParser_parsedFormatInfo.dataMask);
+
 	// Separate into data blocks
 	struct ArrayRef blockArray = DataBlock_getDataBlocks(codewords, version, ecLevel);
 	struct DataBlock *dataBlocks = blockArray.ptr;
@@ -30,7 +26,7 @@ struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 	{
 		totalBytes += dataBlocks[i].numDataCodeWords;
 	}
-	printNum(totalBytes);
+
 	char *resultBytes = Memory_allocate(totalBytes * SIZEOF_CHAR);
 
 	int resultOffset = 0;

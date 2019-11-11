@@ -2103,11 +2103,13 @@ qrcode.decode = function () {
 
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height)
 	qrcode.setImageData(qrcode.imagedata);
+	qrcode.context.fillStyle = "orange";
+	qrcode.decodeWasm();
 	var bitmap = qrcode.imageToBitmap();
 	qrcode.imagedata.data.set(qrcode.pixeldata);
 	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
-	qrcode.context.fillStyle = "orange";
-	qrcode.decodeWasm();
+
+
 	qrcode.result = qrcode.process(bitmap);
 
 
@@ -2264,12 +2266,12 @@ qrcode.load = (() => {
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
-			qrcode.pixeldata = new Uint8Array(imports.env.memory.buffer, imageIndex, imageSize);
-			exportBitmap = new Int8Array(imports.env.memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
+			qrcode.pixeldata = new Uint32Array(imports.env.memory.buffer, imageIndex, imageSize);
+			exportBitmap = new Uint32Array(imports.env.memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
 		}
 
 		qrcode.imageToBitmap = function () {
-			instance.exports.imageToBitmap();
+
 			return exportBitmap;
 		}
 		if (qrcode.context)
