@@ -71,19 +71,19 @@ export void imageToBitmap()
 		{
 			min = 255;
 			max = 0;
-			for (imageY = 0; imageY < areaHeight; imageY += 2)
+			for (imageY = 0; imageY < areaHeight; ++imageY)
 			{
-				for (imageX = 0; imageX < areaWidth; imageX += 2)
+				for (imageX = 0; imageX < areaWidth; ++imageX)
 				{
 					pixel = areaX + imageX + (areaY + imageY) * imageWidth;
-					target = (image[pixel] * 33 + image[pixel + 1] * 34 + image[pixel + 2] * 33) / 100;
+					target = (image[pixel] + image[pixel + 1] + image[pixel + 2]);
 					if (target < min)
 						min = target;
 					if (target > max)
 						max = target;
 				}
 			}
-			middle = (min + max) / 2;
+			middle = (min + max) / 6;
 			for (imageY = 0; imageY < areaHeight; ++imageY)
 			{
 				for (imageX = 0; imageX < areaWidth; ++imageX)
@@ -92,20 +92,7 @@ export void imageToBitmap()
 					unsigned int y = (imageWidth * (areaY + imageY));
 					target = x * 4 + y * 4;
 					bitTarget = x + y;
-					if (image[target] > middle)
-					{
-						//image[target] = 255;
-						//image[target + 1] = 255;
-						//image[target + 2] = 255;
-						bitMap[bitTarget] = false;
-					}
-					else
-					{
-						//image[target] = 0;
-						//image[target + 1] = 0;
-						//image[target + 2] = 0;
-						bitMap[bitTarget] = true;
-					}
+					bitMap[bitTarget] = image[target] < middle;
 				}
 			}
 		}
@@ -155,6 +142,6 @@ export void decode()
 	//create detector
 	//detect
 	//decode
-
+	printNum(Memory_head - (unsigned int)&__heap_base);
 	allocateImage();
 }

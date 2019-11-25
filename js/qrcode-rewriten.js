@@ -16,9 +16,11 @@ qrcode.decode = function () {
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height);
 
 	qrcode.pixeldata.set(qrcode.imagedata.data);
-
-
 	qrcode.decodeWasm();
+
+	qrcode.imagedata.data.set(qrcode.pixeldata);
+	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+
 	var resultBytes = qrcode.getResultBytes();
 	var versionNumber = qrcode.getVersionNumber();
 	var bits = qrcode.getECLevelBits();
@@ -352,7 +354,8 @@ function QRCodeDataBlockReader(blocks, version, numErrorCorrectionCode) {
 					mode != MODE_8BIT_BYTE &&
 					mode != MODE_KANJI) {
 
-					mode = guessMode(mode);
+					//mode = guessMode(mode);
+					console.log("Mode", mode);
 					throw 'Invalid mode: ' + mode + ' in (block:' + this.blockPointer + ' bit:' + this.bitPointer + ')';
 				}
 

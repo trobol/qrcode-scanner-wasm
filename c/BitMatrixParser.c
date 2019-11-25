@@ -128,11 +128,12 @@ char *BitMatrixParser_readCodewords()
 	int dimension = BitMatrixParser_bitMatrix.height;
 	DataMask_unmaskBitMatrix(BitMatrixParser_bitMatrix, dimension, BitMatrixParser_parsedFormatInfo.dataMask);
 
+	char *result = Memory_allocate(version->totalCodewords * SIZEOF_CHAR);
+
 	struct BitMatrix functionPattern = Version_buildFunctionPattern(version);
 
 	bool readingUp = true;
 
-	char *result = Memory_allocate(version->totalCodewords * SIZEOF_CHAR);
 	for (int i = 0; i < version->totalCodewords; i++)
 	{
 		result[i] = 0;
@@ -177,7 +178,7 @@ char *BitMatrixParser_readCodewords()
 		}
 		readingUp = !readingUp; // switch directions
 	}
-
+	delete_BitMatrix(&functionPattern);
 	if (resultOffset != version->totalCodewords)
 	{
 		//ERROR

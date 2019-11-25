@@ -30,8 +30,7 @@ QRCodeScanner.prototype.start = function (startUpdate = true) {
 	navigator.mediaDevices.getUserMedia({
 		audio: false,
 		video: {
-			facingMode: 'environment',
-			aspectRatio: this.videoElem.offsetWidth / this.videoElem.offsetHeight
+			facingMode: 'environment'
 		}
 	})
 		.then((stream) => {
@@ -46,7 +45,7 @@ QRCodeScanner.prototype.start = function (startUpdate = true) {
 			console.log(self.videoElem.videoWidth);
 
 
-			if(startUpdate) self.update();
+			if (startUpdate) self.update();
 			//self.videoElem.play();
 			self.onStart();
 
@@ -131,7 +130,7 @@ QRCodeScanner.prototype._captureToCanvas = function () {
 		}
 	}
 };
-QRCodeScanner.prototype.update = function() {
+QRCodeScanner.prototype.update = function () {
 	this._captureToCanvas();
 	this.timerCapture = setTimeout(() => {
 		this.update();

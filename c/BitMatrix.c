@@ -64,3 +64,8 @@ void BitMatrix_setRegion(struct BitMatrix *matrix, int left, int top, int width,
 		}
 	}
 }
+
+void delete_BitMatrix(struct BitMatrix *matrix)
+{
+	Memory_delete(matrix->bitSize * SIZEOF_INT);
+}

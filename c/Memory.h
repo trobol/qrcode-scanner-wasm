@@ -1,13 +1,15 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#define PAGE_SIZE 64000
 /*
 Just keep adding items to memory and then delete them all at once
 */
 
-struct ArrayRef {
+struct ArrayRef
+{
 	unsigned int size;
-	void* ptr;
+	void *ptr;
 };
 
 extern unsigned int Memory_head;
@@ -21,8 +23,8 @@ void Memory_clear();
 //delete item from front of heap
 void Memory_delete(unsigned int size);
 
+void Memory_size(unsigned int i);
 #endif
-
 
 /*
 image = width * height * 4 * SIZEOF_INT

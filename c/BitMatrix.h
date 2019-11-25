@@ -21,4 +21,6 @@ bool BitMatrix_get(struct BitMatrix *matrix, int x, int y);
 void BitMatrix_flip(struct BitMatrix *matrix, int x, int y);
 
 void BitMatrix_setRegion(struct BitMatrix *matrix, int left, int top, int width, int height);
+
+void delete_BitMatrix(struct BitMatrix *matrix);
 #endif

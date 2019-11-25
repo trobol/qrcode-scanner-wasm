@@ -1,6 +1,9 @@
 #ifndef WASM_H
 #define WASM_H
 
+#define memory_size __builtin_wasm_memory_size(0)
+#define memory_grow(v) __builtin_wasm_memory_grow(0, v)
+
 #ifndef __GNUC__
 #define __attribute__(x)
 #endif
