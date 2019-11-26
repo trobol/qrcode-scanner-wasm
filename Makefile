@@ -1,26 +1,29 @@
-DEPS = 
-OBJ = qrcode.o
-NANOLIBC_OBJ = $(patsubst %.cpp,%.o,$(wildcard nanolibc/*.cpp))
-OUTPUT = qrcode.wasm
-CC = clang \
-		-c \
-		$(COMPILE_FLAGS) \
-		-o $@ \
-		$<
+CC = clang
 
-COMPILE_FLAGS = -Wall \
-		--target=wasm32 \
-		-Os \
-		-flto \
-		-nostdlib \
-		-fvisibility=hidden \
-		-std=c++14 \
-		-ffunction-sections \
-		-fdata-sections \
-		-DPRINTF_DISABLE_SUPPORT_FLOAT=1 \
-		-DPRINTF_DISABLE_SUPPORT_LONG_LONG=1 \
-		-DPRINTF_DISABLE_SUPPORT_PTRDIFF_T=1
+DEBUG_COMPILE_FLAGS = -g \
+					-O0 \
+					-Wl,--lto-O0 
+					
 
+BUILD_COMPILE_FLAGS = -Oz \
+					-Wl,--lto-O3 \
+					-Wl,--strip-all 
+
+COMPILE_FLAGS = --target=wasm32-unknown-unknown \
+				-std=c11 \
+				-include ./c/wasm.h \
+				-flto \
+				-nostdlib \
+				-Wl,--export=__heap_base \
+				-Wl,--gc-sections \
+				-Wl,--no-entry \
+				-Wl,--export-dynamic \
+				-Wl,--allow-undefined-file=qrcode.syms \
+				-Wl,--initial-memory=131072 \
+				-nostdlib \
+
+				
+ 
 FILES = c/FinderPattern.c \
 		c/qrcode.c \
 		c/FinderPatternFinder.c \
@@ -41,42 +44,10 @@ FILES = c/FinderPattern.c \
 		c/BitMatrixParser.c \
 		c/DataBlock.c \
 		c/DataMask.c
+empty:
 
+build: 
+	@$(CC) $(BUILD_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
 
-$(OUTPUT): $(OBJ) $(NANOLIBC_OBJ) Makefile
-	wasm-ld-$(LLVM_VERSION) \
-		-o $(OUTPUT) \
-		--no-entry \
-		--strip-all \
-		--export-dynamic \
-		--initial-memory=131072 \
-		-error-limit=0 \
-		--lto-O3 \
-		-O3 \
-		--gc-sections \
-		$(OBJ) \
-		$(LIBCXX_OBJ) \
-		$(NANOLIBC_OBJ)
-
-
-%.o: %.c $(DEPS) Makefile
-	clang \
-		-c \
-		$(COMPILE_FLAGS) \
-		-o $@ \
-		$<
-
-qrcode.wasm: 
-
-FinderPattern.o:
-	$(CC) 
-
-
-qrcode.wasm: qrcode.o
-
-wat: library.wat
-
-clean:
-	rm -f $(OBJ) $(NANOLIBC_OBJ) $(OUTPUT) library.wat
-say_hello:
-	echo "say_hello"
+debug:
+	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm

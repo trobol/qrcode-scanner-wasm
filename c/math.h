@@ -1,21 +1,22 @@
 #ifndef MATH_H
 #define MATH_H
 
+
 #include "wasm.h"
 
-int abs(int i);
-float fabs(float i);
+int math_abs(int i);
+float math_fabs(float i);
 
-int max(int i, int j);
-float fmax(float i, float j);
+int math_max(int i, int j);
+float math_fmax(float i, float j);
 
-int min(int i, int j);
-float fmin(float i, float j);
+int math_min(int i, int j);
+float math_fmin(float i, float j);
 
-import float fsqrt(float num);
+float math_fsqrt(float num);
 
-int round(float d);
+int math_round(float d);
 
-float distance(float aX, float aY, float bX, float bY);
+float math_distance(float aX, float aY, float bX, float bY);
 
 #endif

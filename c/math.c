@@ -1,41 +1,47 @@
-#include "./math.h"
+#include "math.h"
 
-int abs(int i)
-{
-	return i < 0 ? -i : i;
+
+float math_fsqrt(float f) {
+	return __builtin_sqrtf(f);
 }
 
-float fabs(float i)
+int math_abs(int i)
 {
-	return i < 0 ? -i : i;
+	return __builtin_abs(i);
 }
 
-int max(int i, int j)
+float math_fabs(float f)
+{
+	return __builtin_fabs(f);
+}
+
+int math_max(int i, int j)
 {
 	return i > j ? i : j;
 }
 
-float fmax(float i, float j)
+float math_fmax(float i, float j)
 {
 	return i > j ? i : j;
 }
 
-int min(int i, int j)
+int math_min(int i, int j)
 {
-	return i < j ? i : j;
+	return (int)__builtin_wasm_min_f32(i, j);
 }
-float fmin(float i, float j)
+float math_fmin(float i, float j)
 {
-	return i < j ? i : j;
+	return __builtin_wasm_min_f32(i, j);
 }
 
-int round(float d)
+int math_round(float d)
 {
+	
 	return (int)(d + 0.5f);
 }
-float distance(float aX, float aY, float bX, float bY)
+float math_distance(float aX, float aY, float bX, float bY)
 {
 	float xDiff = aX - bX;
 	float yDiff = aY - bY;
-	return fsqrt(xDiff * xDiff + yDiff * yDiff);
+	return math_fsqrt(xDiff * xDiff + yDiff * yDiff);
 }

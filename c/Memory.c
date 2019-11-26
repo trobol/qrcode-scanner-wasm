@@ -3,13 +3,15 @@
 #include "qrcode.h"
 
 unsigned int Memory_head = (unsigned int)(&__heap_base);
-unsigned int Memory_max = 0;
+unsigned int Memory_max = 2 * PAGE_SIZE;
 
 void *Memory_allocate(unsigned int size)
 {
+	
 	unsigned int ptr = Memory_head;
 	Memory_head += size;
-
+	Memory_size(Memory_head-(unsigned int)(__heap_base));
+	
 	return (void *)ptr;
 }
 
@@ -28,6 +30,12 @@ void Memory_size(unsigned int i)
 {
 	if (Memory_max < i)
 	{
-		memory_grow((Memory_max - i) / PAGE_SIZE);
+		float size = (float)(i - Memory_max) / PAGE_SIZE;
+		int isize = (int) size;
+		
+		if ((float)isize != size)
+			isize++;
+		memory_grow(isize);
+		Memory_max += isize*PAGE_SIZE;
 	}
 }

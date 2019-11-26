@@ -21,7 +21,7 @@ bool AlignmentPatternFinder_foundPatternCross(int stateCount[5])
 	float maxVariance = AlignmentPatternFinder_moduleSize / 2.0f;
 	for (int i = 0; i < 3; i++)
 	{
-		if (fabs(AlignmentPatternFinder_moduleSize - stateCount[i]) >= maxVariance)
+		if (math_fabs(AlignmentPatternFinder_moduleSize - stateCount[i]) >= maxVariance)
 		{
 			return false;
 		}
@@ -79,7 +79,7 @@ float AlignmentPatternFinder_crossCheckVertical(int startI, int centerJ, int max
 	}
 
 	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-	if (5 * fabs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
+	if (5 * math_fabs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
 	{
 		return NaN;
 	}

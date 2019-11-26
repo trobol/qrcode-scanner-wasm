@@ -29,7 +29,7 @@ void *allocateImage()
 {
 	Memory_clear();
 	bitMap = Memory_allocate(imageWidth * imageHeight * SIZEOF_INT);
-	image = Memory_allocate(imageSize);
+	image = Memory_allocate(imageSize * SIZEOF_INT);
 	return image;
 }
 
@@ -126,7 +126,7 @@ export int getECLevelBits()
 
 export void decode()
 {
-
+	
 	//process data
 	imageToBitmap();
 	//detect findpatterns
@@ -142,6 +142,5 @@ export void decode()
 	//create detector
 	//detect
 	//decode
-	printNum(Memory_head - (unsigned int)&__heap_base);
 	allocateImage();
 }

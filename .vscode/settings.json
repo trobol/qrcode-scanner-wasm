@@ -13,6 +13,7 @@
 		"utility": "c",
 		"xstring": "c",
 		"xlocale": "cpp",
-		"iosfwd": "c"
+		"iosfwd": "c",
+		"math.h": "c"
 	}
 }

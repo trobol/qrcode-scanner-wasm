@@ -5,7 +5,7 @@ float FinderPattern_distance(struct FinderPattern *p1, struct FinderPattern *p2)
 {
     float dx = p1->posX - p2->posX;
     float dy = p1->posY - p2->posY;
-    return (float)fsqrt(dx * dx + dy * dy);
+    return (float)math_fsqrt(dx * dx + dy * dy);
 }
 
 float get_posX(struct FinderPattern *pat)
@@ -45,9 +45,9 @@ struct FinderPattern combineEstimate(struct FinderPattern *from, float i, float 
 
 bool aboutEquals(struct FinderPattern *pat, float moduleSize, float i, float j)
 {
-    if (fabs(i - pat->posY) <= moduleSize && fabs(j - pat->posX) <= moduleSize)
+    if (math_fabs(i - pat->posY) <= moduleSize && math_fabs(j - pat->posX) <= moduleSize)
     {
-        float moduleSizeDiff = fabs(moduleSize - pat->estimatedModuleSize);
+        float moduleSizeDiff = math_fabs(moduleSize - pat->estimatedModuleSize);
         return moduleSizeDiff <= 1.0f || moduleSizeDiff <= pat->estimatedModuleSize;
     }
     return false;

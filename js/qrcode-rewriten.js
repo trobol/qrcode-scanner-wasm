@@ -15,6 +15,7 @@ qrcode.decode = function () {
 
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height);
 
+	qrcode.setPixelData();
 	qrcode.pixeldata.set(qrcode.imagedata.data);
 	qrcode.decodeWasm();
 
@@ -87,19 +88,9 @@ qrcode.updateCanvas = function () {
 }
 
 qrcode.load = (() => {
-
 	let imports = {
 		env: {
-			memory: new WebAssembly.Memory({ initial: 1024 }),
-			printNum(n) {
-				console.log("Num", n);
-			},
-			drawPoint(x, y) {
-
-				qrcode.context.fillRect(x, y, 10, 10); // fill in the pixel at (10,10)
-			},
-			fsqrt: Math.sqrt,
-			round: Math.round
+			math_fsqrt: Math.sqrt
 		}
 	}
 
@@ -107,8 +98,9 @@ qrcode.load = (() => {
 	WebAssembly.instantiateStreaming(
 		fetch("/qrcode.wasm"), imports
 	).then(({ instance }) => {
+		const memory = instance.exports.memory;
 		qrcode.getResultBytes = function () {
-			return new Uint8Array(imports.env.memory.buffer, instance.exports.get_bytes(), instance.exports.get_size());
+			return new Uint8Array(memory.buffer, instance.exports.get_bytes(), instance.exports.get_size());
 		}
 
 		qrcode.getVersionNumber = instance.exports.getVersionNumber;
@@ -124,8 +116,8 @@ qrcode.load = (() => {
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
-			qrcode.pixeldata = new Uint32Array(imports.env.memory.buffer, imageIndex, imageSize);
-			exportBitmap = new Uint32Array(imports.env.memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
+			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
+			exportBitmap = new Uint32Array(memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
 		}
 
 		qrcode.imageToBitmap = function () {

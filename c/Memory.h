@@ -1,7 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#define PAGE_SIZE 64000
+#define PAGE_SIZE 65536 
 /*
 Just keep adding items to memory and then delete them all at once
 */
@@ -25,8 +25,3 @@ void Memory_delete(unsigned int size);
 
 void Memory_size(unsigned int i);
 #endif
-
-/*
-image = width * height * 4 * SIZEOF_INT
-
-*/

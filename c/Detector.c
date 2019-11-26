@@ -109,9 +109,9 @@ int computeDimension(struct FinderPattern *topLeft, struct FinderPattern *topRig
 					 float moduleSize)
 {
 	int tltrCentersDimension =
-		round(FinderPattern_distance(topLeft, topRight) / moduleSize);
+		math_round(FinderPattern_distance(topLeft, topRight) / moduleSize);
 	int tlblCentersDimension =
-		round(FinderPattern_distance(topLeft, bottomLeft) / moduleSize);
+		math_round(FinderPattern_distance(topLeft, bottomLeft) / moduleSize);
 	int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
 	switch (dimension & 0x03)
 	{ // mod 4
@@ -135,14 +135,14 @@ struct AlignmentPattern *findAlignmentInRegion(float overallEstModuleSize, int e
 	// Look for an alignment pattern (3 modules in size) around where it
 	// should be
 	int allowance = (int)(allowanceFactor * overallEstModuleSize);
-	int alignmentAreaLeftX = max(0, estAlignmentX - allowance);
-	int alignmentAreaRightX = min((int)(imageWidth - 1), estAlignmentX + allowance);
+	int alignmentAreaLeftX = math_max(0, estAlignmentX - allowance);
+	int alignmentAreaRightX = math_min((int)(imageWidth - 1), estAlignmentX + allowance);
 	if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
 	}
-	int alignmentAreaTopY = max(0, estAlignmentY - allowance);
-	int alignmentAreaBottomY = min((int)(imageHeight - 1), estAlignmentY + allowance);
+	int alignmentAreaTopY = math_max(0, estAlignmentY - allowance);
+	int alignmentAreaBottomY = math_min((int)(imageHeight - 1), estAlignmentY + allowance);
 	if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3)
 	{
 		//region too small to hold alignment pattern
@@ -199,7 +199,7 @@ float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
 {
 	// Mild variant of Bresenham's algorithm;
 	// see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-	bool steep = abs(toY - fromY) > abs(toX - fromX);
+	bool steep = math_abs(toY - fromY) > math_abs(toX - fromX);
 	if (steep)
 	{
 		int temp = fromX;
@@ -210,8 +210,8 @@ float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
 		toY = temp;
 	}
 
-	int dx = abs(toX - fromX);
-	int dy = abs(toY - fromY);
+	int dx = math_abs(toX - fromX);
+	int dy = math_abs(toY - fromY);
 	int error = -dx >> 1;
 	int xstep = fromX < toX ? 1 : -1;
 	int ystep = fromY < toY ? 1 : -1;
@@ -230,7 +230,7 @@ float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
 		{
 			if (state == 2)
 			{
-				return distance(x, y, fromX, fromY);
+				return math_distance(x, y, fromX, fromY);
 			}
 			state++;
 		}
@@ -251,7 +251,7 @@ float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
 	// small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
 	if (state == 2)
 	{
-		return distance(toX + xstep, toY, fromX, fromY);
+		return math_distance(toX + xstep, toY, fromX, fromY);
 	}
 	// else we didn't find even black-white-black; no estimate is really possible
 	return NaN;
