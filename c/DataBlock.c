@@ -1,6 +1,5 @@
 #include "DataBlock.h"
 
-
 struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *version, struct ErrorCorrectionLevel *ecLevel)
 {
 	// Figure out the number and size of data blocks used by this version and
@@ -85,12 +84,12 @@ struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *vers
 			result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
 		}
 	}
-	/*
-	if (rawCodewordsOffset != rawCodewords->size())
+
+	if (rawCodewordsOffset != version->totalCodewords)
 	{
-		//throw rawCodewordsOffset != rawCodewords.length
+		//cant read code
+		return (struct ArrayRef){0, 0};
 	}
-	*/
-	struct ArrayRef ref =  {totalBlocks, result};
-	return ref;
+
+	return (struct ArrayRef){totalBlocks, result};
 }

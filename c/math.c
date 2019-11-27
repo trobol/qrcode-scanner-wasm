@@ -1,7 +1,7 @@
 #include "math.h"
 
-
-float math_fsqrt(float f) {
+float math_fsqrt(float f)
+{
 	return __builtin_sqrtf(f);
 }
 
@@ -36,7 +36,7 @@ float math_fmin(float i, float j)
 
 int math_round(float d)
 {
-	
+
 	return (int)(d + 0.5f);
 }
 float math_distance(float aX, float aY, float bX, float bY)

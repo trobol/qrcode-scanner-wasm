@@ -15,7 +15,7 @@ COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 				-flto \
 				-nostdlib \
 				-Wl,--export=__heap_base \
-				-Wl,--gc-sections \
+				-Wl,--no-gc-sections \
 				-Wl,--no-entry \
 				-Wl,--export-dynamic \
 				-Wl,--allow-undefined-file=qrcode.syms \
@@ -46,8 +46,10 @@ FILES = c/FinderPattern.c \
 		c/DataMask.c
 empty:
 
-build: 
+build: .FORCE
 	@$(CC) $(BUILD_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
 
 debug:
 	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
+
+.FORCE:

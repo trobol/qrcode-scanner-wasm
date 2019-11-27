@@ -14,9 +14,14 @@ struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 
 	// Read codewords
 	char *codewords = BitMatrixParser_readCodewords();
-
+	if (codewords == 0)
+		return (struct DecoderResult){0, 0, 0, 0};
 	// Separate into data blocks
 	struct ArrayRef blockArray = DataBlock_getDataBlocks(codewords, version, ecLevel);
+	if (blockArray.size == 0)
+	{
+		return (struct DecoderResult){0, 0, 0, 0};
+	}
 	struct DataBlock *dataBlocks = blockArray.ptr;
 	unsigned int blockCount = blockArray.size;
 
