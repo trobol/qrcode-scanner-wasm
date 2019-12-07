@@ -59,8 +59,9 @@ void orderBestPatterns()
 	possibleCenters[1] = topLeft;
 	possibleCenters[2] = topRight;
 }
-void findFinderPatterns()
+bool findFinderPatterns()
 {
+	possibleCentersSize = 0;
 	hasSkipped = false;
 	bool tryHarder = false;
 	//image
@@ -199,8 +200,11 @@ void findFinderPatterns()
 			}
 		}
 	}
+	if (possibleCentersSize < 3)
+		return false;
 	selectBestPatterns();
 	orderBestPatterns();
+	return true;
 }
 
 int findRowSkip()
@@ -554,12 +558,6 @@ void sortCenterComparator(float averageModuleSize)
 void selectBestPatterns()
 {
 	unsigned int startSize = possibleCentersSize;
-
-	if (startSize < 3)
-	{
-		// Couldn't find enough finder patterns
-		//throw(); //zxing::ReaderException("Could not find three finder patterns");
-	}
 
 	// Filter outlier possibilities whose module size is too different
 	if (startSize > 3)

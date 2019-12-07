@@ -71,11 +71,11 @@ export void imageToBitmap()
 		{
 			min = 255;
 			max = 0;
-			for (imageY = 0; imageY < areaHeight; ++imageY)
+			for (imageY = areaY; imageY < areaHeight + areaY; ++imageY)
 			{
-				for (imageX = 0; imageX < areaWidth; ++imageX)
+				for (imageX = areaX; imageX < areaWidth + areaX; ++imageX)
 				{
-					pixel = areaX + imageX + (areaY + imageY) * imageWidth;
+					pixel = imageX + imageY * imageWidth;
 					target = (image[pixel] + image[pixel + 1] + image[pixel + 2]);
 					if (target < min)
 						min = target;
@@ -84,14 +84,14 @@ export void imageToBitmap()
 				}
 			}
 			middle = (min + max) / 6;
-			for (imageY = 0; imageY < areaHeight; ++imageY)
+			for (imageY = areaY; imageY < areaHeight + areaY; ++imageY)
 			{
-				for (imageX = 0; imageX < areaWidth; ++imageX)
+				for (imageX = areaX; imageX < areaWidth+areaX; ++imageX)
 				{
-					unsigned int x = (areaX + imageX);
-					unsigned int y = (imageWidth * (areaY + imageY));
-					target = x * 4 + y * 4;
-					bitTarget = x + y;
+
+					unsigned int y = imageWidth * imageY;
+					target = imageX * 4 + y * 4;
+					bitTarget = imageX + y;
 					bitMap[bitTarget] = image[target] < middle;
 				}
 			}
@@ -124,23 +124,24 @@ export int getECLevelBits()
 	return result.ecLevel->bits;
 }
 
-export void decode()
+export bool decode()
 {
 	
 	//process data
 	imageToBitmap();
 	//detect findpatterns
 	possibleCentersSize = 0;
-	findFinderPatterns();
-
+	bool found = findFinderPatterns();
+	if(!found) return false;
 	//detector results
 
-	processFinderPatternInfo(&matrix);
-
+	bool detected = processFinderPatternInfo(&matrix);
+	if(!detected) return false;
 	result = Decoder_decode(matrix);
 
 	//create detector
 	//detect
 	//decode
 	allocateImage();
+	return true;
 }

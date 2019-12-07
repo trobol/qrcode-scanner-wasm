@@ -44,12 +44,10 @@ FILES = c/FinderPattern.c \
 		c/BitMatrixParser.c \
 		c/DataBlock.c \
 		c/DataMask.c
-empty:
+.empty:
 
-build: .FORCE
+build: .empty
 	@$(CC) $(BUILD_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
 
-debug:
+debug: .empty
 	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
-
-.FORCE:

@@ -10,4 +10,5 @@ struct
 } DecodedBitStreamParser;
 
 int DecodedBitStreamParser_parseECIValue();
+void DecodedBitStreamParser_parse();
 #endif
