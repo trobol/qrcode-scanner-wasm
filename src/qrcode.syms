@@ -2,3 +2,5 @@ printNum
 drawPoint
 drawDot
 __head_base
+js_printf
+printNum

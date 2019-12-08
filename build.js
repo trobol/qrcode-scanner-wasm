@@ -64,7 +64,7 @@ findFiles()
 								};
 								const func = build_mode == 'debug' ?
 									() => fs.copyFile(source, dest, finish) :
-									() => fs.writeFile(source, content, { flag: 'w' }, finish);
+									() => fs.writeFile(source, output, { flag: 'w' }, finish);
 								if (exists) {
 									func();
 								} else {

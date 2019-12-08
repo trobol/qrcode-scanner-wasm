@@ -6,6 +6,7 @@ struct GenericGFPoly new_GenericGFPoly(int *coefficients, int size)
 	if (size == 0)
 	{
 		//error
+		printf("Size was 0");
 	}
 	struct GenericGFPoly result;
 	int coefficientsLength = size;
@@ -25,8 +26,8 @@ struct GenericGFPoly new_GenericGFPoly(int *coefficients, int size)
 		else
 		{
 			result.coefficientSize = coefficientsLength - firstNonZero;
-			result.coefficients = (int *)Memory_allocate(size * SIZEOF_INT);
-			
+			result.coefficients = (int *)Memory_allocate(result.coefficientSize * SIZEOF_INT);
+
 			for (int i = 0; i < result.coefficientSize; i++)
 			{
 				result.coefficients[i] = coefficients[i + firstNonZero];
@@ -71,7 +72,6 @@ int GenericGFPoly_evaluateAt(struct GenericGFPoly poly, int a)
 	return result;
 }
 
-
 struct GenericGFPoly GenericGFPoly_addOrSubtract(struct GenericGFPoly poly, struct GenericGFPoly other)
 {
 
@@ -114,6 +114,7 @@ struct GenericGFPoly GenericGFPoly_multiplyByMonomial(struct GenericGFPoly poly,
 {
 	if (degree < 0)
 	{
+		printf("degree must not be less then 0");
 		//throw IllegalArgumentException("degree must not be less then 0");
 	}
 	if (coefficient == 0)

@@ -1,2 +1,2 @@
 # WebAssembly QrCode Scanner (waqc)
-![WAQC Logo](docs/resources/waqc.png)
+![WAQC Logo](docs/img/waqc.png =100x)

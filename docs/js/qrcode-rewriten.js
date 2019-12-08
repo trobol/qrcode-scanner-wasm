@@ -19,7 +19,7 @@ qrcode.decode = function () {
 	qrcode.pixeldata.set(qrcode.imagedata.data);
 	const found = qrcode.decodeWasm();
 
-	if (!found) throw 'failed to find qrcode';
+	if(!found) throw 'failed to find qrcode';
 	qrcode.imagedata.data.set(qrcode.pixeldata);
 	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
 
@@ -89,30 +89,20 @@ qrcode.updateCanvas = function () {
 }
 
 qrcode.load = (() => {
-	var memory;
 	let imports = {
 		env: {
-			js_printf(str, size) {
-				const chars = new Uint8Array(memory.buffer, str, size);
-				console.log(String.fromCharCode(...chars));
-			},
-			printNum(num) {
-				console.log(num);
-			}
+			math_fsqrt: Math.sqrt
 		}
 	}
 
 
 	WebAssembly.instantiateStreaming(
 		fetch("/build/qrcode.wasm"), imports
-	).then(out => {
-		console.log(out.module);
-		const { instance } = out;
-		memory = instance.exports.memory;
+	).then(({ instance }) => {
+		const memory = instance.exports.memory;
 		qrcode.getResultBytes = function () {
 			return new Uint8Array(memory.buffer, instance.exports.get_bytes(), instance.exports.get_size());
 		}
-
 
 		qrcode.getVersionNumber = instance.exports.getVersionNumber;
 

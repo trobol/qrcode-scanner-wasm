@@ -6,14 +6,15 @@ int GenericGF_multiply(int a, int b)
   {
     return 0;
   }
-
+  printNum(a);
+  printNum(b);
   return QR_CODE_FIELD_256.expTable[(QR_CODE_FIELD_256.logTable[a] + QR_CODE_FIELD_256.logTable[b]) % (QR_CODE_FIELD_256.size - 1)];
 }
 struct GenericGFPoly GenericGF_buildMonomial(int degree, int coefficient)
 {
   if (degree < 0)
   {
-    //ERROR
+    printf("Degree cannot be zero");
   }
   if (coefficient == 0)
   {
@@ -31,6 +32,7 @@ int GenericGF_inverse(int a)
 {
   if (a == 0)
   {
+    printf("Cannot calculate the inverse of 0");
     //ERROR IllegalArgumentException("Cannot calculate the inverse of 0");
   }
   return QR_CODE_FIELD_256.expTable[QR_CODE_FIELD_256.size - QR_CODE_FIELD_256.logTable[a] - 1];

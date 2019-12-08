@@ -18,7 +18,6 @@ bool processFinderPatternInfo(struct BitMatrix *matrix)
 	if (moduleSize < 1.0f)
 	{
 		return false;
-		//TODO: EXIT
 		//throw(); // zxing::ReaderException("bad module size");
 	}
 	int dimension = computeDimension(&topLeft, &topRight, &bottomLeft, moduleSize);
@@ -55,6 +54,7 @@ bool processFinderPatternInfo(struct BitMatrix *matrix)
 		if (alignmentPattern == 0)
 		{
 			// Try anyway
+			printf("Try anyway");
 		}
 	}
 

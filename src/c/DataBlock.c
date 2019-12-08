@@ -52,6 +52,7 @@ struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *vers
 		}
 		if (numCodewords != shorterBlocksTotalCodewords + 1)
 		{
+			printf("Data block sizes differ by more than 1");
 			//ERROR "Data block sizes differ by more than 1"
 		}
 		longerBlocksStartAt--;

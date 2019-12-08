@@ -86,7 +86,7 @@ export void imageToBitmap()
 			middle = (min + max) / 6;
 			for (imageY = areaY; imageY < areaHeight + areaY; ++imageY)
 			{
-				for (imageX = areaX; imageX < areaWidth+areaX; ++imageX)
+				for (imageX = areaX; imageX < areaWidth + areaX; ++imageX)
 				{
 
 					unsigned int y = imageWidth * imageY;
@@ -126,22 +126,29 @@ export int getECLevelBits()
 
 export bool decode()
 {
-	
+
 	//process data
 	imageToBitmap();
 	//detect findpatterns
 	possibleCentersSize = 0;
 	bool found = findFinderPatterns();
-	if(!found) return false;
+	if (!found)
+	{
+		allocateImage();
+		return false;
+	}
 	//detector results
 
 	bool detected = processFinderPatternInfo(&matrix);
-	if(!detected) return false;
-	result = Decoder_decode(matrix);
-
-	//create detector
-	//detect
-	//decode
-	allocateImage();
-	return true;
+	if (detected)
+	{
+		result = Decoder_decode(matrix);
+		allocateImage();
+		return true;
+	}
+	else
+	{
+		allocateImage();
+		return false;
+	}
 }

@@ -43,17 +43,17 @@ void BitMatrix_setRegion(struct BitMatrix *matrix, int left, int top, int width,
 {
 	if (top < 0 || left < 0)
 	{
-		//ERROR
+		printf("Left and top must be nonnegative");
 	}
 	if (height < 1 || width < 1)
 	{
-		//ERROR
+		printf("Height and width must be at least 1");
 	}
 	int right = left + width;
 	int bottom = top + height;
 	if (bottom > matrix->height || right > matrix->width)
 	{
-		//ERROR
+		printf("The region must fit inside the matrix");
 	}
 	for (int y = top; y < bottom; y++)
 	{

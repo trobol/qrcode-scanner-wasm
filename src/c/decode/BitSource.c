@@ -1,4 +1,5 @@
 #include "BitSource.h"
+#include "../wasm.h"
 
 void BitSource_writeBytes(char *bytes, int size)
 {
@@ -12,6 +13,7 @@ int BitSource_readBits(int numBits)
 {
 	if (numBits < 0 || numBits > 32 || numBits > BitSource_available())
 	{
+		printf("Bitsource IllegalArgumentException");
 		//throw IllegalArgumentException(oss.str().c_str());
 	}
 

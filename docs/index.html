@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="/src/js/qrcode-scanner.js"></script>
+	<script src="/src/js/qrcode-rewriten.js"></script>
+
+</head>
+
+<body>
+	<h1>Source Video</h1>
+	<video></video>
+	<h1>Scanner Canvas</h1>
+	<canvas></canvas>
+	<img src="img/qrcode.png">
+
+	<script>
+		const video = document.querySelector('video');
+		const canvas = document.createElement('canvas');
+		const img = document.querySelector('img');
+
+		let imageData;
+		const scanner = new QRCodeScanner(canvas);
+		scanner.videoElem = video;
+
+		scanner.onStart = onStart;
+		scanner.onRead = onRead;
+		scanner.onError = onError;
+
+		scanner.start(false);
+
+		function onStart() {
+			setTimeout(update, 500);
+		}
+
+		function onRead(data) {
+			//console.log(data);
+		}
+		function onError(e) {
+			console.error(e);
+		}
+		var i = 0;
+		var totalTime = 0;
+		var updateCount = 0;
+		var successCount = 0;
+		const updateTotal = 100;
+		function update() {
+			scanner.context.clearRect(0, 0, canvas.width,
+				canvas.height);
+			scanner.context.drawImage(scanner.videoElem, 0, 0,
+				scanner.videoElem.videoWidth,
+				scanner.videoElem.videoHeight);
+			scanner.context.translate(canvas.width / 2, canvas.height / 2);
+			scanner.context.rotate(i);
+
+			scanner.context.drawImage(img, -img.width / 2, -img.height / 2,
+				img.width,
+				img.height);
+			scanner.context.rotate(-i);
+			scanner.context.translate(-canvas.width / 2, -canvas.height / 2);
+			i += 0.1;
+			var startTime = performance.now();
+
+			try {
+
+				var decoded = qrcode.decode();
+				console.log(decoded);
+				if (decoded == "testing testing 1")
+					successCount++;
+			} catch (e) {
+				console.error(e);
+			}
+			var endTime = performance.now();
+			totalTime += endTime - startTime;
+
+			if (decoded) {
+
+				this.onRead(decoded);
+			}
+			updateCount++;
+			if (updateCount < updateTotal) {
+				setTimeout(update, 100);
+			} else {
+				console.log("Average time", totalTime / updateTotal);
+				console.log("Success Rate", successCount / updateTotal);
+			}
+		}
+
+	</script>
+</body>
+
+</html>
