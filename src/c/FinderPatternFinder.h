@@ -18,7 +18,7 @@ extern struct FinderPattern possibleCenters[12];
 extern unsigned int possibleCentersSize;
 
 //returns pattern finder
-void findFinderPatterns();
+bool findFinderPatterns();
 
 //returns pattern
 void selectBestPatterns();

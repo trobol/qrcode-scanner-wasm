@@ -8,7 +8,7 @@
 
 struct struct_DetectorResult DetectorResult;
 
-void processFinderPatternInfo(struct BitMatrix *matrix)
+bool processFinderPatternInfo(struct BitMatrix *matrix)
 {
 	struct FinderPattern bottomLeft = possibleCenters[0];
 	struct FinderPattern topLeft = possibleCenters[1];
@@ -17,6 +17,7 @@ void processFinderPatternInfo(struct BitMatrix *matrix)
 	float moduleSize = calculateModuleSize(&topLeft, &topRight, &bottomLeft);
 	if (moduleSize < 1.0f)
 	{
+		return false;
 		//TODO: EXIT
 		//throw(); // zxing::ReaderException("bad module size");
 	}
@@ -24,7 +25,7 @@ void processFinderPatternInfo(struct BitMatrix *matrix)
 
 	struct Version *provisionalVersion = getProvisionalVersionForDimension(dimension);
 	if ((int)provisionalVersion == NaN)
-		return;
+		return false;
 
 	int modulesBetweenFPCenters = getDimensionForVersion(provisionalVersion) - 7;
 
@@ -79,6 +80,7 @@ void processFinderPatternInfo(struct BitMatrix *matrix)
 		DetectorResult.points[7] = 0;
 	}
 	*/
+	return true;
 }
 
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft)

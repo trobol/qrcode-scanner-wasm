@@ -17,8 +17,9 @@ qrcode.decode = function () {
 
 	qrcode.setPixelData();
 	qrcode.pixeldata.set(qrcode.imagedata.data);
-	qrcode.decodeWasm();
+	const found = qrcode.decodeWasm();
 
+	if(!found) throw 'failed to find qrcode';
 	qrcode.imagedata.data.set(qrcode.pixeldata);
 	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
 
@@ -108,21 +109,13 @@ qrcode.load = (() => {
 		qrcode.getECLevelBits = instance.exports.getECLevelBits;
 
 		qrcode.instance = instance;
-		qrcode.get_int = instance.exports.get_int;
 		qrcode.decodeWasm = instance.exports.decode;
 
-		var exportBitmap;
 
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
 			const imageSize = instance.exports.getImageSize();
 			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
-			exportBitmap = new Uint32Array(memory.buffer, instance.exports.getBitMap(), qrcode.width * qrcode.height);
-		}
-
-		qrcode.imageToBitmap = function () {
-			instance.exports.imageToBitmap();
-			return exportBitmap;
 		}
 		if (qrcode.context)
 			qrcode.setPixelData();

@@ -11,7 +11,7 @@ struct struct_DetectorResult
 	float points[8];
 };
 extern struct struct_DetectorResult DetectorResult;
-void processFinderPatternInfo(struct BitMatrix *matrix);
+bool processFinderPatternInfo(struct BitMatrix *matrix);
 float calculateModuleSize(struct FinderPattern *topLeft, struct FinderPattern *topRight, struct FinderPattern *bottomLeft);
 
 float calculateModuleSizeOneWay(struct FinderPattern *pattern, struct FinderPattern *otherPattern);
