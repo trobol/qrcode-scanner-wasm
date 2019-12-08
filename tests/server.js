@@ -22,10 +22,6 @@ const mimeType = {
 	'.ttf': 'application/font-sfnt',
 	'.wasm': 'application/wasm'
 };
-let wasmFiles = {
-	"qrcode.wasm": "c/qrcode.c",
-	"qrcode-reader.wasm": "mine/cpp/qrcode.cpp"
-};
 
 http.createServer(function (req, res) {
 	console.log(`${req.method} ${req.url}`);
@@ -58,25 +54,21 @@ http.createServer(function (req, res) {
 		let p = path.parse(pathname),
 			ext = p.ext;
 
-		readFile();
 
+		// read file from file system
+		fs.readFile(pathname, function (err, data) {
+			if (err) {
+				res.statusCode = 500;
+				res.end(`Error getting the file: ${err}.`);
+			} else {
+				// based on the URL path, extract the file extention. e.g. .js, .doc, ...
 
-		function readFile() {
+				// if the file is found, set Content-type and send data
+				res.setHeader('Content-type', mimeType[ext] || 'text/plain');
+				res.end(data);
+			}
+		});
 
-			// read file from file system
-			fs.readFile(pathname, function (err, data) {
-				if (err) {
-					res.statusCode = 500;
-					res.end(`Error getting the file: ${err}.`);
-				} else {
-					// based on the URL path, extract the file extention. e.g. .js, .doc, ...
-
-					// if the file is found, set Content-type and send data
-					res.setHeader('Content-type', mimeType[ext] || 'text/plain');
-					res.end(data);
-				}
-			});
-		}
 	});
 
 

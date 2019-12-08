@@ -29,7 +29,7 @@ COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 FILES = $(wildcard $(SOURCE_DIR)/*.c) \
 		$(wildcard $(SOURCE_DIR)/decode/reedsolomon/*.c)
 
-$(shell   mkdir $(BUILD_DIR))
+
 
 .PHONY:
 
@@ -39,3 +39,4 @@ build: .PHONY
 debug: .PHONY
 	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o $(BUILD_DIR)/qrcode.wasm
 
+$(shell mkdir $(BUILD_DIR))

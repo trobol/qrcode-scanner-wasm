@@ -1,0 +1,26 @@
+{
+  "name": "waqc",
+  "version": "1.0.0",
+  "description": "WebAssembly QrCode Scanner",
+  "main": "build/qrcode.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trobol/waqc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trobol/waqc/issues"
+  },
+  "homepage": "https://github.com/trobol/waqc#readme",
+  "dependencies": {
+    "minify": "^4.1.3"
+  }
+}
