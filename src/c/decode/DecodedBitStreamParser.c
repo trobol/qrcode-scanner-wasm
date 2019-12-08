@@ -1,5 +1,5 @@
 #include "DecodedBitStreamParser.h"
-#include "Memory.h"
+#include "../Memory.h"
 #include "Mode.h"
 #include "BitSource.h"
 #include "CharacterSetECI.h"

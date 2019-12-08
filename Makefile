@@ -1,4 +1,6 @@
 CC = clang
+BUILD_DIR = build
+SOURCE_DIR = src/c
 
 DEBUG_COMPILE_FLAGS = -g \
 					-O0 \
@@ -11,45 +13,29 @@ BUILD_COMPILE_FLAGS = -Oz \
 
 COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 				-std=c11 \
-				-include ./c/wasm.h \
+				-include ./src/c/wasm.h \
 				-flto \
 				-nostdlib \
 				-Wl,--export=__heap_base \
 				-Wl,--no-gc-sections \
 				-Wl,--no-entry \
 				-Wl,--export-dynamic \
-				-Wl,--allow-undefined-file=qrcode.syms \
+				-Wl,--allow-undefined-file=src/qrcode.syms \
 				-Wl,--initial-memory=131072 \
 				-nostdlib \
 
 				
  
-FILES = c/FinderPattern.c \
-		c/qrcode.c \
-		c/FinderPatternFinder.c \
-		c/math.c c/Detector.c \
-		c/Version.c \
-		c/AlignmentPatternFinder.c \
-		c/AlignmentPattern.c \
-		c/GridSampler.c \
-		c/PerspectiveTransform.c \
-		c/Memory.c \
-		c/FormatInformation.c \
-		c/BitMatrix.c \
-		c/ErrorCorrectionLevel.c \
-		c/Decoder.c \
-		c/decode/reedsolomon/ReedSolomonDecoder.c \
-		c/decode/reedsolomon/GenericGF.c \
-		c/decode/reedsolomon/GenericGFPoly.c \
-		c/BitMatrixParser.c \
-		c/DataBlock.c \
-		c/DataMask.c
-empty:
+FILES = $(wildcard $(SOURCE_DIR)/*.c) \
+		$(wildcard $(SOURCE_DIR)/decode/reedsolomon/*.c)
 
-build: .FORCE
-	@$(CC) $(BUILD_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
+$(shell   mkdir $(BUILD_DIR))
 
-debug:
-	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o qrcode.wasm
+.PHONY:
 
-.FORCE:
+build: .PHONY
+	@$(CC) $(BUILD_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o $(BUILD_DIR)/qrcode.wasm
+
+debug: .PHONY
+	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o $(BUILD_DIR)/qrcode.wasm
+
