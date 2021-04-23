@@ -1,11 +1,12 @@
 #include "wasm.h"
 
-void printf(const char *str)
+int printf(const char *str, ...)
 {
 	js_printf(str, strlen(str));
+	return 0;
 }
 
-unsigned int strlen(const char *str)
+unsigned long strlen(const char *str)
 {
 	unsigned int size = 0;
 

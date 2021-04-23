@@ -12,10 +12,12 @@ BUILD_COMPILE_FLAGS = -Oz \
 					-Wl,--strip-all 
 
 COMPILE_FLAGS = --target=wasm32-unknown-unknown \
-				-std=c11 \
+				-x c \
+				-std=c17 \
 				-include ./src/c/wasm.h \
 				-flto \
 				-nostdlib \
+				-mnontrapping-fptoint\
 				-Wl,--export=__heap_base \
 				-Wl,--no-gc-sections \
 				-Wl,--no-entry \
@@ -38,5 +40,6 @@ build: .PHONY
 
 debug: .PHONY
 	@$(CC) $(DEBUG_COMPILE_FLAGS) $(COMPILE_FLAGS) $(FILES) -o $(BUILD_DIR)/qrcode.wasm
+	wasm2wat build/qrcode.wasm > build/qrcode.wat
 
 $(shell mkdir $(BUILD_DIR))

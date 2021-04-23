@@ -77,10 +77,8 @@ export void imageToBitmap()
 				{
 					pixel = imageX + imageY * imageWidth;
 					target = (image[pixel] + image[pixel + 1] + image[pixel + 2]);
-					if (target < min)
-						min = target;
-					if (target > max)
-						max = target;
+					min = min_i32(target, min);
+					max = max_i32(target, max);
 				}
 			}
 			middle = (min + max) / 6;

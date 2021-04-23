@@ -4,19 +4,20 @@
 
 #include "wasm.h"
 
-int math_abs(int i);
-float math_fabs(float i);
 
-int math_max(int i, int j);
-float math_fmax(float i, float j);
+i32 min_i32(i32 a, i32 b);
+i32 max_i32(i32 a, i32 b);
+i32 abs_i32(i32 a);
 
-int math_min(int i, int j);
-float math_fmin(float i, float j);
+f32 min_f32(f32 i, f32 j);
+f32 max_f32(f32 i, f32 j);
+f32 abs_f32(f32 a);
+f32 sqrt_f32(f32 f);
 
-float math_fsqrt(float num);
+i32 round_f32(f32 f);
 
-int math_round(float d);
+f32 distance_vec2(f32 aX, f32 aY, f32 bX, f32 bY);
 
-float math_distance(float aX, float aY, float bX, float bY);
+i32 cast_f32_i32(f32 f);
 
 #endif

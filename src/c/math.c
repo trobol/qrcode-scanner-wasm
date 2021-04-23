@@ -1,47 +1,52 @@
 #include "math.h"
 
-float math_fsqrt(float f)
-{
-	return __builtin_sqrtf(f);
+i32 sign_i32(i32 c) {
+	return c >> 31;
 }
 
-int math_abs(int i)
-{
-	return __builtin_abs(i);
+i32 min_i32(i32 a, i32 b) {
+	i32 c = a-b;
+	return b + (c & sign_i32(c));
 }
 
-float math_fabs(float f)
-{
-	return __builtin_fabs(f);
+i32 max_i32(i32 a, i32 b) {
+	i32 c = b-a;
+	return a + (c & ~sign_i32(c));
 }
 
-int math_max(int i, int j)
-{
-	return i > j ? i : j;
+i32 abs_i32(i32 a) {
+	return __builtin_abs(a);
 }
 
-float math_fmax(float i, float j)
-{
-	return i > j ? i : j;
-}
-
-int math_min(int i, int j)
-{
-	return (int)__builtin_wasm_min_f32(i, j);
-}
-float math_fmin(float i, float j)
+f32 min_f32(f32 i, f32 j)
 {
 	return __builtin_wasm_min_f32(i, j);
 }
 
-int math_round(float d)
-{
-
-	return (int)(d + 0.5f);
+f32 max_f32(f32 i, f32 j) {
+	return __builtin_wasm_max_f32(i, j);
 }
-float math_distance(float aX, float aY, float bX, float bY)
+
+f32 abs_f32(f32 a) {
+	return __builtin_fabsf(a);
+}
+
+f32 sqrt_f32(f32 f)
 {
-	float xDiff = aX - bX;
-	float yDiff = aY - bY;
-	return math_fsqrt(xDiff * xDiff + yDiff * yDiff);
+	return __builtin_sqrtf(f);
+}
+
+i32 round_f32(f32 f) {
+	return cast_f32_i32(f + 0.5f);
+}
+
+f32 distance_vec2(f32 aX, f32 aY, f32 bX, f32 bY)
+{
+	f32 xDiff = aX - bX;
+	f32 yDiff = aY - bY;
+	return sqrt_f32(xDiff * xDiff + yDiff * yDiff);
+}
+
+i32 cast_f32_i32(f32 f) {
+	return __builtin_wasm_trunc_saturate_s_i32_f32(f);
 }

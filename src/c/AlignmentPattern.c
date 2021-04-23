@@ -11,9 +11,9 @@ struct AlignmentPattern *AlignmentPattern_combineEstimate(struct AlignmentPatter
 
 bool AlignmentPattern_aboutEquals(struct AlignmentPattern *pat, float moduleSize, float i, float j)
 {
-	if (math_fabs(i - pat->posY) <= moduleSize && math_fabs(j - pat->posX) <= moduleSize)
+	if (abs_f32(i - pat->posY) <= moduleSize && abs_f32(j - pat->posX) <= moduleSize)
 	{
-		float moduleSizeDiff = math_fabs(moduleSize - pat->estimatedModuleSize);
+		float moduleSizeDiff = abs_f32(moduleSize - pat->estimatedModuleSize);
 		return moduleSizeDiff <= 1.0f || moduleSizeDiff <= pat->estimatedModuleSize;
 	}
 	return false;

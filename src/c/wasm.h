@@ -25,6 +25,9 @@
 #define SIZEOF_FLOAT 4
 #define SIZEOF_BOOL SIZEOF_CHAR
 
+typedef int i32;
+typedef float f32;
+
 #define NULL 0
 
 typedef char bool;
@@ -36,9 +39,17 @@ typedef char bool;
 import unsigned char __data_end;
 import unsigned char __heap_base;
 
-unsigned int strlen(const char *str);
+unsigned long strlen(const char *str);
 
-void printf(const char *str);
+int printf(const char *str, ...);
+
+#ifdef DEBUG
+#define debug_message(message) js_printf(message, strlen(message))
+#else
+#define debug_message(message)
+#endif
+
+float __builtin_wasm_min_f32(float a, float b);
 
 import void js_printf(const char *str, unsigned int size);
 

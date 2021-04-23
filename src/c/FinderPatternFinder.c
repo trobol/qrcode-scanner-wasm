@@ -235,7 +235,7 @@ int findRowSkip()
 				// difference in the x / y coordinates of the two centers.
 				// This is the case where you find top left first. Draw it out.
 				hasSkipped = true;
-				return (int)(math_fabs(possibleCenters[firstConfirmedCenter].posX - possibleCenters[i].posX) - math_fabs(possibleCenters[firstConfirmedCenter].posY - possibleCenters[i].posY)) / 2;
+				return (int)((possibleCenters[firstConfirmedCenter].posX - possibleCenters[i].posX) - (possibleCenters[firstConfirmedCenter].posY - possibleCenters[i].posY)) / 2;
 			}
 		}
 	}
@@ -267,7 +267,7 @@ bool haveMultiplyConfirmedCenters()
 	float totalDeviation = 0.0f;
 	for (unsigned int i = 0; i < max; i++)
 	{
-		totalDeviation += math_fabs(possibleCenters[i].estimatedModuleSize - average);
+		totalDeviation += (possibleCenters[i].estimatedModuleSize - average);
 	}
 	return totalDeviation <= 0.05f * totalModuleSize;
 }
@@ -290,7 +290,7 @@ bool foundPatternCross(int stateCount[5])
 	float moduleSize = (float)totalModuleSize / 7.0f;
 	float maxVariance = moduleSize / 2.0f;
 	// Allow less than 50% variance from 1-1-3-1-1 proportions
-	return math_fabs(moduleSize - stateCount[0]) < maxVariance && math_fabs(moduleSize - stateCount[1]) < maxVariance && math_fabs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && math_fabs(moduleSize - stateCount[3]) < maxVariance && math_fabs(moduleSize - stateCount[4]) < maxVariance;
+	return (moduleSize - stateCount[0]) < maxVariance && (moduleSize - stateCount[1]) < maxVariance && (3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance && (moduleSize - stateCount[3]) < maxVariance && (moduleSize - stateCount[4]) < maxVariance;
 }
 
 bool handlePossibleCenter(int stateCount[5], unsigned int i, unsigned int j)
@@ -400,7 +400,7 @@ float crossCheckVertical(unsigned int startI, unsigned int centerJ, int maxCount
 	// If we found a finder-pattern-like section, but its size is more than 40% different than
 	// the original, assume it's a false positive
 	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-	if (5 * math_abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
+	if (5 * abs_i32(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
 	{
 		return NaN;
 	}
@@ -476,8 +476,8 @@ float crossCheckHorizontal(unsigned int startJ, unsigned int centerI, int maxCou
 
 	// If we found a finder-pattern-like section, but its size is significantly different than
 	// the original, assume it's a false positive
-	int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-	if (5 * math_abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal)
+	i32 stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+	if (5 * abs_i32(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal)
 	{
 		return NaN;
 	}
@@ -515,8 +515,8 @@ void sortPossibleCenters(float average)
 	for (i = 0; i < possibleCentersSize - 1; i++)
 		for (j = 0; j < possibleCentersSize - i - 1; j++)
 		{
-			float dA = math_fabs(possibleCenters[j].estimatedModuleSize - average);
-			float dB = math_fabs(possibleCenters[j + 1].estimatedModuleSize - average);
+			float dA = (possibleCenters[j].estimatedModuleSize - average);
+			float dB = (possibleCenters[j + 1].estimatedModuleSize - average);
 			if (dA > dB)
 			{
 				temp = possibleCenters[j];
@@ -541,8 +541,8 @@ void sortCenterComparator(float averageModuleSize)
 			}
 			else
 			{
-				float dA = math_fabs(possibleCenters[j].estimatedModuleSize - averageModuleSize);
-				float dB = math_fabs(possibleCenters[j + 1].estimatedModuleSize - averageModuleSize);
+				float dA = (possibleCenters[j].estimatedModuleSize - averageModuleSize);
+				float dB = (possibleCenters[j + 1].estimatedModuleSize - averageModuleSize);
 				swap = dA < dB;
 			}
 			if (swap)
@@ -572,15 +572,15 @@ void selectBestPatterns()
 			square += size * size;
 		}
 		float average = totalModuleSize / (float)startSize;
-		float stdDev = (float)math_fsqrt(square / startSize - average * average);
+		f32 stdDev = sqrt_f32(square / startSize - average * average);
 
 		sortPossibleCenters(average);
 
-		float limit = math_max(0.2f * average, stdDev);
+		float limit = max_f32(0.2f * average, stdDev);
 
 		for (unsigned int i = 0; i < possibleCentersSize && possibleCentersSize > 3; i++)
 		{
-			if (math_fabs(possibleCenters[i].estimatedModuleSize - average) > limit)
+			if ((possibleCenters[i].estimatedModuleSize - average) > limit)
 			{
 				for (unsigned int j = i; j < possibleCentersSize - 1; j++)
 				{
