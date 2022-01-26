@@ -48,5 +48,6 @@ f32 distance_vec2(f32 aX, f32 aY, f32 bX, f32 bY)
 }
 
 i32 cast_f32_i32(f32 f) {
-	return __builtin_wasm_trunc_saturate_s_i32_f32(f);
+	//return __builtin_wasm_trunc_saturate_s_i32_f32(f);
+	return (int)f;
 }

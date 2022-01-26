@@ -41,7 +41,7 @@ import unsigned char __heap_base;
 
 unsigned long strlen(const char *str);
 
-int printf(const char *str, ...);
+int printf(const char *str);
 
 #ifdef DEBUG
 #define debug_message(message) js_printf(message, strlen(message))

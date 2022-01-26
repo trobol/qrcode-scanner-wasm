@@ -17,7 +17,6 @@ COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 				-include ./src/c/wasm.h \
 				-flto \
 				-nostdlib \
-				-mnontrapping-fptoint\
 				-Wl,--export=__heap_base \
 				-Wl,--no-gc-sections \
 				-Wl,--no-entry \

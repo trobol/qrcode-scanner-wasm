@@ -56,7 +56,7 @@ findFiles()
 				return minify(source)
 					.then(output =>
 						new Promise((resolve, reject) => {
-							const dirname = p.dirname(source);
+							const dirname = p.dirname(build_path);
 							fs.exists(dirname, exists => {
 								const finish = err => {
 									if (err) reject(err);
@@ -64,7 +64,7 @@ findFiles()
 								};
 								const func = build_mode == 'debug' ?
 									() => fs.copyFile(source, dest, finish) :
-									() => fs.writeFile(source, output, { flag: 'w' }, finish);
+									() => fs.writeFile(dest, output, { flag: 'w' }, finish);
 								if (exists) {
 									func();
 								} else {

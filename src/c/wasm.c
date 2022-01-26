@@ -1,6 +1,6 @@
 #include "wasm.h"
 
-int printf(const char *str, ...)
+int printf(const char *str)
 {
 	js_printf(str, strlen(str));
 	return 0;
