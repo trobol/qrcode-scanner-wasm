@@ -1,8 +1,8 @@
 #include "wasm.h"
 
-int printf(const char *str)
+int puts(const char *str)
 {
-	js_printf(str, strlen(str));
+	js_puts(str, strlen(str));
 	return 0;
 }
 

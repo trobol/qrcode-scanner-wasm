@@ -54,7 +54,7 @@ bool processFinderPatternInfo(struct BitMatrix *matrix)
 		if (alignmentPattern == 0)
 		{
 			// Try anyway
-			printf("Try anyway");
+			puts("Try anyway");
 		}
 	}
 

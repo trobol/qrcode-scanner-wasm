@@ -2,5 +2,5 @@ printNum
 drawPoint
 drawDot
 __head_base
-js_printf
+js_puts
 printNum

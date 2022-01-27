@@ -35,7 +35,7 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
     int position = size - 1 - QR_CODE_FIELD_256.logTable[errorLocations[i]];
     if (position < 0)
     {
-      printf("Bad error location");
+      puts("Bad error location");
       //throw ReedSolomonException("Bad error location");
     }
     // GenericGF::addOrSubtract
@@ -73,7 +73,7 @@ void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], st
     {
       // Oops, Euclidean algorithm already terminated?
       // r_{i-1} was zero
-      printf("Oops, Euclidean algorithm already terminated?");
+      puts("Oops, Euclidean algorithm already terminated?");
     }
     r = rLastLast;
     struct GenericGFPoly q = QR_CODE_FIELD_256.zero;
@@ -94,7 +94,7 @@ void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], st
 
     if (r.degree >= rLast.degree)
     {
-      printf("Division algorithm failed to reduce polynomial?");
+      puts("Division algorithm failed to reduce polynomial?");
       //throw IllegalStateException("Division algorithm failed to reduce polynomial?");
     }
   }
@@ -102,7 +102,7 @@ void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], st
   int sigmaTildeAtZero = t.coefficients[t.coefficientSize - 1];
   if (sigmaTildeAtZero == 0)
   {
-    printf("sigmaTilde(0) was zero");
+    puts("sigmaTilde(0) was zero");
     //throw ReedSolomonException("sigmaTilde(0) was zero");
   }
 
@@ -136,7 +136,7 @@ struct ArrayRef ReedSolomonDecoder_findErrorLocations(struct GenericGFPoly error
   }
   if (e != numErrors)
   {
-    printf("Error locator degree does not match number of roots");
+    puts("Error locator degree does not match number of roots");
     //throw ReedSolomonException("Error locator degree does not match number of roots");
   }
   return result;

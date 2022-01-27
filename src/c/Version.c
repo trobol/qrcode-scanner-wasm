@@ -9,7 +9,7 @@ struct Version *getVersionForNumber(int versionNumber)
 	{
 		//ERROR
 		//throw(); // ReaderException("versionNumber must be between 1 and 40");
-		printf("versionNumber must be between 1 and 40");
+		puts("versionNumber must be between 1 and 40");
 		return (struct Version *)NaN;
 	}
 
@@ -21,7 +21,7 @@ struct Version *getProvisionalVersionForDimension(int dimension)
 	if (dimension % 4 != 1)
 	{
 		//ERROR
-		printf("FormatExeption");
+		puts("FormatExeption");
 		//throw();// FormatException();
 		return (struct Version *)NaN;
 	}

@@ -6,7 +6,7 @@ struct GenericGFPoly new_GenericGFPoly(int *coefficients, int size)
 	if (size == 0)
 	{
 		//error
-		printf("Size was 0");
+		puts("Size was 0");
 	}
 	struct GenericGFPoly result;
 	int coefficientsLength = size;
@@ -114,7 +114,7 @@ struct GenericGFPoly GenericGFPoly_multiplyByMonomial(struct GenericGFPoly poly,
 {
 	if (degree < 0)
 	{
-		printf("degree must not be less then 0");
+		puts("degree must not be less then 0");
 		//throw IllegalArgumentException("degree must not be less then 0");
 	}
 	if (coefficient == 0)

@@ -13,7 +13,7 @@ int BitSource_readBits(int numBits)
 {
 	if (numBits < 0 || numBits > 32 || numBits > BitSource_available())
 	{
-		printf("Bitsource IllegalArgumentException");
+		puts("Bitsource IllegalArgumentException");
 		//throw IllegalArgumentException(oss.str().c_str());
 	}
 

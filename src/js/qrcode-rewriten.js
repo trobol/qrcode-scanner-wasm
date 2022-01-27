@@ -92,7 +92,7 @@ qrcode.load = (() => {
 	var memory;
 	let imports = {
 		env: {
-			js_printf(str, size) {
+			js_puts(str, size) {
 				const chars = new Uint8Array(memory.buffer, str, size);
 				console.log(String.fromCharCode(...chars));
 			},

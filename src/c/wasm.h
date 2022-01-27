@@ -41,17 +41,17 @@ import unsigned char __heap_base;
 
 unsigned long strlen(const char *str);
 
-int printf(const char *str);
+int puts(const char *str);
 
 #ifdef DEBUG
-#define debug_message(message) js_printf(message, strlen(message))
+#define debug_message(message) js_puts(message, strlen(message))
 #else
 #define debug_message(message)
 #endif
 
 float __builtin_wasm_min_f32(float a, float b);
 
-import void js_printf(const char *str, unsigned int size);
+import void js_puts(const char *str, unsigned int size);
 
 import void printNum(int);
 #endif
