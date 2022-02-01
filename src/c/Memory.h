@@ -24,4 +24,11 @@ void Memory_clear();
 void Memory_delete(unsigned int size);
 
 void Memory_size(unsigned int i);
+
+
+void* malloc(long num_bytes);
+void free(void* ptr);
+void memcpy();
+void memset();
+
 #endif
