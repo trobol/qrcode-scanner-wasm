@@ -27,7 +27,10 @@ export void *getBitMap()
 
 void *allocateImage()
 {
-	Memory_clear();
+	if (bitMap)
+	free(bitMap);
+	if (image)
+	free(image);
 	bitMap = malloc(imageWidth * imageHeight * SIZEOF_INT);
 	image = malloc(imageSize * SIZEOF_INT);
 	return image;
@@ -149,6 +152,6 @@ export bool decode()
 		allocateImage();
 		return false;
 	}
-	free()
+	
 	return detected;
 }

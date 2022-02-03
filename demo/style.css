@@ -1,0 +1,35 @@
+
+body {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.videos {
+
+}
+
+canvas {
+	display: none;
+}
+
+
+.message-wrapper {
+	min-width: 400px;
+	margin: 0 20px;
+	padding: 0 20px;
+	background-color: #ADB5BD;
+}
+
+.message {
+	padding: 5px;
+	margin: 5px 0;
+	background-color: #E9ECEF;
+	
+}
+
+.messages {
+	background-color: #343A40;
+	height: 700px;
+	padding: 5px;
+}

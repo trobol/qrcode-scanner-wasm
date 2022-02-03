@@ -21,8 +21,10 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
     return;
   }
 
+
   // This whole section is broken
   // there were errors in the scan, correct them
+  /*
   struct GenericGFPoly syndrome = new_GenericGFPoly(syndromeCoefficients, twoS);
   struct GenericGFPoly sigmaOmega[2];
 
@@ -44,6 +46,7 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
     // GenericGF::addOrSubtract
     received[position] = received[position] ^ errorMagitudes[i];
   }
+  */
 }
 
 void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], struct GenericGFPoly a,
