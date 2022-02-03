@@ -135,8 +135,6 @@ void* malloc(u32 num_bytes) {
 }
 
 void free(void* ptr) {
-
-	puts("freed");
 	
 	u32 loc = (u32)ptr-sizeof(mem_header);
 	mem_header* hdr = (mem_header*)loc;

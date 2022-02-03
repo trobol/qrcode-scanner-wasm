@@ -47,6 +47,10 @@ export void *setImageSize(unsigned int x, unsigned int y)
 	return allocateImage();
 }
 
+export void* getImagePtr() {
+	return image;
+}
+
 export unsigned int getImageSize()
 {
 	return imageSize;

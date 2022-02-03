@@ -20,7 +20,10 @@ qrcode.decode = function () {
 	const found = qrcode.decodeWasm();
 
 	if (!found) throw 'failed to find qrcode';
+	qrcode.updatePixelData();
 	qrcode.imagedata.data.set(qrcode.pixeldata);
+	
+	//imgdata = new ImageData(qrcode.pixeldata, qrcode.imagedata.width, qrcode.imagedata.height);
 	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
 
 	var resultBytes = qrcode.getResultBytes();
@@ -124,6 +127,11 @@ qrcode.load = (() => {
 
 		qrcode.setPixelData = function () {
 			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
+			const imageSize = instance.exports.getImageSize();
+			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
+		}
+		qrcode.updatePixelData = function() {
+			const imageIndex = instance.exports.getImagePtr();
 			const imageSize = instance.exports.getImageSize();
 			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
 		}
