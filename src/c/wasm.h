@@ -27,6 +27,7 @@
 
 typedef int i32;
 typedef float f32;
+typedef unsigned int u32;
 
 #define NULL 0
 

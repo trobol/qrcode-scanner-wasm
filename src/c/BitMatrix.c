@@ -15,7 +15,7 @@ void new_BitMatrix(struct BitMatrix *matrix, int dimension)
 	}
 	matrix->bitSize = matrix->rowSize * matrix->height;
 
-	matrix->bits = Memory_allocate(matrix->bitSize * SIZEOF_INT);
+	matrix->bits = malloc(matrix->bitSize * SIZEOF_INT);
 	for (unsigned int i = 0; i < matrix->bitSize; i++)
 	{
 		matrix->bits[i] = 0;
@@ -67,5 +67,5 @@ void BitMatrix_setRegion(struct BitMatrix *matrix, int left, int top, int width,
 
 void delete_BitMatrix(struct BitMatrix *matrix)
 {
-	Memory_delete(matrix->bitSize * SIZEOF_INT);
+	free(matrix->bits);
 }

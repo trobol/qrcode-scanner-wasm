@@ -6,8 +6,8 @@ int GenericGF_multiply(int a, int b)
   {
     return 0;
   }
-  printNum(a);
-  printNum(b);
+  //printNum(a);
+  //printNum(b);
   return QR_CODE_FIELD_256.expTable[(QR_CODE_FIELD_256.logTable[a] + QR_CODE_FIELD_256.logTable[b]) % (QR_CODE_FIELD_256.size - 1)];
 }
 struct GenericGFPoly GenericGF_buildMonomial(int degree, int coefficient)
@@ -21,7 +21,7 @@ struct GenericGFPoly GenericGF_buildMonomial(int degree, int coefficient)
     return QR_CODE_FIELD_256.zero;
   }
   //POTENTIAL ERROR FROM GARBAGE MEMORY
-  int *coefficients = Memory_allocate((degree + 1) * SIZEOF_INT);
+  int *coefficients = malloc((degree + 1) * SIZEOF_INT);
 
   coefficients[0] = coefficient;
 

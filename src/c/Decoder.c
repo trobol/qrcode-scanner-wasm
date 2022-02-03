@@ -32,7 +32,7 @@ struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 		totalBytes += dataBlocks[i].numDataCodeWords;
 	}
 
-	char *resultBytes = Memory_allocate(totalBytes * SIZEOF_CHAR);
+	char *resultBytes = malloc(totalBytes * SIZEOF_CHAR);
 
 	int resultOffset = 0;
 
@@ -60,7 +60,7 @@ struct DecoderResult Decoder_decode(struct BitMatrix matrix)
 void Decoder_correctErrors(char *codewordBytes, int ecCodeWords, int numDataCodewords)
 {
 	int numCodewords = ecCodeWords + numDataCodewords;
-	int *codewordInts = Memory_allocate(numCodewords * SIZEOF_INT);
+	int *codewordInts = malloc(numCodewords * SIZEOF_INT);
 	for (int i = 0; i < numCodewords; i++)
 	{
 		codewordInts[i] = codewordBytes[i] & 0xff;

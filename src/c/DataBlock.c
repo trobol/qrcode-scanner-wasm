@@ -18,8 +18,12 @@ struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *vers
 	// Now establish DataBlocks of the appropriate size and number of data codewords
 	//std::vector<Ref<DataBlock>> result(totalBlocks);
 	//MIGHT BE ERRORS HERE
-	struct DataBlock *result = Memory_allocate(totalBlocks * SIZEOF_DATA_BLOCK);
-	char *buffer = Memory_allocate(version->totalCodewords * SIZEOF_CHAR);
+	struct DataBlock *result = malloc(totalBlocks * SIZEOF_DATA_BLOCK);
+	char stack_buffer[1085];
+	char* buffer = stack_buffer;
+	if (version->totalCodewords > 1085) // only use heap if using more than 1085 codewords
+		buffer = malloc(version->totalCodewords * SIZEOF_CHAR);
+
 	int numResultBlocks = 0;
 	int bufferIndex = 0;
 	for (unsigned int j = 0; j < 2; j++)
@@ -86,11 +90,16 @@ struct ArrayRef DataBlock_getDataBlocks(char *rawCodewords, struct Version *vers
 		}
 	}
 
+	// free heap buffer if we are using one
+	if (buffer != stack_buffer)
+		free(buffer);
+
 	if (rawCodewordsOffset != version->totalCodewords)
 	{
 		//cant read code
 		return (struct ArrayRef){0, 0};
 	}
 
+	
 	return (struct ArrayRef){totalBlocks, result};
 }

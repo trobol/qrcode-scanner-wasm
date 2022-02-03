@@ -5,7 +5,7 @@
 void ReedSolomonDecoder_decode(int *received, int size, int twoS)
 {
   struct GenericGFPoly poly = new_GenericGFPoly(received, size);
-  int *syndromeCoefficients = Memory_allocate(twoS * SIZEOF_INT);
+  int *syndromeCoefficients = malloc(twoS * SIZEOF_INT);
   bool noError = true;
   for (int i = 0; i < twoS; i++)
   {
@@ -20,6 +20,9 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
   {
     return;
   }
+
+  // This whole section is broken
+  // there were errors in the scan, correct them
   struct GenericGFPoly syndrome = new_GenericGFPoly(syndromeCoefficients, twoS);
   struct GenericGFPoly sigmaOmega[2];
 
@@ -80,15 +83,16 @@ void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], st
     int denominatorLeadingTerm = rLast.coefficients[rLast.coefficientSize - 1 - rLast.degree];
     int dltInverse = GenericGF_inverse(denominatorLeadingTerm);
 
-    while (r.degree >= rLast.degree && r.coefficients[0] != 0)
-    {
+    //while (r.degree >= rLast.degree && r.coefficients[0] != 0)
+    //{
       int degreeDiff = r.degree - rLast.degree;
       //potential error getCoefficient(degree)
+	  printNum(r.degree);
       int scale = GenericGF_multiply(r.coefficients[0], dltInverse);
 
       q = GenericGFPoly_addOrSubtract(q, GenericGF_buildMonomial(degreeDiff, scale));
       r = GenericGFPoly_addOrSubtract(r, GenericGFPoly_multiplyByMonomial(rLast, degreeDiff, scale));
-    }
+    //}
 
     t = GenericGFPoly_addOrSubtract(GenericGFPoly_multiplyPoly(q, tLast), tLastLast);
 
@@ -118,12 +122,12 @@ struct ArrayRef ReedSolomonDecoder_findErrorLocations(struct GenericGFPoly error
   int numErrors = errorLocator.degree;
   if (numErrors == 1)
   { // shortcut
-    result.ptr = Memory_allocate(SIZEOF_INT);
+    result.ptr = malloc(SIZEOF_INT);
     ((int *)result.ptr)[0] = errorLocator.coefficients[0];
     result.size = 1;
     return result;
   }
-  result.ptr = Memory_allocate(numErrors * SIZEOF_INT);
+  result.ptr = malloc(numErrors * SIZEOF_INT);
   result.size = numErrors;
   int e = 0;
   for (int i = 1; i < QR_CODE_FIELD_256.size && e < numErrors; i++)
@@ -146,7 +150,7 @@ int *ReedSolomonDecoder_findErrorMagnitudes(struct GenericGFPoly errorEvaluator,
 {
   // This is directly applying Forney's Formula
   int s = size;
-  int *result = Memory_allocate(s * SIZEOF_INT);
+  int *result = malloc(s * SIZEOF_INT);
   for (int i = 0; i < s; i++)
   {
     int xiInverse = GenericGF_inverse(errorLocations[i]);

@@ -1,10 +1,12 @@
-CC = clang
+CC = clang-12
 BUILD_DIR = build
 SOURCE_DIR = src/c
 
 DEBUG_COMPILE_FLAGS = -g \
-					-O0 \
-					-Wl,--lto-O0 
+					-O0 
+
+
+#					-Wl,--lto-O0 
 					
 
 BUILD_COMPILE_FLAGS = -Oz \
@@ -14,8 +16,14 @@ BUILD_COMPILE_FLAGS = -Oz \
 COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 				-x c \
 				-std=c17 \
+				-fwasm-exceptions \
 				-include ./src/c/wasm.h \
-				-flto \
+				-Wall \
+				-fno-builtin-free \
+				-fno-builtin-malloc \
+				-fno-builtin-memset \
+				-fno-builtin-memcpy \
+				-mbulk-memory \
 				-nostdlib \
 				-Wl,--export=__heap_base \
 				-Wl,--no-gc-sections \
@@ -25,6 +33,7 @@ COMPILE_FLAGS = --target=wasm32-unknown-unknown \
 				-Wl,--initial-memory=131072 \
 				-nostdlib \
 
+#				-flto \
 				
  
 FILES = $(wildcard $(SOURCE_DIR)/*.c) \

@@ -17,7 +17,7 @@ struct DecoderResult DecodedBitStreamParser_decode(char *bytes, int size, struct
 
 	BitSource_writeBytes(bytes, size);
 	char resultMax = size / 8;
-	DecodedBitStreamParser.result = Memory_allocate(resultMax * SIZEOF_CHAR);
+	DecodedBitStreamParser.result = malloc(resultMax * SIZEOF_CHAR);
 	char* result = DecodedBitStreamParser.result;
 	//ArrayRef<ArrayRef<char>> byteSegments(0);
 	/*
@@ -220,7 +220,7 @@ const char DecodedBitStreamParser_ALPHANUMERIC_CHARS[] =
 void DecodedBitStreamParser_decodeNumericSegment(char* result, int count) {
   int nBytes = count;
   //char* bytes = new char[nBytes];
-  char* bytes = Memory_allocate(nBytes * SIZEOF_CHAR);
+  char* bytes = malloc(nBytes * SIZEOF_CHAR);
   int i = 0;
   // Read three digits at a time
   while (count >= 3) {

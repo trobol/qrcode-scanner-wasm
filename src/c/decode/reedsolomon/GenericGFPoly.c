@@ -26,7 +26,7 @@ struct GenericGFPoly new_GenericGFPoly(int *coefficients, int size)
 		else
 		{
 			result.coefficientSize = coefficientsLength - firstNonZero;
-			result.coefficients = (int *)Memory_allocate(result.coefficientSize * SIZEOF_INT);
+			result.coefficients = (int *)malloc(result.coefficientSize * SIZEOF_INT);
 
 			for (int i = 0; i < result.coefficientSize; i++)
 			{
@@ -93,7 +93,7 @@ struct GenericGFPoly GenericGFPoly_addOrSubtract(struct GenericGFPoly poly, stru
 		largerPoly = temp;
 	}
 
-	int *sumDiff = Memory_allocate(largerPoly.coefficientSize * SIZEOF_INT);
+	int *sumDiff = malloc(largerPoly.coefficientSize * SIZEOF_INT);
 	int lengthDiff = largerPoly.coefficientSize - smallerPoly.coefficientSize;
 	// Copy high-order terms only found in higher-degree polynomial's coefficients
 	for (int i = 0; i < lengthDiff; i++)
@@ -122,7 +122,7 @@ struct GenericGFPoly GenericGFPoly_multiplyByMonomial(struct GenericGFPoly poly,
 		return QR_CODE_FIELD_256.zero;
 	}
 	int size = poly.coefficientSize;
-	int *product = Memory_allocate((size + degree) * SIZEOF_INT);
+	int *product = malloc((size + degree) * SIZEOF_INT);
 	for (int i = 0; i < size; i++)
 	{
 		product[i] = GenericGF_multiply(poly.coefficients[i], coefficient);
@@ -141,7 +141,7 @@ struct GenericGFPoly GenericGFPoly_multiplyScalar(struct GenericGFPoly poly, int
 		return poly;
 	}
 	int size = poly.coefficientSize;
-	int *product = Memory_allocate(size * SIZEOF_INT);
+	int *product = malloc(size * SIZEOF_INT);
 	for (int i = 0; i < size; i++)
 	{
 		product[i] = GenericGF_multiply(poly.coefficients[i], scalar);
@@ -163,7 +163,7 @@ struct GenericGFPoly GenericGFPoly_multiplyPoly(struct GenericGFPoly poly, struc
 	int *bCoefficients = other.coefficients;
 	int bLength = other.coefficientSize;
 	int size = aLength + bLength - 1;
-	int *product = Memory_allocate(size * SIZEOF_INT);
+	int *product = malloc(size * SIZEOF_INT);
 	for (int i = 0; i < aLength; i++)
 	{
 		int aCoeff = aCoefficients[i];
