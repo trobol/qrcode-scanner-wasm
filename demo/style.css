@@ -1,8 +1,45 @@
+/*
+colors
 
+*/
+
+:root {
+	
+/* CSS HEX */
+--cultured: #f8f9faff;
+--cultured-2: #e9ecefff;
+--gainsboro: #dee2e6ff;
+--light-gray: #ced4daff;
+--cadet-blue-crayola: #adb5bdff;
+--slate-gray: #6c757dff;
+--davys-grey: #495057ff;
+--gunmetal: #343a40ff;
+--charleston-green: #212529ff;
+}
+
+
+
+body>h1 {
+	background-color: var(--light-gray);
+	margin: 0;
+	padding: 10px;
+}
 body {
-	display: flex;
-	flex-direction: row;
 	height: 100%;
+	position: fixed;
+	background-color: var(--cultured);
+	font-family: sans-serif;
+	color: var(--charleston-green);
+	border-radius: 10px;
+	margin: 0;
+	padding: 0;
+}
+
+.body {
+	flex-direction: row;
+	display: flex;
+	margin: 10px;
+	
 }
 
 .videos {
@@ -17,19 +54,71 @@ canvas {
 .message-wrapper {
 	min-width: 400px;
 	margin: 0 20px;
-	padding: 0 20px;
-	background-color: #ADB5BD;
+	background-color: var(--verdigris);
+}
+
+.message-wrapper h1 {
+	background-color: var(--cadet-blue-crayola);
+	padding: 5px 20px;
+	margin: 0;
+	border-radius: 10px 10px 0 0;
 }
 
 .message {
 	padding: 5px;
 	margin: 5px 0;
-	background-color: #E9ECEF;
+	background-color: var(--light-gray);
+
+	-webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	
 	
 }
 
 .messages {
-	background-color: #343A40;
+	background-color: var(--cg-blue);
 	height: 700px;
 	padding: 5px;
+	margin: 0 20px;
+	position: relative;
+	overflow: hidden;
 }
+
+.messages::after {
+	content: "";
+	display: block;
+	position: absolute;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+	background: linear-gradient(180deg, rgba(248,249,250,0) 40%, rgba(248,249,250, 1) 50%);
+	
+}
+
+@-webkit-keyframes scale-in-center {
+	0% {
+	  -webkit-transform: scale(0);
+			  transform: scale(0);
+	  opacity: 1;
+	}
+	100% {
+	  -webkit-transform: scale(1);
+			  transform: scale(1);
+	  opacity: 1;
+	}
+  }
+  @keyframes scale-in-center {
+	0% {
+	  -webkit-transform: scale(0);
+			  transform: scale(0);
+	   height: 0px;
+	  opacity: 1;
+	}
+	100% {
+	  -webkit-transform: scale(1);
+			  transform: scale(1);
+		height: 20px;
+	  opacity: 1;
+	}
+  }
+  

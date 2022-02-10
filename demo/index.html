@@ -5,13 +5,15 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+	<title>WAQC Demo</title>
 	<script src="src/js/qrcode-scanner.js"></script>
 	<script src="src/js/qrcode-rewriten.js"></script>
 	<link rel="stylesheet" href="/demo/style.css" />
 </head>
 
 <body>
+	<h1>WebAssembly QRCode Scanner</h1>
+	<div class="body">
 	<div class="videos">
 		<h1>Source Video</h1>
 		<video></video>
@@ -22,17 +24,15 @@
 	<div class="message-wrapper">
 		<h1>Message List</h1>
 		<div class="messages">
-			<div id="info list">
-				<div class="message">Qrcode decoded: message</div>
-				<div class="message">QR failed to decode</div>
-				<div class="message">Another message</div>
-			</div>
 		</div>
 	</div>
+</div>
 	<script>
 		const video = document.querySelector('video');
 		const canvas = document.querySelector('canvas');
 		const img = document.querySelector('img');
+
+		const message_list = document.querySelector(".messages");
 
 		let imageData;
 		const scanner = new QRCodeScanner(canvas);
@@ -59,29 +59,40 @@
 		var updateCount = 0;
 		var successCount = 0;
 		const updateTotal = 100;
+		var drawQRCode = true;
 		function update() {
 			scanner.context.clearRect(0, 0, canvas.width,
 				canvas.height);
 			scanner.context.drawImage(scanner.videoElem, 0, 0,
 				scanner.videoElem.videoWidth,
 				scanner.videoElem.videoHeight);
-			scanner.context.translate(canvas.width / 2, canvas.height / 2);
-			scanner.context.rotate(i);
+			if (drawQRCode) {
+				scanner.context.translate(canvas.width / 2, canvas.height / 2);
+				scanner.context.rotate(i);
 
-			scanner.context.drawImage(img, -img.width / 2, -img.height / 2,
-				img.width,
-				img.height);
-			scanner.context.rotate(-i);
-			scanner.context.translate(-canvas.width / 2, -canvas.height / 2);
+				scanner.context.drawImage(img, -img.width / 2, -img.height / 2,
+					img.width,
+					img.height);
+				scanner.context.rotate(-i);
+				scanner.context.translate(-canvas.width / 2, -canvas.height / 2);
+			}
 			i += 0.1;
 			var startTime = performance.now();
 
 			try {
 
 				var decoded = qrcode.decode();
-				console.log(decoded);
-				if (decoded == "testing testing 1")
-					successCount++;
+				if(decoded != undefined) {
+					let div = document.createElement("div");
+					div.setAttribute("class", "message");
+					div.innerText = `Qrcode decoded: ${decoded}`
+
+					message_list.prepend(div);
+
+					console.log(decoded);
+					if (decoded == "testing testing 1")
+						successCount++;
+				}
 			} catch (e) {
 				console.error(e);
 			}

@@ -3,7 +3,7 @@ const fs = require('fs');
 const p = require('path');
 const { exec } = require('child_process');
 
-const build_mode = process.argv[2] || 'release';
+const build_mode = process.argv[2] || 'debug';
 
 const source_path = 'src';
 const build_path = 'build';

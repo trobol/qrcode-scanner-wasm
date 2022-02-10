@@ -29,8 +29,20 @@ qrcode.decode = function () {
 	}
 
 
-	if (!found) throw 'failed to find qrcode';
+	if (!found) return undefined;
 
+
+	var patterns = qrcode.getPatterns();
+
+	
+	qrcode.context.beginPath();
+	qrcode.context.moveTo(patterns[0].posX, patterns[0].posY);
+	qrcode.context.lineTo(patterns[1].posX, patterns[1].posY);
+	qrcode.context.lineTo(patterns[2].posX, patterns[2].posY);
+	//qrcode.context.lineTo(patterns[0].posX, patterns[0].posY);
+	qrcode.context.strokeStyle = "red";
+	qrcode.context.lineWidth = 10;
+	qrcode.context.stroke();
 
 	var resultBytes = qrcode.getResultBytes();
 	var versionNumber = qrcode.getVersionNumber();
@@ -129,6 +141,26 @@ qrcode.load = (() => {
 
 		qrcode.instance = instance;
 		qrcode.decodeWasm = instance.exports.decode;
+
+		class FinderPattern {
+			constructor(i) {
+				this.ptr = instance.exports.get_pattern(i);
+			}
+			get posX() {
+				return instance.exports.get_posX(this.ptr);
+			}
+			get posY() {
+				return instance.exports.get_posY(this.ptr);
+			}
+			get estimatedModuleSize() {
+				return instance.exports.get_estimatedModuleSize(this.ptr);
+			}
+			get count() {
+				return instance.exports.get_count(this.ptr);
+			}
+		}
+
+		qrcode.getPatterns = function() { return [new FinderPattern(0), new FinderPattern(1), new FinderPattern(2)]; };
 
 		// gets a Uint32Array of wasm memory
 		// should only be stored temporarily because,

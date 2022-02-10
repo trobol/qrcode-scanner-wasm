@@ -39,7 +39,7 @@ bool haveMultiplyConfirmedCenters();
 
 int findRowSkip();
 
-struct FinderPattern *get_pattern(int i);
+export struct FinderPattern *get_pattern(int i);
 
 
 
