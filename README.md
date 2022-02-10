@@ -13,7 +13,7 @@ The issue is these tools create a lot of boiler plate code and under utilize the
 In order to avoid this, I have moved/ported the code to C and rewritten large sections in order to be compatible with WASM without a wrapper.
 
 
-[View the demo here](./demo)
+[View the demo here](https://trobol.net/waqc/demo)
 
 
 # Building
