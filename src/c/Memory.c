@@ -86,6 +86,7 @@ void  mem_grow(u32 min_size) {
 
 
 void* malloc(u32 num_bytes) {
+	puts("malloc");
 
 	if (num_bytes == 0) return 0;
 	
@@ -137,6 +138,8 @@ void* malloc(u32 num_bytes) {
 }
 
 void free(void* ptr) {
+	puts("free");
+	if (ptr == 0) return;
 	
 	u32 loc = (u32)ptr-sizeof(mem_header);
 	mem_header* hdr = (mem_header*)loc;
