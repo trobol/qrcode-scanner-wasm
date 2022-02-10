@@ -23,8 +23,9 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
 
 
   // This whole section is broken
+  // it is writing the wrong memory
   // there were errors in the scan, correct them
-  /*
+  
   struct GenericGFPoly syndrome = new_GenericGFPoly(syndromeCoefficients, twoS);
   struct GenericGFPoly sigmaOmega[2];
 
@@ -46,7 +47,7 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
     // GenericGF::addOrSubtract
     received[position] = received[position] ^ errorMagitudes[i];
   }
-  */
+  
 }
 
 void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], struct GenericGFPoly a,
@@ -86,16 +87,16 @@ void ReedSolomonDecoder_runEuclideanAlgorithm(struct GenericGFPoly result[2], st
     int denominatorLeadingTerm = rLast.coefficients[rLast.coefficientSize - 1 - rLast.degree];
     int dltInverse = GenericGF_inverse(denominatorLeadingTerm);
 
-    //while (r.degree >= rLast.degree && r.coefficients[0] != 0)
-    //{
+    while (r.degree >= rLast.degree && r.coefficients[0] != 0)
+    {
       int degreeDiff = r.degree - rLast.degree;
       //potential error getCoefficient(degree)
-	  printNum(r.degree);
-      int scale = GenericGF_multiply(r.coefficients[0], dltInverse);
+	    printNum(r.degree);
+      int scale = GenericGF_multiply(GenericGFPoly_getCoefficient(&r, r.degree), dltInverse);
 
       q = GenericGFPoly_addOrSubtract(q, GenericGF_buildMonomial(degreeDiff, scale));
       r = GenericGFPoly_addOrSubtract(r, GenericGFPoly_multiplyByMonomial(rLast, degreeDiff, scale));
-    //}
+    }
 
     t = GenericGFPoly_addOrSubtract(GenericGFPoly_multiplyPoly(q, tLast), tLastLast);
 

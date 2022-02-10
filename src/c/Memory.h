@@ -29,6 +29,6 @@ void Memory_size(unsigned int i);
 void* malloc(u32 num_bytes);
 void free(void* ptr);
 void memcpy();
-void memset();
+static inline void memset(void* ptr, i32 val, u32 len) { __builtin_memset(ptr, val, len); }
 
 #endif

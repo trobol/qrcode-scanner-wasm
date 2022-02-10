@@ -176,3 +176,7 @@ struct GenericGFPoly GenericGFPoly_multiplyPoly(struct GenericGFPoly poly, struc
 
 	return new_GenericGFPoly(product, size);
 }
+
+int GenericGFPoly_getCoefficient(struct GenericGFPoly *poly, int degree) {
+	return poly->coefficients[poly->coefficientSize - 1 - degree];	
+}

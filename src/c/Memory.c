@@ -47,7 +47,6 @@ Currently this does't care about memory alignment,
 probably something to look into
 */
 
-
 typedef struct mem_header {
 	u32 size_free; // free is the final bit in size
 	u32 check;
@@ -60,6 +59,8 @@ u32 mem_tail = (u32)(&__heap_base);
 void  mem_grow(u32 min_size) {
 	min_size += sizeof(mem_header);
 
+	puts("grow");
+	printNum(mem_tail - mem_head);
 	
 	u32 page_count = 1;
 	while (page_count * PAGE_SIZE < min_size)
@@ -129,6 +130,7 @@ void* malloc(u32 num_bytes) {
 
 
 	out_hdr->size_free = num_bytes;
+	out_hdr->size_free &= 0xFFFFFFFE; // not free
 	out_hdr->check = out_hdr->size_free ^ (u32)out_hdr;
 	
 	return out_hdr->mem;
@@ -142,8 +144,8 @@ void free(void* ptr) {
 	u32 check = hdr->size_free ^ loc;
 	if (check != hdr->check) puts("heap corrupted");
 
-	hdr->size_free &= 0xFFFFFFFE;
-	hdr->check = hdr->size_free ^ loc;
 	__builtin_memset(hdr->mem, 0, hdr->size_free);
+	hdr->size_free |= 1;
+	hdr->check = hdr->size_free ^ loc;
 
 }

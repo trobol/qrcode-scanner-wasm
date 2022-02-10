@@ -28,9 +28,10 @@ export void *getBitMap()
 void *allocateImage()
 {
 	if (bitMap)
-	free(bitMap);
+		free(bitMap);
 	if (image)
-	free(image);
+		free(image);
+		
 	bitMap = malloc(imageWidth * imageHeight * SIZEOF_INT);
 	image = malloc(imageSize * SIZEOF_INT);
 	return image;
@@ -98,11 +99,13 @@ export void imageToBitmap()
 					target = imageX * 4 + y * 4;
 					bitTarget = imageX + y;
 					bitMap[bitTarget] = image[target] < middle;
+					image[target] = image[target+1] = image[target+2] = (image[target] < middle) * 255;
 				}
 			}
 		}
 	}
 }
+
 
 bool getBitmapPixel(unsigned int x, unsigned int y)
 {
@@ -137,25 +140,15 @@ export bool decode()
 	//detect findpatterns
 	possibleCentersSize = 0;
 	bool found = findFinderPatterns();
-	if (!found)
-	{
-		allocateImage();
-		return false;
-	}
+	if (!found) return false;
+
 	//detector results
 
 	bool detected = processFinderPatternInfo(&matrix);
-	if (detected)
-	{
-		result = Decoder_decode(matrix);
-		allocateImage();
-		return true;
-	}
-	else
-	{
-		allocateImage();
-		return false;
-	}
-	
-	return detected;
+	if (!detected) return false;
+
+
+	result = Decoder_decode(matrix);
+
+	return true;
 }

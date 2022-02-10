@@ -20,7 +20,7 @@ struct GenericGFPoly GenericGF_buildMonomial(int degree, int coefficient)
   {
     return QR_CODE_FIELD_256.zero;
   }
-  //POTENTIAL ERROR FROM GARBAGE MEMORY
+  
   int *coefficients = malloc((degree + 1) * SIZEOF_INT);
 
   coefficients[0] = coefficient;

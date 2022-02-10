@@ -15,16 +15,22 @@ qrcode.decode = function () {
 
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height);
 
-	qrcode.setPixelData();
-	qrcode.pixeldata.set(qrcode.imagedata.data);
+	{
+		pixelarray = qrcode.getPixelArray();
+		pixelarray.set(qrcode.imagedata.data);
+	}
+	
 	const found = qrcode.decodeWasm();
 
+	{
+		pixelarray = qrcode.getPixelArray();
+		qrcode.imagedata.data.set(pixelarray);
+		qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+	}
+
+
 	if (!found) throw 'failed to find qrcode';
-	qrcode.updatePixelData();
-	qrcode.imagedata.data.set(qrcode.pixeldata);
-	
-	//imgdata = new ImageData(qrcode.pixeldata, qrcode.imagedata.width, qrcode.imagedata.height);
-	qrcode.context.putImageData(qrcode.imagedata, 0, 0);
+
 
 	var resultBytes = qrcode.getResultBytes();
 	var versionNumber = qrcode.getVersionNumber();
@@ -87,8 +93,8 @@ qrcode.setCanvasElement = function (element) {
 qrcode.updateCanvas = function () {
 	qrcode.width = qrcode.canvasElement.width;
 	qrcode.height = qrcode.canvasElement.height;
-	if (qrcode.ready)
-		qrcode.setPixelData();
+	if(qrcode.ready)
+		qrcode.setImageSize(qrcode.width, qrcode.height);
 }
 
 qrcode.load = (() => {
@@ -124,19 +130,23 @@ qrcode.load = (() => {
 		qrcode.instance = instance;
 		qrcode.decodeWasm = instance.exports.decode;
 
-
-		qrcode.setPixelData = function () {
-			const imageIndex = instance.exports.setImageSize(qrcode.width, qrcode.height);
-			const imageSize = instance.exports.getImageSize();
-			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
-		}
-		qrcode.updatePixelData = function() {
+		// gets a Uint32Array of wasm memory
+		// should only be stored temporarily because,
+		// when wasm memory grow, the array becomes invalid
+		qrcode.getPixelArray = function() {
 			const imageIndex = instance.exports.getImagePtr();
 			const imageSize = instance.exports.getImageSize();
-			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
+			return new Uint32Array(memory.buffer, imageIndex, imageSize);
 		}
+		
+		qrcode.setImageSize = function(width, height) {
+			instance.exports.setImageSize(qrcode.width, qrcode.height);
+		}
+
 		if (qrcode.context)
-			qrcode.setPixelData();
+			qrcode.setImageSize(qrcode.width, qrcode.height);
+
+
 		qrcode.ready = true;
 	});
 })();

@@ -85,7 +85,7 @@ qrcode.updateCanvas = function () {
 	qrcode.width = qrcode.canvasElement.width;
 	qrcode.height = qrcode.canvasElement.height;
 	if (qrcode.ready)
-		qrcode.setPixelData();
+		qrcode.instance.exports.setImageSize
 }
 
 qrcode.load = (() => {
@@ -117,6 +117,10 @@ qrcode.load = (() => {
 			const imageSize = instance.exports.getImageSize();
 			qrcode.pixeldata = new Uint32Array(memory.buffer, imageIndex, imageSize);
 		}
+		qrcode.setImageSize = function(width, height) {
+			
+		}
+
 		if (qrcode.context)
 			qrcode.setPixelData();
 		qrcode.ready = true;
