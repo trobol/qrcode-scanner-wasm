@@ -125,7 +125,7 @@ qrcode.load = (() => {
 
 
 	WebAssembly.instantiateStreaming(
-		fetch("/build/qrcode.wasm"), imports
+		fetch("../build/qrcode.wasm"), imports
 	).then(out => {
 		console.log(out.module);
 		const { instance } = out;
