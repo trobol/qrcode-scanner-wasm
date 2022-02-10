@@ -21,6 +21,7 @@ void ReedSolomonDecoder_decode(int *received, int size, int twoS)
     return;
   }
 
+  return;
 
   // This whole section is broken
   // it is writing the wrong memory
