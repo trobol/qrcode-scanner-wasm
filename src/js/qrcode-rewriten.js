@@ -13,6 +13,8 @@ qrcode.sizeOfDataLengthInfo = [[10, 9, 8, 8], [12, 11, 16, 10], [14, 13, 16, 12]
 
 qrcode.decode = function () {
 
+	if (!qrcode.ready) return undefined;
+
 	qrcode.imagedata = qrcode.context.getImageData(0, 0, qrcode.width, qrcode.height);
 
 	{
