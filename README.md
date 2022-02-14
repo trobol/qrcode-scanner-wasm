@@ -27,18 +27,16 @@ Transform color to bitmap
 WebAssembly heap acts as an always contiguous section of memory that can grow or shrink on request.
 This makes most of the malloc implementation easy.
 
-
-```
+The heap is just a contiguous section of memory that is essentially a linked list with each allocated section of memory starting with a header that says if it has space, if its free and a checksum to make sure the header has not been corrupted. 
 
 header layout:
-
+```
  _____31_____ __1__ _____32_____
 |____________|_____|____________|
      size     free     check
 
 |________32________|
         data
-
 ```
 
 # Reading QRCodes
